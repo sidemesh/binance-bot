@@ -4,6 +4,7 @@ public enum Symbol {
 
     LINK_USDT("linkusdt"),
     ETH_USDT("ethusdt"),
+    BNB_USDT("bnbusdt"),
     BTC_USDT("btcusdt");
 
     public final String str;

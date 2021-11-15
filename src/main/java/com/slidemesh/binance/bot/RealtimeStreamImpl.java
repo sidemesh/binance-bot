@@ -5,10 +5,10 @@ import com.slidemesh.binance.bot.binance.SubscribeMessage;
 import com.slidemesh.binance.bot.proxy.ProxyInfo;
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.URI;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
@@ -31,7 +31,7 @@ public class RealtimeStreamImpl implements RealtimeStream {
 
     public RealtimeStreamImpl(ProxyInfo proxyInfo) {
         this.proxyInfo = proxyInfo;
-        symbolListenersMap.put(Symbol.BTC_USDT, null);
+        symbolListenersMap.put(Symbol.LINK_USDT, null);
     }
 
     public RealtimeStreamImpl() {
@@ -55,18 +55,31 @@ public class RealtimeStreamImpl implements RealtimeStream {
         }
     }
 
-    public synchronized void connect() {
-        wsClient = new BinanceWebSocketClient(
+    public synchronized BinanceWebSocketClient connect() {
+        return wsClient = new BinanceWebSocketClient(
                 proxyInfo,
                 BINANCE_WSS,
+                // on connect
+                (client) -> {
+                    client.subscribe(symbolListenersMap.keySet());
+                    return null;
+                },
+                // on message
+                (msg) -> {
+                    log.info("on message: {}", msg);
+                    return null;
+                },
                 // on close
                 (reason) -> {
                     this.reconnect();
                     return null;
                 },
-                // on connect
-                (client) -> {
-                    client.subscribe(symbolListenersMap.keySet());
+                (e) -> {
+                    /*
+                        不应该无限重连，需要设置最大重连次数，超过最大次数发送报警信息
+                     */
+                    log.error("socket error", e);
+                    this.reconnect();
                     return null;
                 }
         );
@@ -74,7 +87,8 @@ public class RealtimeStreamImpl implements RealtimeStream {
 
     private void reconnect() {
         if (!this.isClosed) {
-            connect();
+            var client = connect();
+            log.info("new websocket {} reconnect success!", client.id);
         }
     }
 
@@ -91,55 +105,53 @@ public class RealtimeStreamImpl implements RealtimeStream {
     }
 
     /**
-     * 通过符号生成 wss 链接
-     */
-    @Deprecated
-    private URI generateWssStreamsURLBySymbols() {
-        // 当前所有符号
-        final var symbolList = new ArrayList<String>();
-        symbolListenersMap.forEach((k, v) -> symbolList.add(k.str));
-        final var symbols = String.join("/", symbolList);
-
-        final var uri = String.format("%s/stream?streams=%s", BINANCE_WSS, symbols);
-        return URI.create(uri);
-    }
-
-    /**
      * web socket 客户端
      */
     private static class BinanceWebSocketClient extends okhttp3.WebSocketListener {
+        private static final Logger log = LoggerFactory.getLogger(BinanceWebSocketClient.class);
 
-        private final String id;
-        private final Function<String, Void> onClose;
-        private final Function<BinanceWebSocketClient, Void> onConnected;
+        public final String id;
+        // 自增的 message id
         private final AtomicLong messageId;
-        // 由于异步回调，需设置为线程间可见
+        // ws 实例
         private final okhttp3.WebSocket ws;
+
+        // 回调函数
+        private final Function<BinanceWebSocketClient, Void> onConnected;
+        private final Function<String, Void> onMessage;
+        private final Function<String, Void> onClose;
+        private final Function<Throwable, Void> onError;
 
         public BinanceWebSocketClient(ProxyInfo proxyInfo,
                                       String url,
+                                      Function<BinanceWebSocketClient, Void> onConnected,
+                                      Function<String, Void> onMessage,
                                       Function<String, Void> onClose,
-                                      Function<BinanceWebSocketClient, Void> onConnected) {
+                                      Function<Throwable, Void> onError
+                                      ) {
+            // 随机一个UUID作为当前客户端唯一标识
             this.id = UUID.randomUUID().toString();
+            // 原子自增的消息ID
             this.messageId= new AtomicLong(0);
-            // 必须要在之前进行初始化
+
+            // 必须要在之前进行初始
             this.onClose = onClose;
             this.onConnected = onConnected;
+            this.onMessage = onMessage;
+            this.onError = onError;
 
+            // build web socket
             var httpClientBuilder =
                     new OkHttpClient.Builder()
                             .connectTimeout(Duration.ofSeconds(10))
-                            .pingInterval(Duration.ofSeconds(1));
-            // 判断是否增加代理
-            if (proxyInfo != null) {
-                httpClientBuilder.proxy(proxyInfo.toProxy());
-            }
+                            .pingInterval(Duration.ofSeconds(1))
+                            // 可选的代理
+                            .proxy(null != proxyInfo ? proxyInfo.toProxy() : null);
 
             var request = new Request.Builder()
-                    .url(url + "/" + this.id)
+                    .url(url + "/" + id)
                     .build();
 
-            // ws 配置
             ws = httpClientBuilder
                     .build()
                     .newWebSocket(request, this);
@@ -150,51 +162,38 @@ public class RealtimeStreamImpl implements RealtimeStream {
         }
 
         public void subscribe(Set<Symbol> symbols) {
+            log.info("subscribe symbols {}", symbols);
             var msg = new SubscribeMessage(symbols, messageId.addAndGet(1L));
             ws.send(msg.toJson());
         }
 
+        /**
+         * 关闭连接
+         */
         public void close() {
             ws.close(200, "manual close");
         }
 
         @Override
         public void onOpen(@NotNull WebSocket webSocket, @NotNull Response response) {
+            // 当连接打开执行回调
             onConnected.apply(this);
         }
 
         @Override
         public void onMessage(@NotNull WebSocket webSocket, @NotNull String text) {
-            log.info("ws {} on text: {}", id, text);
-        }
-
-        /*
-        @Override
-        public void onOpen(WebSocket webSocket) {
-            log.info("ws {} connected!", id);
-            ws = webSocket;
-            onConnected.apply(this);
-            WebSocket.Listener.super.onOpen(webSocket);
+            onMessage.apply(text);
         }
 
         @Override
-        public CompletionStage<?> onText(WebSocket webSocket, CharSequence data, boolean last) {
-            log.info("ws {} on text: {}", id, data);
-            return WebSocket.Listener.super.onText(webSocket, data, last);
+        public void onClosed(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
+            onClose.apply(String.format("code: %d, reason: %s", code, reason));
         }
 
         @Override
-        public CompletionStage<?> onClose(WebSocket webSocket, int statusCode, String reason) {
-            onClose.apply(reason);
-            return WebSocket.Listener.super.onClose(webSocket, statusCode, reason);
+        public void onFailure(@NotNull WebSocket webSocket, @NotNull Throwable t, @Nullable Response response) {
+            onError.apply(t);
         }
-
-        @Override
-        public void onError(WebSocket webSocket, Throwable error) {
-            log.error("ws error: ", error);
-            onClose.apply("error: " + error.getMessage());
-        }
-         */
     }
 
 }

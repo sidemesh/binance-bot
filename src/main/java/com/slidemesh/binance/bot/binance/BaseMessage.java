@@ -1,9 +1,12 @@
 package com.slidemesh.binance.bot.binance;
 
-import com.slidemesh.binance.bot.json.ToJson;
+import com.slidemesh.binance.bot.json.JSON;
 
-public class BaseMessage extends ToJson {
+public class BaseMessage extends JSON.ToJson {
 
-    public long id;
+    public final long id;
 
+    public BaseMessage(long id) {
+        this.id = id;
+    }
 }
