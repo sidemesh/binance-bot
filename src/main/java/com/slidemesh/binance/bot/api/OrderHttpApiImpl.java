@@ -24,11 +24,14 @@ public class OrderHttpApiImpl implements Order {
     private volatile String baseApi;
 
     public OrderHttpApiImpl(Proxy proxy, Duration timeout, Duration callTimeOut) {
-        this.cli = new OkHttpClient.Builder().connectTimeout(timeout).proxy(proxy).callTimeout(callTimeOut).build();
-        this.fastApiSelector = new FastApiSelector(this.cli, BINANCE_APIS);
-        this.fastApiSelector .onUpdate((h) -> this.baseApi = h);
-        // 快速获取一个
-        this.baseApi = fastApiSelector.loop();
+        final var httpCli =  new OkHttpClient.Builder().connectTimeout(timeout).proxy(proxy).callTimeout(callTimeOut).build();
+        final var fas = new FastApiSelector(httpCli, BINANCE_APIS);
+
+        this.cli = httpCli;
+        this.fastApiSelector = fas;
+        // 立刻获取一个最优地址
+        this.baseApi = fas.once();
+        this.fastApiSelector.onUpdate((h) -> this.baseApi = h).loop(10, 10);
     }
 
     public OrderHttpApiImpl() {
