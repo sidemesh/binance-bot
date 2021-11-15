@@ -13,7 +13,7 @@ public class FastApiSelectorTest {
     @Test
     public void testRunnable() {
         var httpCli = new OkHttpClient.Builder().build();
-        var selector = new FastApiSelector(httpCli, "https://baidu.com", "https://qq.com");
+        var selector = new FastApiSelector(httpCli, "https://baidu.com", "https://qq.com", "https://huawei.com", "https://163.com");
 
         final var res = new String[1];
 

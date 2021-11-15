@@ -6,7 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.Date;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.Executors;
@@ -16,6 +17,11 @@ import java.util.function.Consumer;
 
 public class FastApiSelector implements Runnable {
     private final static Logger log = LoggerFactory.getLogger(FastApiSelector.class);
+
+    // 默认接口测试次数
+    private static final int DEFAULT_TESTS = 10;
+    // 默认快速接口测试次数
+    private static final int DEFAULT_FAST_TESTS = 3;
 
     // flag
     private boolean isRunning;
@@ -61,7 +67,7 @@ public class FastApiSelector implements Runnable {
 
         // 暂时不考虑并发测试
         // this.works = Executors.newFixedThreadPool(this.apis.length);
-        return test(3);
+        return test(DEFAULT_FAST_TESTS);
     }
 
     public synchronized void stop() {
@@ -73,7 +79,7 @@ public class FastApiSelector implements Runnable {
 
     @Override
     public void run() {
-        final var selected = test(10);
+        final var selected = test(DEFAULT_TESTS);
         callbacks.forEach(it -> it.accept(selected));
     }
 
@@ -81,37 +87,27 @@ public class FastApiSelector implements Runnable {
      * 请求接口测试时间间隔，使用最小值选取。
      * 是否应该按照平均最小值选取？
      * @param countOfTest 测试次数
-     * @return 最快的 host
+     * @return 最快的地址
      */
     private String test(int countOfTest) {
         // 存放结果
-        int[] totals = new int[apis.length];
+        final var testSums = new int[apis.length];
 
         for (var i = 0; i < apis.length; i++) {
             for (var j = 0; j < countOfTest; j++) {
-                final var startAt = new Date().getTime();
+                final var startAt = Instant.now();
                 try(var ignored = cli.newCall(reqs[i]).execute()) {
-                    final var interval = new Date().getTime() - startAt;
-                    log.debug("{} test.{} interval {}", apis[i], j, interval);
-                    totals[i] += interval;
+                    final var interval = Duration.between(startAt, Instant.now()).toMillis();
+                    log.debug("{} test.{} interval {}ms", apis[i], j, interval);
+                    testSums[i] += interval;
                 } catch (IOException e) {
-                    totals[i] += 99999;
+                    testSums[i] += 99999;
                     log.error("api test error", e);
                 }
-
-                // 取平均值
-                // totals[i] = totals[i] / countOfTest;
             }
         }
 
-        int faster = 0;
-        for (var i = 0; i< totals.length; i++) {
-            if (totals[i] < faster) {
-                faster = i;
-            }
-        }
-
-        return apis[faster];
+        return apis[minIndex(testSums)];
     }
 
     private Request[] buildTestRequests(String[] apis) {
@@ -120,5 +116,20 @@ public class FastApiSelector implements Runnable {
             reqs[i] = new Request.Builder().url(apis[i]).build();
         }
         return reqs;
+    }
+
+    /**
+     * 查找数组中最小值的下标
+     * @param nums int数组
+     * @return 数组中最小值的下标
+     */
+    private int minIndex(int[] nums) {
+        int faster = 0;
+        for (var i = 0; i < nums.length; i++) {
+            if (nums[i] < faster) {
+                faster = i;
+            }
+        }
+        return faster;
     }
 }
