@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.function.Function;
+import java.util.function.Consumer;
 
 public class RealtimeStreamImpl implements RealtimeStream {
 
@@ -27,7 +27,7 @@ public class RealtimeStreamImpl implements RealtimeStream {
     // close flag
     private boolean isClosed;
     // 当前 ws 链接
-    private BinanceWebSocketClient wsClient;
+    private BinanceWebSocketClient bwsc;
 
     public RealtimeStreamImpl(ProxyInfo proxyInfo) {
         this.proxyInfo = proxyInfo;
@@ -50,29 +50,26 @@ public class RealtimeStreamImpl implements RealtimeStream {
 
     public synchronized void close() {
         if (!this.isClosed) {
-            this.wsClient.close();
+            this.bwsc.close();
             this.isClosed = true;
         }
     }
 
     public synchronized BinanceWebSocketClient connect() {
-        return wsClient = new BinanceWebSocketClient(
+        return bwsc = new BinanceWebSocketClient(
                 proxyInfo,
                 BINANCE_WSS,
                 // on connect
                 (client) -> {
                     client.subscribe(symbolListenersMap.keySet());
-                    return null;
                 },
                 // on message
                 (msg) -> {
                     log.info("on message: {}", msg);
-                    return null;
                 },
                 // on close
                 (reason) -> {
                     this.reconnect();
-                    return null;
                 },
                 (e) -> {
                     /*
@@ -80,7 +77,6 @@ public class RealtimeStreamImpl implements RealtimeStream {
                      */
                     log.error("socket error", e);
                     this.reconnect();
-                    return null;
                 }
         );
     }
@@ -94,6 +90,9 @@ public class RealtimeStreamImpl implements RealtimeStream {
 
     @Override
     public synchronized void addListener(Symbol symbol, RealtimeStreamListener listener) {
+        // 如果不存在 KEY 则需要订阅
+        boolean isNeedSubscribe = !symbolListenersMap.containsKey(symbol);
+
         var list = symbolListenersMap.computeIfAbsent(symbol, (k) -> {
             // 新增监听
             return new ArrayList<>();
@@ -101,7 +100,10 @@ public class RealtimeStreamImpl implements RealtimeStream {
         list.add(listener);
         symbolListenersMap.put(symbol, list);
 
-        wsClient.subscribe(symbol);
+        // 订阅 symbol
+        if (isNeedSubscribe) {
+            bwsc.subscribe(symbol);
+        }
     }
 
     /**
@@ -117,17 +119,17 @@ public class RealtimeStreamImpl implements RealtimeStream {
         private final okhttp3.WebSocket ws;
 
         // 回调函数
-        private final Function<BinanceWebSocketClient, Void> onConnected;
-        private final Function<String, Void> onMessage;
-        private final Function<String, Void> onClose;
-        private final Function<Throwable, Void> onError;
+        private final Consumer<BinanceWebSocketClient> onConnected;
+        private final Consumer<String> onMessage;
+        private final Consumer<String> onClose;
+        private final Consumer<Throwable> onError;
 
         public BinanceWebSocketClient(ProxyInfo proxyInfo,
                                       String url,
-                                      Function<BinanceWebSocketClient, Void> onConnected,
-                                      Function<String, Void> onMessage,
-                                      Function<String, Void> onClose,
-                                      Function<Throwable, Void> onError
+                                      Consumer<BinanceWebSocketClient> onConnected,
+                                      Consumer<String> onMessage,
+                                      Consumer<String> onClose,
+                                      Consumer<Throwable> onError
                                       ) {
             // 随机一个UUID作为当前客户端唯一标识
             this.id = UUID.randomUUID().toString();
@@ -177,22 +179,22 @@ public class RealtimeStreamImpl implements RealtimeStream {
         @Override
         public void onOpen(@NotNull WebSocket webSocket, @NotNull Response response) {
             // 当连接打开执行回调
-            onConnected.apply(this);
+            onConnected.accept(this);
         }
 
         @Override
         public void onMessage(@NotNull WebSocket webSocket, @NotNull String text) {
-            onMessage.apply(text);
+            onMessage.accept(text);
         }
 
         @Override
         public void onClosed(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
-            onClose.apply(String.format("code: %d, reason: %s", code, reason));
+            onClose.accept(String.format("code: %d, reason: %s", code, reason));
         }
 
         @Override
         public void onFailure(@NotNull WebSocket webSocket, @NotNull Throwable t, @Nullable Response response) {
-            onError.apply(t);
+            onError.accept(t);
         }
     }
 
