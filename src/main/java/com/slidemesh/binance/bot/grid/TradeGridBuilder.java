@@ -1,7 +1,5 @@
 package com.slidemesh.binance.bot.grid;
 
-import java.util.List;
-
 public interface TradeGridBuilder {
     /**
      * 生成交易网格

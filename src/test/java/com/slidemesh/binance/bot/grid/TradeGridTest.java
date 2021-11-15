@@ -13,21 +13,20 @@ public class TradeGridTest {
     public void tradeGridBuildTest() {
         BigDecimal costPrice = new BigDecimal("10.123");
 
-        SimpleTradeGridBuilder simpleTradeGridBuilder = new SimpleTradeGridBuilder(costPrice, BigDecimal.valueOf(1), 5);
-        TradeGrid tradeGrid = simpleTradeGridBuilder.create();
+        FixedStepTradeGridBuilder fixedStepTradeGridBuilder = new FixedStepTradeGridBuilder(costPrice, BigDecimal.valueOf(1), 5);
+        TradeGrid tradeGrid = fixedStepTradeGridBuilder.create();
 
         List<Grid> grids = tradeGrid.getGrids();
 
         Assertions.assertEquals(costPrice, tradeGrid.getCostPrice());
         Assertions.assertEquals(10, grids.size());
-        Assertions.assertEquals(costPrice, tradeGrid.getLastTradePrice());
     }
 
     @Test
     public void currPriceFallCorrectGrid() {
         BigDecimal costPrice = new BigDecimal("10.123");
-        SimpleTradeGridBuilder simpleTradeGridBuilder = new SimpleTradeGridBuilder(costPrice, BigDecimal.valueOf(1), 5);
-        TradeGrid tradeGrid = simpleTradeGridBuilder.create();
+        FixedStepTradeGridBuilder fixedStepTradeGridBuilder = new FixedStepTradeGridBuilder(costPrice, BigDecimal.valueOf(1), 5);
+        TradeGrid tradeGrid = fixedStepTradeGridBuilder.create();
 
         // 成本金额 所在的格子
         Grid currFallGrid = tradeGrid.getCurrFallGrid(costPrice);

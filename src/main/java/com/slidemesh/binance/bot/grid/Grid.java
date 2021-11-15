@@ -1,38 +1,30 @@
 package com.slidemesh.binance.bot.grid;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
-@Data
-@AllArgsConstructor
 public class Grid {
     /**
      * 网格序号
+     * 1 ---> max
      */
+    @Setter
+    @Getter
     private int order;
     /**
      * 网格下界
      */
-    private BigDecimal lowPrice;
+    @Getter private BigDecimal lowPrice;
     /**
      * 网格上界
      */
-    private BigDecimal highPrice;
+    @Getter private BigDecimal highPrice;
 
-    /**
-     * 是否落在了此网格上
-     * @param currPrice
-     * @return
-     */
-    public boolean isFallGrid(BigDecimal currPrice) {
-        if (lowPrice.compareTo(currPrice) <= 0
-                && highPrice.compareTo(currPrice) > 0) {
-            return true;
-        } else {
-            return false;
-        }
+    public Grid(BigDecimal lowPrice, BigDecimal highPrice) {
+        this.lowPrice = lowPrice;
+        this.highPrice = highPrice;
     }
 
     @Override
