@@ -1,4 +1,4 @@
-package com.slidemesh.binance.bot.binance;
+package com.slidemesh.binance.bot.websocket.message;
 
 public class BaseMethodMessage extends BaseMessage {
 
