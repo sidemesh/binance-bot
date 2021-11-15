@@ -49,9 +49,9 @@ public class RealtimeStreamImpl implements RealtimeStream {
     }
 
     public synchronized void close() {
-        if (!this.isClosed) {
-            this.bwsc.close();
-            this.isClosed = true;
+        if (!isClosed) {
+            bwsc.close();
+            isClosed = true;
         }
     }
 
@@ -91,9 +91,9 @@ public class RealtimeStreamImpl implements RealtimeStream {
     @Override
     public synchronized void addListener(Symbol symbol, RealtimeStreamListener listener) {
         // 如果不存在 KEY 则需要订阅
-        boolean isNeedSubscribe = !symbolListenersMap.containsKey(symbol);
+        final var isNeedSubscribe = !symbolListenersMap.containsKey(symbol);
 
-        var list = symbolListenersMap.computeIfAbsent(symbol, (k) -> {
+        final var list = symbolListenersMap.computeIfAbsent(symbol, (k) -> {
             // 新增监听
             return new ArrayList<>();
         });
