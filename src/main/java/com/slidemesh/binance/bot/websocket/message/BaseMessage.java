@@ -1,4 +1,4 @@
-package com.slidemesh.binance.bot.binance;
+package com.slidemesh.binance.bot.websocket.message;
 
 import com.slidemesh.binance.bot.json.JSON;
 
