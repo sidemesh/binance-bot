@@ -35,8 +35,10 @@ public class FastApiSelectorTest {
             cd.countDown();
         });
 
+        selector.loop(0, 365);
+
         // 测试快速返回
-        assertNotNull(selector.loop(0, 365));
+        assertNotNull(selector.once());
 
         // 测试异步
         // TODO 需要设置超时
