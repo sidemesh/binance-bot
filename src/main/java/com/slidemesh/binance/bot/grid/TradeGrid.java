@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 交易网格
@@ -14,27 +15,31 @@ public class TradeGrid {
     /**
      * 成本价
      */
-    @Getter private BigDecimal costPrice;
+    @Getter
+    private final BigDecimal costPrice;
 
     /**
      * 网格
      */
-    @Getter private List<Grid> grids;
+    @Getter
+    private final List<Grid> grids;
 
     /**
      * 网格Map
      */
-    private Map<Integer, Grid> gridMap;
+    private final Map<Integer, Grid> gridMap;
 
     /**
      * 最底部的网格
      */
-    @Getter private Grid bottomGrid;
+    @Getter
+    private final Grid bottomGrid;
 
     /**
      * 最高网格
      */
-    @Getter  private Grid topGrid;
+    @Getter
+    private final Grid topGrid;
 
     public TradeGrid(BigDecimal costPrice, List<Grid> grids) {
         this.costPrice = costPrice;
@@ -47,12 +52,15 @@ public class TradeGrid {
             order++;
         }
         // 找出顶部和底部
-        bottomGrid = grids.get(1);
-        topGrid = grids.get(order);
+        bottomGrid = grids.get(0);
+        topGrid = grids.get(grids.size() - 1);
+        // 转换 Map
+        gridMap = grids.stream().collect(Collectors.toMap(Grid::getOrder, v -> v, (o1, o2) -> o1));
     }
 
     /**
      * 获取当前价格所处的网格
+     *
      * @param currPrice
      * @return
      */
@@ -68,6 +76,7 @@ public class TradeGrid {
 
     /**
      * 二分查找
+     *
      * @param currPrice
      * @param startOrder
      * @param topOrder
@@ -77,11 +86,11 @@ public class TradeGrid {
         if (startOrder == topOrder) {
             return gridMap.get(startOrder);
         }
-        int mid = (topOrder - startOrder) / 2 + 1;
+        int mid = (topOrder + startOrder) / 2 + 1;
         Grid midGrid = gridMap.get(mid);
         if (currPrice.compareTo(midGrid.getLowPrice()) < 0) {
             return binarySearchGrids(currPrice, startOrder, mid - 1);
-        } else if(currPrice.compareTo(midGrid.getHighPrice()) >= 0) {
+        } else if (currPrice.compareTo(midGrid.getHighPrice()) >= 0) {
             return binarySearchGrids(currPrice, mid + 1, topOrder);
         } else {
             return midGrid;

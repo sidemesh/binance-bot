@@ -49,7 +49,7 @@ public class FixedBoundTradeGridBuilder implements TradeGridBuilder {
             } else {
                 high = low.add(step);
             }
-            Grid grid = new Grid(lowerPrice, high);
+            Grid grid = new Grid(low, high);
             grids.add(grid);
             low = high;
         }
