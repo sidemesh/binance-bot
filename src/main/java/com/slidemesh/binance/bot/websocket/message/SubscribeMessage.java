@@ -11,7 +11,8 @@ public class SubscribeMessage extends BaseMethodMessage {
 
     public SubscribeMessage(Set<Symbol> symbols, long messageId) {
         super(messageId, "SUBSCRIBE");
-        this.params = symbols.stream().map(it -> it.str + "@trade").collect(Collectors.toSet());
+        // 注意必须要小写
+        this.params = symbols.stream().map(it -> it.toLowerCase() + "@trade").collect(Collectors.toSet());
     }
 
 }

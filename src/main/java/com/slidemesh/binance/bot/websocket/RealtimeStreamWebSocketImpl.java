@@ -63,21 +63,14 @@ public class RealtimeStreamWebSocketImpl implements RealtimeStream {
                 proxyInfo,
                 BINANCE_WSS,
                 // on connect
-                (client) -> {
-                    client.subscribe(symbolListenersMap.keySet());
-                },
+                (client) -> client.subscribe(symbolListenersMap.keySet()),
                 // on message
-                (msg) -> {
-                    log.info("on message: {}", msg);
-                },
+                (msg) -> log.info("on message: {}", msg),
                 // on close
-                (reason) -> {
-                    this.reconnect();
-                },
+                (reason) -> this.reconnect(),
+                // on error
                 (e) -> {
-                    /*
-                        不应该无限重连，需要设置最大重连次数，超过最大次数发送报警信息
-                     */
+                    // 不应该无限重连，需要设置最大重连次数，超过最大次数发送报警信息
                     log.error("socket error", e);
                     this.reconnect();
                 }

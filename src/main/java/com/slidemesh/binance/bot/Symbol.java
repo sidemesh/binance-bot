@@ -1,15 +1,36 @@
 package com.slidemesh.binance.bot;
 
-public enum Symbol {
+import com.slidemesh.binance.bot.util.StringEnum;
 
-    LINK_USDT("linkusdt"),
-    ETH_USDT("ethusdt"),
-    BNB_USDT("bnbusdt"),
-    BTC_USDT("btcusdt");
+public enum Symbol implements StringEnum<Symbol> {
 
-    public final String str;
+    LINK_USDT("LINKUSDT"),
+    ETH_USDT("ETHUSDT"),
+    BNB_USDT("BNBUSDT"),
+    BTC_USDT("BTCUSDT");
+
+    public final String STR;
 
     Symbol(String str) {
-        this.str = str;
+        this.STR = str;
     }
+
+    public String toUpperCaseStr() {
+        return this.STR;
+    }
+
+    public String toLowerCase() {
+        return STR.toLowerCase();
+    }
+
+    @Override
+    public String getStr() {
+        return STR;
+    }
+
+    @Override
+    public Symbol[] getValues() {
+        return values();
+    }
+
 }

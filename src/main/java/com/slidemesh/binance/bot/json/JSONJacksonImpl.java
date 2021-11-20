@@ -15,4 +15,13 @@ public class JSONJacksonImpl implements JSON {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public <T> T read(String json, Class<T> clazz) {
+        try {
+            return objectMapper.readValue(json, clazz);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
