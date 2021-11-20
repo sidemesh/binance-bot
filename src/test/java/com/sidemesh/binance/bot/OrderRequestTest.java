@@ -1,7 +1,5 @@
 package com.sidemesh.binance.bot;
 
-import com.slidemesh.binance.bot.OrderRequest;
-import com.slidemesh.binance.bot.Symbol;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
