@@ -3,7 +3,7 @@ package com.sidemesh.binance.bot;
 import java.util.HashSet;
 import java.util.Set;
 
-public class TradeRealTimeStreamPusher implements RealtimeStreamListener{
+public class TradeRealTimeStreamPusher implements RealtimeStreamListener {
 
     private static final Set<Bot> BOT_LISTENERS = new HashSet<>();
 

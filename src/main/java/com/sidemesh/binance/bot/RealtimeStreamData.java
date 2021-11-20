@@ -1,11 +1,9 @@
 package com.sidemesh.binance.bot;
 
-public class RealtimeStreamData {
+import java.math.BigDecimal;
 
-    public final Symbol symbol;
+public interface RealtimeStreamData {
 
-    public RealtimeStreamData(Symbol symbol) {
-        this.symbol = symbol;
-    }
+    BigDecimal price();
 
 }
