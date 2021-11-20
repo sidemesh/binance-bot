@@ -2,7 +2,6 @@ package com.sidemesh.binance.bot.util;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import com.slidemesh.binance.bot.util.FastApiSelector;
 import okhttp3.OkHttpClient;
 import org.junit.jupiter.api.Test;
 
