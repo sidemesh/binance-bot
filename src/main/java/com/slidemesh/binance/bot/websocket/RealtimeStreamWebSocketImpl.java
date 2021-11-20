@@ -1,7 +1,10 @@
-package com.slidemesh.binance.bot;
+package com.slidemesh.binance.bot.websocket;
 
 import com.google.common.collect.Sets;
-import com.slidemesh.binance.bot.binance.SubscribeMessage;
+import com.slidemesh.binance.bot.RealtimeStream;
+import com.slidemesh.binance.bot.RealtimeStreamListener;
+import com.slidemesh.binance.bot.Symbol;
+import com.slidemesh.binance.bot.websocket.message.SubscribeMessage;
 import com.slidemesh.binance.bot.proxy.ProxyInfo;
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
@@ -14,9 +17,9 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 
-public class RealtimeStreamImpl implements RealtimeStream {
+public class RealtimeStreamWebSocketImpl implements RealtimeStream {
 
-    private static final Logger log = LoggerFactory.getLogger(RealtimeStreamImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(RealtimeStreamWebSocketImpl.class);
 
     private static final String BINANCE_WSS = "wss://stream.binance.com:9443/ws";
 
@@ -29,12 +32,12 @@ public class RealtimeStreamImpl implements RealtimeStream {
     // 当前 ws 链接
     private BinanceWebSocketClient bwsc;
 
-    public RealtimeStreamImpl(ProxyInfo proxyInfo) {
+    public RealtimeStreamWebSocketImpl(ProxyInfo proxyInfo) {
         this.proxyInfo = proxyInfo;
         symbolListenersMap.put(Symbol.LINK_USDT, null);
     }
 
-    public RealtimeStreamImpl() {
+    public RealtimeStreamWebSocketImpl() {
         this(null);
     }
 
@@ -60,21 +63,14 @@ public class RealtimeStreamImpl implements RealtimeStream {
                 proxyInfo,
                 BINANCE_WSS,
                 // on connect
-                (client) -> {
-                    client.subscribe(symbolListenersMap.keySet());
-                },
+                (client) -> client.subscribe(symbolListenersMap.keySet()),
                 // on message
-                (msg) -> {
-                    log.info("on message: {}", msg);
-                },
+                (msg) -> log.info("on message: {}", msg),
                 // on close
-                (reason) -> {
-                    this.reconnect();
-                },
+                (reason) -> this.reconnect(),
+                // on error
                 (e) -> {
-                    /*
-                        不应该无限重连，需要设置最大重连次数，超过最大次数发送报警信息
-                     */
+                    // 不应该无限重连，需要设置最大重连次数，超过最大次数发送报警信息
                     log.error("socket error", e);
                     this.reconnect();
                 }
