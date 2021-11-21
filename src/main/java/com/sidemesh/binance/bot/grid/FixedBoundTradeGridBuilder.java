@@ -9,10 +9,7 @@ import java.util.List;
  * 固定 上下边界 的网格生成器
  */
 public class FixedBoundTradeGridBuilder implements TradeGridBuilder {
-    /**
-     * 成本价
-     */
-    private BigDecimal costPrice;
+
     /**
      * 下边界
      */
@@ -26,15 +23,14 @@ public class FixedBoundTradeGridBuilder implements TradeGridBuilder {
      */
     private int gridNumber;
 
-    public FixedBoundTradeGridBuilder(BigDecimal costPrice, BigDecimal lowerPrice, BigDecimal upperPrice, int gridNumber) {
-        this.costPrice = costPrice;
+    public FixedBoundTradeGridBuilder(BigDecimal lowerPrice, BigDecimal upperPrice, int gridNumber) {
         this.lowerPrice = lowerPrice;
         this.upperPrice = upperPrice;
         this.gridNumber = gridNumber;
     }
 
     @Override
-    public TradeGrid create() {
+    public List<Grid> create() {
         int scale = Math.max(lowerPrice.scale(), upperPrice.scale());
 
         BigDecimal subtract = upperPrice.subtract(lowerPrice);
@@ -53,6 +49,6 @@ public class FixedBoundTradeGridBuilder implements TradeGridBuilder {
             grids.add(grid);
             low = high;
         }
-        return new TradeGrid(costPrice, grids);
+        return grids;
     }
 }

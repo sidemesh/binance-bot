@@ -16,11 +16,11 @@ public class Grid {
     /**
      * 网格下界
      */
-    @Getter private BigDecimal lowPrice;
+    @Getter private final BigDecimal lowPrice;
     /**
      * 网格上界
      */
-    @Getter private BigDecimal highPrice;
+    @Getter private final BigDecimal highPrice;
 
     public Grid(BigDecimal lowPrice, BigDecimal highPrice) {
         this.lowPrice = lowPrice;

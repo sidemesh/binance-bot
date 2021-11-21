@@ -3,6 +3,7 @@ package com.sidemesh.binance.bot.grid;
 import lombok.Getter;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -12,11 +13,6 @@ import java.util.stream.Collectors;
  * 交易网格
  */
 public class TradeGrid {
-    /**
-     * 成本价
-     */
-    @Getter
-    private final BigDecimal costPrice;
 
     /**
      * 网格
@@ -40,9 +36,25 @@ public class TradeGrid {
      */
     @Getter
     private final Grid topGrid;
+    /**
+     * 投资总额
+     */
+    @Getter
+    private BigDecimal investAmount;
 
-    public TradeGrid(BigDecimal costPrice, List<Grid> grids) {
-        this.costPrice = costPrice;
+    @Getter
+    private BigDecimal stepAmount;
+
+    public static TradeGrid generate(BigDecimal investAmount, TradeGridBuilder tradeGridBuilder) {
+        List<Grid> grids = tradeGridBuilder.create();
+        TradeGrid tradeGrid = new TradeGrid(grids);
+        // todo 校验最小投入总金额
+        tradeGrid.investAmount = investAmount;
+        tradeGrid.stepAmount = investAmount.divide(BigDecimal.valueOf(grids.size()), RoundingMode.HALF_UP);
+        return tradeGrid;
+    }
+
+    private TradeGrid(List<Grid> grids) {
         this.grids = grids;
         // 初始化序号
         grids.sort(Comparator.comparing(Grid::getLowPrice));
@@ -56,6 +68,16 @@ public class TradeGrid {
         topGrid = grids.get(grids.size() - 1);
         // 转换 Map
         gridMap = grids.stream().collect(Collectors.toMap(Grid::getOrder, v -> v, (o1, o2) -> o1));
+    }
+
+    /**
+     * 获取交易网格 每格购买数量
+     * @param currPrice
+     * @return
+     */
+    public BigDecimal getQualityByPrice(BigDecimal currPrice) {
+        int scale = Math.max(currPrice.scale(), stepAmount.scale());
+        return stepAmount.divide(currPrice, scale + 2, RoundingMode.HALF_UP);
     }
 
     /**

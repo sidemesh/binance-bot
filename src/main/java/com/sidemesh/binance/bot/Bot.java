@@ -5,7 +5,7 @@ public interface Bot {
     /**
      * 机器人名称
      */
-    void name();
+    String name();
 
     /**
      * 机器人交易的对

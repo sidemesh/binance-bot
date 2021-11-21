@@ -14,29 +14,29 @@ import java.util.List;
 @Getter
 @Setter
 public class FixedStepTradeGridBuilder implements TradeGridBuilder {
-    private BigDecimal costPrice;
+    private BigDecimal currPrice;
     private BigDecimal gridStepPrice;
     private int gridLevels;
 
     /**
      * 简单的网格生成器
-     * @param costPrice 成本价格
+     * @param currPrice 成本价格
      * @param gridStepPrice 网格间隔金额
      * @param gridLevels 网格层数量
      */
-    public FixedStepTradeGridBuilder(BigDecimal costPrice, BigDecimal gridStepPrice, int gridLevels) {
+    public FixedStepTradeGridBuilder(BigDecimal currPrice, BigDecimal gridStepPrice, int gridLevels) {
         if (gridLevels <= 0) {
             throw new IllegalArgumentException("gridLevels must not less than 1");
         }
-        this.costPrice = costPrice;
+        this.currPrice = currPrice;
         this.gridStepPrice = gridStepPrice;
         this.gridLevels = gridLevels;
     }
 
     @Override
-    public TradeGrid create() {
+    public List<Grid> create() {
         List<Grid> grids = new ArrayList<>();
-        BigDecimal currPrice = costPrice;
+        BigDecimal currPrice = this.currPrice;
         // 上界网格
         for (int i = 0; i < gridLevels; i++) {
             BigDecimal highPrice = currPrice.add(gridStepPrice);
@@ -45,13 +45,13 @@ public class FixedStepTradeGridBuilder implements TradeGridBuilder {
             currPrice = highPrice;
         }
         // 下届网格
-        currPrice = costPrice;
+        currPrice = this.currPrice;
         for (int i = 0; i < gridLevels; i++) {
             BigDecimal lowPrice = currPrice.subtract(gridStepPrice);
             Grid grid = new Grid(lowPrice, currPrice);
             grids.add(grid);
             currPrice = lowPrice;
         }
-        return new TradeGrid(costPrice, grids);
+        return grids;
     }
 }
