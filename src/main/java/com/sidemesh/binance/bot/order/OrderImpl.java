@@ -23,4 +23,9 @@ public class OrderImpl implements Order {
     public OrderResponse getResponse() {
         return this.response;
     }
+
+    @Override
+    public boolean isDeal() {
+        return false;
+    }
 }
