@@ -13,6 +13,10 @@ public class ClashProxy implements ProxyInfo {
         this.port = port;
     }
 
+    public static ClashProxy newLocalClashProxy() {
+        return new ClashProxy("127.0.0.1", 7890);
+    }
+    
     public InetSocketAddress toInetSocketAddress() {
         return new InetSocketAddress(this.host, this.port);
     }
