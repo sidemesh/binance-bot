@@ -11,7 +11,6 @@ public class BackTest {
         var realtime = new RealtimeStreamBackTestDataImpl(Symbol.REN_USDT, "2020-05");
         realtime.addListener(Symbol.REN_USDT, System.out::println);
         realtime.run();
-
         Thread.sleep(100000000000L);
     }
 

@@ -23,6 +23,7 @@ public class BinanceAPIv3 implements BinanceAPI {
     private final static String[] BINANCE_APIS = {"https://api.binance.com", "https://api1.binance.com", "https://api2.binance.com", "https://api3.binance.com"};
     private final static RequestBody OKHTTP_EMPTY_REQUEST_BODY = RequestBody.create(new byte[0]);
 
+    private final RequestLimiter limiter = new RequestLimiter(5);
     protected final OkHttpClient cli;
     protected final FastApiSelector fastApiSelector;
     protected volatile String baseApi;
@@ -43,18 +44,41 @@ public class BinanceAPIv3 implements BinanceAPI {
     }
 
     /**
-     * 下单接口，支持购买和出售
+     * 正式的下单接口，支持购买和出售
      * @param account 交易的账户
      * @param request 请求信息
      * @return 下单结果
      * @throws BinanceAPIException 包装的异常信息
      */
     public Order order(Account account, OrderRequest request) throws BinanceAPIException {
+        return order("/api/v3/order", account, request);
+    }
+
+    /**
+     * 用于测试订单请求，但不会提交到撮合引擎，支持购买和出售.
+     * @param account 交易的账户
+     * @param request 请求信息
+     * @return 下单结果
+     * @throws BinanceAPIException 包装的异常信息
+     */
+    @Override
+    public Order orderTest(Account account, OrderRequest request) throws BinanceAPIException {
+        return order("/api/v3/order/test", account, request);
+    }
+
+    /**
+     * 通用的下单接口
+     */
+    protected Order order(String api, Account account, OrderRequest request) throws BinanceAPIException {
+        if (!limiter.acquire()) {
+            throw new BinanceAPIException(true);
+        }
+
         final var paramas = request.toUrlParams();
 
         // 为了性能仅采用 URL Params 模式填充数据
         final var req = new Request.Builder()
-                .url(buildRequestUrl("/api/v3/order", signByHMACSHA256(account, paramas), paramas))
+                .url(buildRequestUrl(api, signByHMACSHA256(account, paramas), paramas))
                 .post(OKHTTP_EMPTY_REQUEST_BODY)
                 .build();
 

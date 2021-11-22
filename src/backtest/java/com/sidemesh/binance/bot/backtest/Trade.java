@@ -17,6 +17,11 @@ public class Trade implements RealtimeStreamData {
     }
 
     @Override
+    public long id() {
+        return 0;
+    }
+
+    @Override
     public BigDecimal price() {
         return price;
     }
