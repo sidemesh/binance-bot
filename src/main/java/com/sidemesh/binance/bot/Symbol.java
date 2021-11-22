@@ -7,6 +7,8 @@ public enum Symbol implements StringEnum<Symbol> {
     LINK_USDT("LINKUSDT"),
     ETH_USDT("ETHUSDT"),
     BNB_USDT("BNBUSDT"),
+    REN_USDT("RENUSDT"),
+    GALA_USDT("GALAUSDT"),
     BTC_USDT("BTCUSDT");
 
     public final String STR;

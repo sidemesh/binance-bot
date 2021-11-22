@@ -19,6 +19,7 @@ public class OrderRequest extends JSON.ToJson {
     public final Type type;
     public final BigDecimal price;
     public final BigDecimal quantity;
+    public final TimeInForce timeInForce;
     public final Long recvWindow;
     public final Long timestamp;
     public final RespType newOrderRespType;
@@ -29,6 +30,7 @@ public class OrderRequest extends JSON.ToJson {
                         Type type,
                         BigDecimal price,
                         BigDecimal quantity,
+                        TimeInForce timeInForce,
                         Long recvWindow,
                         Long timestamp) {
         this.newClientOrderId = newClientOrderId;
@@ -39,6 +41,7 @@ public class OrderRequest extends JSON.ToJson {
         this.quantity = quantity;
         this.recvWindow = recvWindow;
         this.timestamp = timestamp;
+        this.timeInForce = timeInForce;
         this.newOrderRespType = RespType.FULL;
     }
 
@@ -49,6 +52,7 @@ public class OrderRequest extends JSON.ToJson {
                 // 需要避免科学记数法，注意此处不移除末尾小数 0
                 "price=" + this.price.toPlainString() + "&" +
                 "quantity=" + this.quantity.toPlainString() + "&" +
+                "timeInForce=" + this.timeInForce.str + "&" +
                 "recvWindow=" + this.recvWindow + "&" +
                 "newOrderRespType=" + this.newOrderRespType + "&" +
                 "timestamp=" + this.timestamp;
@@ -137,6 +141,8 @@ public class OrderRequest extends JSON.ToJson {
                     Type.LIMIT,
                     price,
                     quantity,
+                    // 不能立即成交就撤单
+                    TimeInForce.FOK,
                     null == rcwindow ? OrderRequest.DEFAULT_RC_WINDOW : rcwindow,
                     null == timestamp ? new Date().getTime() : timestamp
             );
