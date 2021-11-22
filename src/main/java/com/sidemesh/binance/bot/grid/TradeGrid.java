@@ -71,16 +71,6 @@ public class TradeGrid {
     }
 
     /**
-     * 获取交易网格 每格购买数量
-     * @param currPrice
-     * @return
-     */
-    public BigDecimal getQualityByPrice(BigDecimal currPrice) {
-        int scale = Math.max(currPrice.scale(), stepAmount.scale());
-        return stepAmount.divide(currPrice, scale + 2, RoundingMode.HALF_UP);
-    }
-
-    /**
      * 获取当前价格所处的网格
      *
      * @param currPrice

@@ -1,13 +1,14 @@
-package com.sidemesh.binance.bot.grid;
+package com.sidemesh.binance.bot;
 
-import com.sidemesh.binance.bot.*;
 import com.sidemesh.binance.bot.api.BinanceAPI;
 import com.sidemesh.binance.bot.api.BinanceAPIException;
 import com.sidemesh.binance.bot.api.BinanceAPIv3;
+import com.sidemesh.binance.bot.grid.Grid;
+import com.sidemesh.binance.bot.grid.TradeGrid;
+import com.sidemesh.binance.bot.util.TradeUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Slf4j
@@ -22,11 +23,18 @@ public class SimpleGridBot implements Bot {
     /**
      * 持仓数量
      */
-    private BigDecimal positQuantity = BigDecimal.ZERO;
+    private BigDecimal positQuantity;
     /**
      * 上一次成交网格
      */
     private Grid preTradeGrid;
+
+    /**
+     * 订单处理标志位
+     * 0：无订单处理中
+     * 1：有订单正在处理中
+     */
+    int orderProcessingFlag = 0;
 
     public SimpleGridBot(String name, Symbol symbol, BigDecimal serviceChargeRate, TradeGrid tradeGrid, Account account, BigDecimal positQuantity) {
         this.name = name;
@@ -65,8 +73,18 @@ public class SimpleGridBot implements Bot {
         }
         // todo get price
         BigDecimal price = new BigDecimal("1.999");
+
+        try {
+            doTrade(price);
+        } catch (BinanceAPIException e) {
+            log.error("执行交易发生异常 ", e);
+        }
+    }
+
+    private void doTrade(BigDecimal price) throws BinanceAPIException {
         Grid currFallGrid = tradeGrid.getCurrFallGrid(price);
         if (currFallGrid != null) {
+            log.info("Bot {} {} 当前持仓数量 {} 当前价格 {} 进入格子 #{}", name, price, positQuantity, price, currFallGrid.getOrder());
             if (preTradeGrid == null) {
                 // 第一次建仓
                 log.info("Bot {} {} 开始第一次建仓....", name, symbol);
@@ -84,7 +102,7 @@ public class SimpleGridBot implements Bot {
         }
     }
 
-    private void sell(BigDecimal price, Grid currFallGrid) {
+    private void sell(BigDecimal price, Grid currFallGrid) throws BinanceAPIException {
         final var builder = OrderRequest.newLimitOrderBuilder();
         BigDecimal sellGridCount = BigDecimal.valueOf(Math.abs(currFallGrid.getOrder() - preTradeGrid.getOrder()));
         TradeQuantity sellTrade = TradeQuantity.instanceOf(price, tradeGrid.getStepAmount().subtract(sellGridCount));
@@ -92,31 +110,27 @@ public class SimpleGridBot implements Bot {
         if (positQuantity.compareTo(sellTrade.getQuantity()) < 0) {
             return;
         }
-        final var req = builder
+        OrderRequest req = builder
                 .sell()
-                .id(generateTradeId())
+                .id(TradeUtil.generateTradeId())
                 .symbol(symbol)
                 .price(price)
                 .quantity(sellTrade.getQuantity())
                 .timestamp(new Date().getTime())
                 .rcwindow(100L)
                 .build();
-        log.info("Bot {} {} 买入 数量 {} 金额 {}", name, symbol, sellTrade.getQuantity(), sellTrade.getAmount());
-        try {
+        log.info("Bot {} {} 卖出 数量 {} 金额 {}", name, symbol, sellTrade.getQuantity(), sellTrade.getAmount());
             Order order = binanceAPI.order(account, req);
             doHandleOrder(order, currFallGrid);
-        } catch (BinanceAPIException e) {
-            e.printStackTrace();
-        }
     }
 
-    private void buy(BigDecimal price, Grid currFallGrid) {
+    private void buy(BigDecimal price, Grid currFallGrid) throws BinanceAPIException {
         OrderRequest.LimitOrderBuilder builder = OrderRequest.newLimitOrderBuilder();
         BigDecimal buyGridCount = BigDecimal.valueOf(Math.abs(currFallGrid.getOrder() - preTradeGrid.getOrder()));
         TradeQuantity buyTrade = TradeQuantity.instanceOf(price, tradeGrid.getStepAmount().subtract(buyGridCount));
-        final var req = builder
+        OrderRequest req = builder
                 .buy()
-                .id(generateTradeId())
+                .id(TradeUtil.generateTradeId())
                 .symbol(symbol)
                 .price(price)
                 .quantity(buyTrade.getQuantity())
@@ -124,18 +138,8 @@ public class SimpleGridBot implements Bot {
                 .rcwindow(100L)
                 .build();
         log.info("Bot {} {} 买入 数量 {} 金额 {}", name, symbol, buyTrade.getQuantity(), buyTrade.getAmount());
-        try {
             Order order = binanceAPI.order(account, req);
             doHandleOrder(order, currFallGrid);
-        } catch (BinanceAPIException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private String generateTradeId() {
-        Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-        return sdf.format(date);
     }
 
 
@@ -146,9 +150,9 @@ public class SimpleGridBot implements Bot {
      */
     private void doHandleOrder(Order order, Grid fallGrid) {
         if (order.isDeal()) {
-            log.info("bot {} success!", name);
             OrderRequest request = order.getRequest();
             BigDecimal executedQty = order.getResponse().getExecutedQty();
+            log.info("bot {} {} 交易成功! 交易数量 {}", name, symbol, executedQty);
             if (request.side == OrderRequest.Side.BUY) {
                 positQuantity = positQuantity.add(executedQty);
             } else {
@@ -156,7 +160,7 @@ public class SimpleGridBot implements Bot {
             }
             preTradeGrid = fallGrid;
         } else {
-            log.info("bot {} fail ", name);
+            log.info("bot {} {} 交易失败! ", name, symbol);
         }
     }
 }
