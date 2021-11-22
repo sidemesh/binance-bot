@@ -1,19 +1,32 @@
 package com.sidemesh.binance.bot;
 
 import com.sidemesh.binance.bot.proxy.ClashProxy;
+import com.sidemesh.binance.bot.proxy.ProxyInfo;
 import com.sidemesh.binance.bot.websocket.RealtimeStreamWebSocketImpl;
+import io.javalin.Javalin;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class Application {
 
-    public static void main(String[] args) throws InterruptedException {
-        System.out.println("binance-bot\n");
+    public static void main(String[] args) {
+        log.info("binance-bot v0.0.1");
+        var opts = ApplicationOptions.formEnv();
 
-        var proxy = new ClashProxy("127.0.0.1", 7890);
+        ProxyInfo proxy = opts.isEnableLocalProxy() ? ClashProxy.newLocalClashProxy() : null;
         var realtimeStream = new RealtimeStreamWebSocketImpl(proxy);
-
         realtimeStream.run();
 
-        Thread.sleep(100000000000000000L);
+        if (opts.isEnableApiServer()) {
+            runApiServer();
+        }
+    }
+
+    private static void runApiServer() {
+        Javalin app = Javalin.create(cfg -> {
+            cfg.showJavalinBanner = true;
+        }).start(8080);
+        app.get("/api/v1/bots", ctx -> ctx.result("TODO"));
     }
 
 }
