@@ -6,15 +6,16 @@ import com.sidemesh.binance.bot.api.BinanceAPIException;
 import com.sidemesh.binance.bot.api.BinanceAPIv3;
 import com.sidemesh.binance.bot.grid.Grid;
 import com.sidemesh.binance.bot.grid.TradeGrid;
+import com.sidemesh.binance.bot.proxy.ClashProxy;
 import com.sidemesh.binance.bot.util.TradeUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
+import java.time.Duration;
 import java.util.Date;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 @Slf4j
 public class SimpleGridBot implements Bot {
@@ -58,8 +59,8 @@ public class SimpleGridBot implements Bot {
         this.positQuantity = positQuantity == null ? BigDecimal.ZERO : positQuantity;
         ThreadFactoryBuilder builder = new ThreadFactoryBuilder();
         orderPool = new ThreadPoolExecutor(1, 1, 0, TimeUnit.SECONDS,
-                // 阻塞队列为 0
-                new ArrayBlockingQueue<>(0),
+                // 阻塞队列为 1
+                new ArrayBlockingQueue<>(1),
                 builder.setNameFormat("bot-order-pool-%d").build(),
                 // 丢弃并发的订单
                 new ThreadPoolExecutor.DiscardPolicy());
@@ -124,7 +125,7 @@ public class SimpleGridBot implements Bot {
     }
 
     private void doTrade(BigDecimal price, Grid currFallGrid) throws BinanceAPIException {
-        log.info("Bot {} {} 当前持仓数量 {} 当前价格 {} 进入格子 #{}", name, price, positQuantity, price, currFallGrid.getOrder());
+        log.info("Bot {} {} 当前持仓数量 {} 当前价格 {} 进入格子 #{}", name, symbol, positQuantity, price, currFallGrid.getOrder());
         if (preTradeGrid == null) {
             // 第一次建仓
             log.info("Bot {} {} 开始第一次建仓....", name, symbol);
