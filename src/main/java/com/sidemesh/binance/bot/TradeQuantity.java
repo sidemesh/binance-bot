@@ -21,12 +21,20 @@ public class TradeQuantity {
      */
     public static TradeQuantity instanceOf(BigDecimal symbolPrice, BigDecimal tradeAmount) {
         int scale = Math.max(symbolPrice.scale(), tradeAmount.scale());
-        return new TradeQuantity(tradeAmount,
-                tradeAmount.divide(symbolPrice, scale + 2, RoundingMode.HALF_UP));
+        return new TradeQuantity(tradeAmount.divide(symbolPrice, scale + 2, RoundingMode.HALF_UP),
+                tradeAmount);
     }
 
     public TradeQuantity(BigDecimal quantity, BigDecimal amount) {
         this.quantity = quantity;
         this.amount = amount;
+    }
+
+    @Override
+    public String toString() {
+        return "TradeQuantity{" +
+                "quantity=" + quantity +
+                ", amount=" + amount +
+                '}';
     }
 }
