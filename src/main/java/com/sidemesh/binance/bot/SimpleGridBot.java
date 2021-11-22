@@ -1,5 +1,6 @@
 package com.sidemesh.binance.bot;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.sidemesh.binance.bot.api.BinanceAPI;
 import com.sidemesh.binance.bot.api.BinanceAPIException;
 import com.sidemesh.binance.bot.api.BinanceAPIv3;
@@ -10,6 +11,10 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class SimpleGridBot implements Bot {
@@ -17,7 +22,7 @@ public class SimpleGridBot implements Bot {
     private Symbol symbol;
     private BigDecimal serviceChargeRate;
     private TradeGrid tradeGrid;
-    private BinanceAPI binanceAPI = new BinanceAPIv3();
+    private BinanceAPI binanceAPI;
     private Account account;
     private BotStatusEnum status = BotStatusEnum.STOP;
     /**
@@ -35,14 +40,36 @@ public class SimpleGridBot implements Bot {
      * 1：有订单正在处理中
      */
     int orderProcessingFlag = 0;
+    /**
+     * 订单处理线程池
+     */
+    private ThreadPoolExecutor orderPool;
 
     public SimpleGridBot(String name, Symbol symbol, BigDecimal serviceChargeRate, TradeGrid tradeGrid, Account account, BigDecimal positQuantity) {
+        check(symbol, "symbol");
+        check(tradeGrid, "tradeGrid");
+        check(account, "account");
         this.name = name;
         this.symbol = symbol;
         this.serviceChargeRate = serviceChargeRate;
         this.tradeGrid = tradeGrid;
         this.account = account;
-        this.positQuantity = positQuantity;
+        this.binanceAPI = new BinanceAPIv3();
+        this.positQuantity = positQuantity == null ? BigDecimal.ZERO : positQuantity;
+        ThreadFactoryBuilder builder = new ThreadFactoryBuilder();
+        orderPool = new ThreadPoolExecutor(1, 1, 0, TimeUnit.SECONDS,
+                // 阻塞队列为 0
+                new ArrayBlockingQueue<>(0),
+                builder.setNameFormat("bot-order-pool-%d").build(),
+                // 丢弃并发的订单
+                new ThreadPoolExecutor.DiscardPolicy());
+
+    }
+
+    private void check(Object o, String field) {
+        if (o == null) {
+            throw new IllegalArgumentException("missing " + field);
+        }
     }
 
     @Override
@@ -66,38 +93,50 @@ public class SimpleGridBot implements Bot {
         status = BotStatusEnum.STOP;
     }
 
+    // todo 暂不支持并发
     @Override
     public void onPriceUpdate(Object data) {
         if (status != BotStatusEnum.RUNNING) {
             return;
         }
+        if (orderProcessingFlag == 1) {
+            return;
+        }
+
         // todo get price
         BigDecimal price = new BigDecimal("1.999");
 
-        try {
-            doTrade(price);
-        } catch (BinanceAPIException e) {
-            log.error("执行交易发生异常 ", e);
-        }
+        // 表示正在处理
+        orderProcessingFlag = 1;
+        orderPool.submit(() -> {
+            try {
+                Grid currFallGrid = tradeGrid.getCurrFallGrid(price);
+                if (currFallGrid != null) {
+                    doTrade(price, currFallGrid);
+                }
+            } catch (BinanceAPIException e) {
+                log.error("执行交易发生异常 ", e);
+            } finally {
+                // 重置flag
+                orderProcessingFlag = 0;
+            }
+        });
     }
 
-    private void doTrade(BigDecimal price) throws BinanceAPIException {
-        Grid currFallGrid = tradeGrid.getCurrFallGrid(price);
-        if (currFallGrid != null) {
-            log.info("Bot {} {} 当前持仓数量 {} 当前价格 {} 进入格子 #{}", name, price, positQuantity, price, currFallGrid.getOrder());
-            if (preTradeGrid == null) {
-                // 第一次建仓
-                log.info("Bot {} {} 开始第一次建仓....", name, symbol);
+    private void doTrade(BigDecimal price, Grid currFallGrid) throws BinanceAPIException {
+        log.info("Bot {} {} 当前持仓数量 {} 当前价格 {} 进入格子 #{}", name, price, positQuantity, price, currFallGrid.getOrder());
+        if (preTradeGrid == null) {
+            // 第一次建仓
+            log.info("Bot {} {} 开始第一次建仓....", name, symbol);
+            buy(price, currFallGrid);
+        } else {
+            int preTradeOrder = preTradeGrid.getOrder();
+            if (currFallGrid.getOrder() > preTradeOrder) {
+                // 卖出
+                sell(price, currFallGrid);
+            } else if (currFallGrid.getOrder() < preTradeOrder) {
+                // 买入
                 buy(price, currFallGrid);
-            } else {
-                int preTradeOrder = preTradeGrid.getOrder();
-                if (currFallGrid.getOrder() > preTradeOrder) {
-                    // 卖出
-                    sell(price, currFallGrid);
-                } else if (currFallGrid.getOrder() < preTradeOrder) {
-                    // 买入
-                    buy(price, currFallGrid);
-                }
             }
         }
     }
@@ -120,8 +159,8 @@ public class SimpleGridBot implements Bot {
                 .rcwindow(100L)
                 .build();
         log.info("Bot {} {} 卖出 数量 {} 金额 {}", name, symbol, sellTrade.getQuantity(), sellTrade.getAmount());
-            Order order = binanceAPI.order(account, req);
-            doHandleOrder(order, currFallGrid);
+        Order order = binanceAPI.order(account, req);
+        doHandleOrder(order, currFallGrid);
     }
 
     private void buy(BigDecimal price, Grid currFallGrid) throws BinanceAPIException {
@@ -138,13 +177,14 @@ public class SimpleGridBot implements Bot {
                 .rcwindow(100L)
                 .build();
         log.info("Bot {} {} 买入 数量 {} 金额 {}", name, symbol, buyTrade.getQuantity(), buyTrade.getAmount());
-            Order order = binanceAPI.order(account, req);
-            doHandleOrder(order, currFallGrid);
+        Order order = binanceAPI.order(account, req);
+        doHandleOrder(order, currFallGrid);
     }
 
 
     /**
      * 处理交易结果
+     *
      * @param order
      * @param fallGrid
      */
