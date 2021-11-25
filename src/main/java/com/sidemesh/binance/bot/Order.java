@@ -17,4 +17,10 @@ public interface Order {
      */
     OrderResponse getResponse();
 
+    /**
+     * 交易是否完成
+     * @return
+     */
+    boolean isDeal();
+
 }
