@@ -1,17 +1,14 @@
 package com.sidemesh.binance.bot;
 
-import lombok.Getter;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 /**
  * 交易金额
  */
-@Getter
 public class TradeQuantity {
-    private final BigDecimal quantity;
-    private final BigDecimal amount;
+    public final BigDecimal quantity;
+    public final BigDecimal amount;
 
     /**
      *
@@ -25,7 +22,7 @@ public class TradeQuantity {
                 tradeAmount);
     }
 
-    public TradeQuantity(BigDecimal quantity, BigDecimal amount) {
+    private TradeQuantity(BigDecimal quantity, BigDecimal amount) {
         this.quantity = quantity;
         this.amount = amount;
     }

@@ -23,9 +23,4 @@ public interface Bot {
      */
     void stop();
 
-    /**
-     * 当价格更新
-     */
-    void onPriceUpdate(Object data);
-
 }
