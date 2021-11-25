@@ -18,6 +18,5 @@ public class TradeRealTimeStreamPusher implements RealtimeStreamListener {
 
     @Override
     public void update(RealtimeStreamData data) {
-        // TODO
     }
 }
