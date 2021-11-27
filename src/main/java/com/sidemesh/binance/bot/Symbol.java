@@ -13,6 +13,7 @@ public enum Symbol implements StringEnum<Symbol> {
     REN_USDT("RENUSDT","0.0000001", "0.1"),
     GALA_USDT("GALAUSDT","0.00001", "1"),
     ANKR_USDT("ANKRUSDT","0.0000001", "0.1"),
+    CHESS_USDT("CHESSUSDT","0.001", "0.1"),
     BTC_USDT("BTCUSDT", "0.0000001", "0.1");
 
     //

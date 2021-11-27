@@ -28,8 +28,7 @@ public class ConditionBotWorker implements Runnable, BotWorker {
     public boolean submit(Runnable runnable) {
         if (!isProcessing) {
             try {
-                consumerLock.lock();
-                if (!isProcessing) {
+                if (consumerLock.tryLock() && !isProcessing) {
                     task = runnable;
                     consumerLockCondition.signalAll();
                     return true;
@@ -48,18 +47,18 @@ public class ConditionBotWorker implements Runnable, BotWorker {
             try {
                 consumerLock.lock();
                 consumerLockCondition.await();
+                isProcessing = true;
                 final var t = task;
                 task = null;
                 if (t != null) {
-                    isProcessing = true;
                     t.run();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
                 // ignore
             } finally {
-                isProcessing = false;
                 consumerLock.unlock();
+                isProcessing = false;
             }
         }
     }

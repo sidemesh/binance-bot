@@ -22,13 +22,13 @@ public class Application {
 
         var bot =  new SimpleGridBot(
                 "simple-grid-bot-0",
-                Symbol.ANKR_USDT,
+                Symbol.CHESS_USDT,
                 Account.fromEnv(),
                 new BinanceAPIv3(proxy != null ? proxy.toProxy() : null, Duration.ofSeconds(10), Duration.ofSeconds(10)),
                 new BigDecimal(20000),
-                new BigDecimal("0.18"),
-                new BigDecimal("0.21"),
-                100,
+                new BigDecimal("1"),
+                new BigDecimal("100"),
+                20,
                 rts
         );
         rts.run();

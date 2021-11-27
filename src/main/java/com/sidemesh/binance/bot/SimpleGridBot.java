@@ -8,6 +8,7 @@ import com.sidemesh.binance.bot.grid.TradeGrid;
 import com.sidemesh.binance.bot.util.TradeUtil;
 import com.sidemesh.binance.bot.worker.BlockingQueueBotWorker;
 import com.sidemesh.binance.bot.worker.BotWorker;
+import com.sidemesh.binance.bot.worker.ConditionBotWorker;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
@@ -52,6 +53,8 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
         this.binanceAPI = binanceAPI;
         this.investInfo = new InvestInfo(money, BigDecimal.ZERO);
         this.tradeGrid = TradeGrid.generate(money, new FixedBoundTradeGridBuilder(lowPrice, highPrice, grids));
+        // this.worker = new ConditionBotWorker(name + "-worker");
+        // 目测性能好一些，需要 benchmark
         this.worker = new BlockingQueueBotWorker(name + "-worker");
         rts.addListener(symbol, this);
     }
