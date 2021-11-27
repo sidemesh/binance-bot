@@ -53,9 +53,9 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
         this.binanceAPI = binanceAPI;
         this.investInfo = new InvestInfo(money, BigDecimal.ZERO);
         this.tradeGrid = TradeGrid.generate(money, new FixedBoundTradeGridBuilder(lowPrice, highPrice, grids));
-        // this.worker = new ConditionBotWorker(name + "-worker");
+        this.worker = new ConditionBotWorker(name + "-worker");
         // 目测性能好一些，需要 benchmark
-        this.worker = new BlockingQueueBotWorker(name + "-worker");
+        // this.worker = new BlockingQueueBotWorker(name + "-worker");
         rts.addListener(symbol, this);
     }
 

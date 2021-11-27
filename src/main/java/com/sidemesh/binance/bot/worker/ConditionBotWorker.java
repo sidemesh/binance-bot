@@ -28,7 +28,8 @@ public class ConditionBotWorker implements Runnable, BotWorker {
     public boolean submit(Runnable runnable) {
         if (!isProcessing) {
             try {
-                if (consumerLock.tryLock() && !isProcessing) {
+                if (consumerLock.tryLock()) {
+                    // TODO is need check is processing??
                     task = runnable;
                     consumerLockCondition.signalAll();
                     return true;
