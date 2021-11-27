@@ -19,13 +19,13 @@ public class TradeQuantityCalcTest {
     @Test
     public void isQuantityCorrect() {
         TradeQuantity tradeQuantity = TradeQuantity.instanceOf(BigDecimal.ONE, tradeGrid.getStepAmount());
-        Assertions.assertEquals(tradeQuantity.getQuantity().compareTo(BigDecimal.valueOf(10)), 0);
+        Assertions.assertEquals(tradeQuantity.quantity.compareTo(BigDecimal.valueOf(10)), 0);
 
         tradeQuantity = TradeQuantity.instanceOf(BigDecimal.TEN, tradeGrid.getStepAmount());
-        Assertions.assertEquals(tradeQuantity.getQuantity().compareTo(BigDecimal.valueOf(1)), 0);
+        Assertions.assertEquals(tradeQuantity.quantity.compareTo(BigDecimal.valueOf(1)), 0);
 
         tradeQuantity = TradeQuantity.instanceOf(new BigDecimal("5.12311"), tradeGrid.getStepAmount());
-        Assertions.assertEquals(tradeQuantity.getQuantity().compareTo(new BigDecimal("1.9519393")), 0);
+        Assertions.assertEquals(tradeQuantity.quantity.compareTo(new BigDecimal("1.9519393")), 0);
 
     }
 

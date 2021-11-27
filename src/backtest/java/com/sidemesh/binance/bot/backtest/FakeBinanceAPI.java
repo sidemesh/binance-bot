@@ -21,6 +21,7 @@ public class FakeBinanceAPI implements BinanceAPI {
             public OrderResponse getResponse() {
                 var res = new OrderResponse();
                 res.setPrice(request.price);
+                res.setExecutedQty(request.quantity);
                 return res;
             }
 

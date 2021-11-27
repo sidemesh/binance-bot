@@ -46,7 +46,7 @@ public class DataLoader {
     }
 
     private Trade toTrade(String[] line) {
-        return new Trade(line[0], new BigDecimal(line[2]), Long.valueOf(line[4]));
+        return new Trade(line[0], new BigDecimal(line[1]), Long.valueOf(line[4]));
     }
 
 }

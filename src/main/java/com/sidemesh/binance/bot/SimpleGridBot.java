@@ -105,18 +105,18 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
     }
 
     private void onPriceUpdate(RealtimeStreamData data) {
-        // 跳过延迟的 ID
-        if (null == currentTrade || data.id() > currentTrade.id()) {
-            currentTrade = data;
-        } else {
+        if (currentTrade != null && currentTrade.id() > data.id()) {
             return;
         }
+        currentTrade = data;
         final var price = data.price();
+        // 没有游标设置游标
         if (preTradeGrid == null) {
             // 确定当前所处格子
             preTradeGrid = tradeGrid.getCurrFallGrid(price);
             return;
         }
+
         try {
             Grid currFallGrid = tradeGrid.getCurrFallGrid(price);
             if (currFallGrid != null) {
@@ -134,11 +134,15 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
     private void doTrade(BigDecimal price, Grid currFallGrid) throws BinanceAPIException {
         log.info("Bot {} {} 当前持仓数量 {} 当前价格 {} 进入格子 #{}", name, symbol, positQuantity, price, currFallGrid.getOrder());
         int preTradeOrder = preTradeGrid.getOrder();
+        // 判断是否为空仓
+        final var isEmptyQuantity = BigDecimal.ZERO.compareTo(positQuantity) == 0;
         if (currFallGrid.getOrder() > preTradeOrder) {
-            // 卖出
-            sell(price, currFallGrid);
+            if (isEmptyQuantity) {
+                preTradeGrid = currFallGrid;
+            } else {
+                sell(price, currFallGrid);
+            }
         } else if (currFallGrid.getOrder() < preTradeOrder) {
-            // 买入
             buy(price, currFallGrid);
         }
     }
@@ -146,7 +150,8 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
     private void sell(BigDecimal price, Grid currFallGrid) throws BinanceAPIException {
         final var builder = OrderRequest.newLimitOrderBuilder();
         BigDecimal sellGridCount = BigDecimal.valueOf(Math.abs(currFallGrid.getOrder() - preTradeGrid.getOrder()));
-        TradeQuantity sellTrade = TradeQuantity.instanceOf(price, tradeGrid.getStepAmount().subtract(sellGridCount));
+        // 交易数量 = （格子数量 *
+        TradeQuantity sellTrade = TradeQuantity.instanceOf(price, tradeGrid.getStepAmount().multiply(sellGridCount));
         // 判断当前持仓数量
         if (positQuantity.compareTo(sellTrade.quantity) < 0) {
             return;
@@ -168,7 +173,7 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
     private void buy(BigDecimal price, Grid currFallGrid) throws BinanceAPIException {
         OrderRequest.LimitOrderBuilder builder = OrderRequest.newLimitOrderBuilder();
         BigDecimal buyGridCount = BigDecimal.valueOf(Math.abs(currFallGrid.getOrder() - preTradeGrid.getOrder()));
-        TradeQuantity buyTrade = TradeQuantity.instanceOf(price, tradeGrid.getStepAmount().subtract(buyGridCount));
+        TradeQuantity buyTrade = TradeQuantity.instanceOf(price, tradeGrid.getStepAmount().multiply(buyGridCount));
         OrderRequest req = builder
                 .buy()
                 .id(TradeUtil.generateTradeId())

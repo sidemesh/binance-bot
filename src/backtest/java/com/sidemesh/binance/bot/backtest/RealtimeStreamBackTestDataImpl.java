@@ -31,15 +31,17 @@ public class RealtimeStreamBackTestDataImpl implements RealtimeStream {
                 throw new RuntimeException(e);
             }
 
-            var pool = Executors.newFixedThreadPool(2);
 
             trades.forEach(t -> {
-                pool.submit(() -> {
-                    listeners.forEach(l -> l.update(t));
-                });
+                try {
+                    Thread.sleep(10L);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(t);
+                listeners.forEach(l -> l.update(t));
             });
 
-            pool.shutdown();
         },"rtl-test");
 
         thread.start();
