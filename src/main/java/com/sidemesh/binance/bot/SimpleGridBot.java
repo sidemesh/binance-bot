@@ -32,12 +32,8 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
     private RealtimeStreamData currentTrade;
     // 手续费
     private BigDecimal serviceChargeRate;
-    // 投资金额
-    private final BigDecimal money;
-    // 持仓数量
-    private BigDecimal positQuantity;
-    // 可用资金
-    private BigDecimal availableMoney;
+
+    private final InvestInfo investInfo;
 
     public SimpleGridBot(String name,
                          Symbol symbol,
@@ -55,10 +51,8 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
         this.symbol = symbol;
         this.account = account;
         this.binanceAPI = binanceAPI;
-        this.money = money;
         this.serviceChargeRate = serviceChargeRate;
-        this.positQuantity = BigDecimal.ZERO;
-        this.availableMoney = money;
+        this.investInfo = new InvestInfo(money, BigDecimal.ZERO);
         this.tradeGrid = TradeGrid.generate(money, new FixedBoundTradeGridBuilder(lowPrice, highPrice, grids));
         this.worker = new BotWorker(name + "-worker");
         rts.addListener(symbol, this);
@@ -132,12 +126,11 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
     }
 
     private void doTrade(BigDecimal price, Grid currFallGrid) throws BinanceAPIException {
-        log.info("Bot {} {} 当前持仓数量 {} 当前价格 {} 进入格子 #{}", name, symbol, positQuantity, price, currFallGrid.getOrder());
+        log.info("Bot {} {} {} 当前价格 {} 当前格子#{} --> 进入格子#{}", name, symbol, investInfo, price, preTradeGrid.getOrder(), currFallGrid.getOrder());
         int preTradeOrder = preTradeGrid.getOrder();
         // 判断是否为空仓
-        final var isEmptyQuantity = BigDecimal.ZERO.compareTo(positQuantity) == 0;
         if (currFallGrid.getOrder() > preTradeOrder) {
-            if (isEmptyQuantity) {
+            if (investInfo.isEmptyQuantity()) {
                 preTradeGrid = currFallGrid;
             } else {
                 sell(price, currFallGrid);
@@ -152,22 +145,24 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
         BigDecimal sellGridCount = BigDecimal.valueOf(Math.abs(currFallGrid.getOrder() - preTradeGrid.getOrder()));
         // 交易数量 = （格子数量 *
         TradeQuantity sellTrade = TradeQuantity.instanceOf(price, tradeGrid.getStepAmount().multiply(sellGridCount));
-        // 判断当前持仓数量
-        if (positQuantity.compareTo(sellTrade.quantity) < 0) {
-            return;
+        // 判断当前持仓数量 (卖出的数量大于当前持仓 卖出全部持仓)
+        BigDecimal sellQuantity = sellTrade.quantity;
+        if (investInfo.getPositQuantity().compareTo(sellQuantity) < 0) {
+            sellQuantity = investInfo.getPositQuantity();
         }
+
         OrderRequest req = builder
                 .sell()
                 .id(TradeUtil.generateTradeId())
                 .symbol(symbol)
                 .price(price)
-                .quantity(sellTrade.quantity)
+                .quantity(sellQuantity)
                 .timestamp(Instant.now().getEpochSecond())
                 .rcwindow(3000L)
                 .build();
-        log.info("Bot {} {} 卖出 数量 {} 金额 {}", name, symbol, sellTrade.quantity, sellTrade.quantity);
+        log.info("Bot {} {} 卖出 数量 {} 金额 {}", name, symbol, sellTrade.quantity, sellTrade.amount);
         Order order = binanceAPI.order(account, req);
-        doHandleOrder(order, currFallGrid);
+        doHandleOrder(order, currFallGrid, sellTrade);
     }
 
     private void buy(BigDecimal price, Grid currFallGrid) throws BinanceAPIException {
@@ -183,9 +178,9 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
                 .timestamp(Instant.now().getEpochSecond())
                 .rcwindow(3000L)
                 .build();
-        log.info("Bot {} {} 买入 数量 {} 金额 {}", name, symbol, buyTrade.quantity, buyTrade.quantity);
+        log.info("Bot {} {} 买入 数量 {} 金额 {}", name, symbol, buyTrade.quantity, buyTrade.amount);
         Order order = binanceAPI.order(account, req);
-        doHandleOrder(order, currFallGrid);
+        doHandleOrder(order, currFallGrid, buyTrade);
     }
 
 
@@ -194,18 +189,19 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
      *
      * @param order
      * @param fallGrid
+     * @param tradeQuantity
      */
-    private void doHandleOrder(Order order, Grid fallGrid) {
+    private void doHandleOrder(Order order, Grid fallGrid, TradeQuantity tradeQuantity) {
         if (order.isDeal()) {
             OrderRequest request = order.getRequest();
             BigDecimal executedQty = order.getResponse().getExecutedQty();
-            log.info("bot {} {} 交易成功! 交易数量 {}", name, symbol, executedQty);
             if (request.side == OrderRequest.Side.BUY) {
-                positQuantity = positQuantity.add(executedQty);
+                investInfo.buySome(tradeQuantity.amount, executedQty);
             } else {
-                positQuantity = positQuantity.subtract(executedQty);
+                investInfo.sellSome(tradeQuantity.amount, executedQty);
             }
             preTradeGrid = fallGrid;
+            log.info("bot {} {} 交易成功! 交易数量 {}  {}", name, symbol, executedQty, investInfo.getInfo(request.price));
         } else {
             log.info("bot {} {} 交易失败! ", name, symbol);
         }

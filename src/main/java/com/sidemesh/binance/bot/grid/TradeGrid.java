@@ -36,11 +36,6 @@ public class TradeGrid {
      */
     @Getter
     private final Grid topGrid;
-    /**
-     * 投资总额
-     */
-    @Getter
-    private BigDecimal investAmount;
 
     @Getter
     private BigDecimal stepAmount;
@@ -48,9 +43,10 @@ public class TradeGrid {
     public static TradeGrid generate(BigDecimal investAmount, TradeGridBuilder tradeGridBuilder) {
         List<Grid> grids = tradeGridBuilder.create();
         TradeGrid tradeGrid = new TradeGrid(grids);
-        // todo 校验最小投入总金额
-        tradeGrid.investAmount = investAmount;
-        tradeGrid.stepAmount = investAmount.divide(BigDecimal.valueOf(grids.size()), RoundingMode.HALF_UP);
+        tradeGrid.stepAmount = investAmount.divide(BigDecimal.valueOf(grids.size()), investAmount.scale() + 2, RoundingMode.HALF_UP);
+        if (BigDecimal.TEN.compareTo(tradeGrid.getStepAmount()) >= 0) {
+            throw new IllegalArgumentException("invest Amount too small");
+        }
         return tradeGrid;
     }
 
