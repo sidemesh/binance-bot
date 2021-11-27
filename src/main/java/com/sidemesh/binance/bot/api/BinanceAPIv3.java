@@ -72,6 +72,7 @@ public class BinanceAPIv3 implements BinanceAPI {
      * 通用的下单接口
      */
     protected Order order(String api, Account account, OrderRequest request) throws BinanceAPIException {
+        // 需要确认币安针对是账户或者IP限流或者账户+IP限流
         if (!limiter.acquire()) throw BinanceAPIException.limited();
 
         final var paramas = request.toUrlParams();
