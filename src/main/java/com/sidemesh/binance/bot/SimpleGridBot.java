@@ -111,8 +111,12 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
         } else {
             return;
         }
-
         final var price = data.price();
+        if (preTradeGrid == null) {
+            // 确定当前所处格子
+            preTradeGrid = tradeGrid.getCurrFallGrid(price);
+            return;
+        }
         try {
             Grid currFallGrid = tradeGrid.getCurrFallGrid(price);
             if (currFallGrid != null) {
@@ -129,19 +133,13 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
 
     private void doTrade(BigDecimal price, Grid currFallGrid) throws BinanceAPIException {
         log.info("Bot {} {} 当前持仓数量 {} 当前价格 {} 进入格子 #{}", name, symbol, positQuantity, price, currFallGrid.getOrder());
-        if (preTradeGrid == null) {
-            // 第一次建仓
-            log.info("Bot {} {} 开始第一次建仓....", name, symbol);
+        int preTradeOrder = preTradeGrid.getOrder();
+        if (currFallGrid.getOrder() > preTradeOrder) {
+            // 卖出
+            sell(price, currFallGrid);
+        } else if (currFallGrid.getOrder() < preTradeOrder) {
+            // 买入
             buy(price, currFallGrid);
-        } else {
-            int preTradeOrder = preTradeGrid.getOrder();
-            if (currFallGrid.getOrder() > preTradeOrder) {
-                // 卖出
-                sell(price, currFallGrid);
-            } else if (currFallGrid.getOrder() < preTradeOrder) {
-                // 买入
-                buy(price, currFallGrid);
-            }
         }
     }
 
