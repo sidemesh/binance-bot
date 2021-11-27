@@ -21,9 +21,9 @@ public class TradeGrid {
     private final List<Grid> grids;
 
     /**
-     * 网格Map
+     * 网格索引
      */
-    private final Map<Integer, Grid> gridMap;
+    private final Grid[] gridIndexes;
 
     /**
      * 最底部的网格
@@ -62,8 +62,12 @@ public class TradeGrid {
         // 找出顶部和底部
         bottomGrid = grids.get(0);
         topGrid = grids.get(grids.size() - 1);
-        // 转换 Map
-        gridMap = grids.stream().collect(Collectors.toMap(Grid::getOrder, v -> v, (o1, o2) -> o1));
+
+        // 转换数组
+        gridIndexes = new Grid[grids.size() + 1];
+        // 由于 order 由 1 开始，所以 0 设为哑结点
+        gridIndexes[0] = null;
+        this.grids.forEach(g -> gridIndexes[g.getOrder()] = g);
     }
 
     /**
@@ -91,11 +95,9 @@ public class TradeGrid {
      * @return
      */
     private Grid binarySearchGrids(BigDecimal currPrice, int startOrder, int topOrder) {
-        if (startOrder == topOrder) {
-            return gridMap.get(startOrder);
-        }
+        if (startOrder == topOrder)  return gridIndexes[startOrder];
         int mid = (topOrder + startOrder) / 2 + 1;
-        Grid midGrid = gridMap.get(mid);
+        Grid midGrid = gridIndexes[mid];
         if (currPrice.compareTo(midGrid.getLowPrice()) < 0) {
             return binarySearchGrids(currPrice, startOrder, mid - 1);
         } else if (currPrice.compareTo(midGrid.getHighPrice()) >= 0) {
