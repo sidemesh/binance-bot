@@ -6,6 +6,8 @@ import com.sidemesh.binance.bot.grid.FixedBoundTradeGridBuilder;
 import com.sidemesh.binance.bot.grid.Grid;
 import com.sidemesh.binance.bot.grid.TradeGrid;
 import com.sidemesh.binance.bot.util.TradeUtil;
+import com.sidemesh.binance.bot.worker.BlockingQueueBotWorker;
+import com.sidemesh.binance.bot.worker.BotWorker;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
@@ -50,7 +52,7 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
         this.binanceAPI = binanceAPI;
         this.investInfo = new InvestInfo(money, BigDecimal.ZERO);
         this.tradeGrid = TradeGrid.generate(money, new FixedBoundTradeGridBuilder(lowPrice, highPrice, grids));
-        this.worker = new BotWorker(name + "-worker");
+        this.worker = new BlockingQueueBotWorker(name + "-worker");
         rts.addListener(symbol, this);
     }
 
@@ -88,8 +90,8 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
     @Override
     public void update(RealtimeStreamData data) {
         if (isRunning()) {
-            if (!worker.submit(() -> onPriceUpdate(data), false)) {
-                log.debug("{} bot worker busy, abandon update event {}", name, data.id());
+            if (!worker.submit(() -> onPriceUpdate(data))) {
+                log.info("{} bot worker busy, abandon update event {}", name, data.id());
             }
         }
     }

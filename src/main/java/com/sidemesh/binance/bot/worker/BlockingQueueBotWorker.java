@@ -1,11 +1,11 @@
-package com.sidemesh.binance.bot;
+package com.sidemesh.binance.bot.worker;
 
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
 @Slf4j
-public class BotWorker implements Runnable {
+public class BlockingQueueBotWorker implements Runnable, BotWorker {
 
     // 当 worker 被销毁后应该丢弃
     private volatile boolean isDestroy = false;
@@ -14,16 +14,11 @@ public class BotWorker implements Runnable {
     // 并发队列
     private final LinkedBlockingQueue<Runnable> tasks = new LinkedBlockingQueue<>();
 
-    public BotWorker(String name) {
+    public BlockingQueueBotWorker(String name) {
         new Thread(this, name).start();
     }
 
-    public boolean submit(Runnable runnable, boolean isImportant) {
-        if (isImportant) {
-            tasks.add(runnable);
-            return true;
-        }
-
+    public boolean submit(Runnable runnable) {
         if (!isProcessing) {
             // TODO 注意此处可能有大量并发
             tasks.add(runnable);
@@ -40,8 +35,7 @@ public class BotWorker implements Runnable {
                 var task = tasks.take();
                 isProcessing = true;
                 task.run();
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (InterruptedException e) {
                 // ignore
             } finally {
                 isProcessing = false;
