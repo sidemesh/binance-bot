@@ -12,6 +12,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 
+import java.io.IOException;
 import java.net.Proxy;
 import java.time.Duration;
 
@@ -35,8 +36,9 @@ public class BinanceAPIv3 implements BinanceAPI {
         this.cli = httpCli;
         this.fastApiSelector = fas;
         // 立刻获取一个最优地址
-        this.baseApi = fas.once();
-        this.fastApiSelector.onUpdate(this::setBaseApi).loop(10, 10);
+        this.baseApi = BINANCE_APIS[0];
+        //this.baseApi = fas.once();
+        // this.fastApiSelector.onUpdate(this::setBaseApi).loop(10, 10);
     }
 
     public BinanceAPIv3() {
@@ -79,16 +81,23 @@ public class BinanceAPIv3 implements BinanceAPI {
         // 为了性能仅采用 URL Params 模式填充数据
         final var req = new Request.Builder()
                 .url(buildRequestUrl(api, signByHMACSHA256(account, paramas), paramas))
+                .header("X-MBX-APIKEY", account.key)
                 .post(OKHTTP_EMPTY_REQUEST_BODY)
                 .build();
 
+        okhttp3.Response executed = null;
+        BinanceAPIV3ErrorResponse errresp;
         try {
-            final var executed = cli.newCall(req).execute();
-            final var response = JSON.jackson.read(executed.toString(), OrderResponse.class);
-            return new OrderImpl(request, response);
+            executed = cli.newCall(req).execute();
+            if (executed.isSuccessful()) {
+                final var response = JSON.jackson.read(executed.body().string(), OrderResponse.class);
+                return new OrderImpl(request, response);
+            }
+            errresp = JSON.jackson.read(new String(executed.body().bytes()), BinanceAPIV3ErrorResponse.class);
         } catch (Exception e) {
             throw new BinanceAPIException(e);
         }
+        throw new BinanceAPIException(false, errresp);
     }
 
     private void setBaseApi(String api) {
@@ -96,7 +105,7 @@ public class BinanceAPIv3 implements BinanceAPI {
     }
 
     private String buildRequestUrl(String api, String signature, String params) {
-        return baseApi +  api + "?signature=" + signature + "&" + params;
+        return baseApi +  api + "?" + params + "&signature=" + signature;
     }
 
     /**

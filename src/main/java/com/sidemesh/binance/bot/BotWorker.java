@@ -40,7 +40,8 @@ public class BotWorker implements Runnable {
                 var task = tasks.take();
                 isProcessing = true;
                 task.run();
-            } catch (InterruptedException e) {
+            } catch (Exception e) {
+                e.printStackTrace();
                 // ignore
             } finally {
                 isProcessing = false;

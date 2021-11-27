@@ -2,19 +2,28 @@ package com.sidemesh.binance.bot;
 
 import com.sidemesh.binance.bot.util.StringEnum;
 
+import java.math.BigDecimal;
+
 public enum Symbol implements StringEnum<Symbol> {
 
-    LINK_USDT("LINKUSDT"),
-    ETH_USDT("ETHUSDT"),
-    BNB_USDT("BNBUSDT"),
-    REN_USDT("RENUSDT"),
-    GALA_USDT("GALAUSDT"),
-    BTC_USDT("BTCUSDT");
+    LINK_USDT("LINKUSDT", "0.0000001", "0.1"),
+    NEAR_USDT("NEARUSDT", "0.0000001", "0.1"),
+    ETH_USDT("ETHUSDT","0.0000001", "0.1"),
+    BNB_USDT("BNBUSDT","0.0000001", "0.1"),
+    REN_USDT("RENUSDT","0.0000001", "0.1"),
+    GALA_USDT("GALAUSDT","0.00001", "1"),
+    ANKR_USDT("ANKRUSDT","0.0000001", "0.1"),
+    BTC_USDT("BTCUSDT", "0.0000001", "0.1");
 
+    //
+    public final BigDecimal pricePrecision;
+    public final BigDecimal quantityPrecision;
     public final String STR;
 
-    Symbol(String str) {
+    Symbol(String str, String precision, String quantity) {
         this.STR = str;
+        this.pricePrecision = new BigDecimal(precision);
+        this.quantityPrecision = new BigDecimal(quantity);
     }
 
     public String toUpperCaseStr() {

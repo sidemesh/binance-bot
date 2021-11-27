@@ -10,7 +10,7 @@ import java.util.UUID;
 public class OrderRequest extends JSON.ToJson {
 
     // 默认窗口 5s
-    private final static long DEFAULT_RC_WINDOW = 5000L;
+     private final static long DEFAULT_RC_WINDOW = 5000L;
 
     // 唯一ID
     public final String newClientOrderId;
@@ -46,14 +46,15 @@ public class OrderRequest extends JSON.ToJson {
     }
 
     public String toUrlParams() {
-        return "newClientOrderId=%s" + this.newClientOrderId + "&"+
+        return "newClientOrderId=" + this.newClientOrderId + "&"+
                 "symbol=" + this.symbol.toUpperCaseStr() + "&" +
                 "side=" + this.side.side + "&" +
                 // 需要避免科学记数法，注意此处不移除末尾小数 0
                 "price=" + this.price.toPlainString() + "&" +
+                "type=" + this.type.str + "&" +
                 "quantity=" + this.quantity.toPlainString() + "&" +
                 "timeInForce=" + this.timeInForce.str + "&" +
-                "recvWindow=" + this.recvWindow + "&" +
+                "recvWindow=" + 50000L + "&" +
                 "newOrderRespType=" + this.newOrderRespType + "&" +
                 "timestamp=" + this.timestamp;
     }

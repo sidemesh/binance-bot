@@ -144,7 +144,7 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
         final var builder = OrderRequest.newLimitOrderBuilder();
         BigDecimal sellGridCount = BigDecimal.valueOf(Math.abs(currFallGrid.getOrder() - preTradeGrid.getOrder()));
         // 交易数量 = （格子数量 *
-        TradeQuantity sellTrade = TradeQuantity.instanceOf(price, tradeGrid.getStepAmount().multiply(sellGridCount));
+        TradeQuantity sellTrade = TradeQuantity.instanceOf(symbol, price, tradeGrid.getStepAmount().multiply(sellGridCount));
         // 判断当前持仓数量 (卖出的数量大于当前持仓 卖出全部持仓)
         BigDecimal sellQuantity = sellTrade.quantity;
         if (investInfo.getPositQuantity().compareTo(sellQuantity) < 0) {
@@ -157,29 +157,29 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
                 .symbol(symbol)
                 .price(price)
                 .quantity(sellQuantity)
-                .timestamp(Instant.now().getEpochSecond())
+                .timestamp(Instant.now().toEpochMilli())
                 .rcwindow(3000L)
                 .build();
         log.info("Bot {} {} 卖出 数量 {} 金额 {}", name, symbol, sellTrade.quantity, sellTrade.amount);
-        Order order = binanceAPI.order(account, req);
+        Order order = binanceAPI.orderTest(account, req);
         doHandleOrder(order, currFallGrid, sellTrade);
     }
 
     private void buy(BigDecimal price, Grid currFallGrid) throws BinanceAPIException {
         OrderRequest.LimitOrderBuilder builder = OrderRequest.newLimitOrderBuilder();
         BigDecimal buyGridCount = BigDecimal.valueOf(Math.abs(currFallGrid.getOrder() - preTradeGrid.getOrder()));
-        TradeQuantity buyTrade = TradeQuantity.instanceOf(price, tradeGrid.getStepAmount().multiply(buyGridCount));
+        TradeQuantity buyTrade = TradeQuantity.instanceOf(symbol, price, tradeGrid.getStepAmount().multiply(buyGridCount));
         OrderRequest req = builder
                 .buy()
                 .id(TradeUtil.generateTradeId())
                 .symbol(symbol)
                 .price(price)
                 .quantity(buyTrade.quantity)
-                .timestamp(Instant.now().getEpochSecond())
+                .timestamp(Instant.now().toEpochMilli())
                 .rcwindow(3000L)
                 .build();
         log.info("Bot {} {} 买入 数量 {} 金额 {}", name, symbol, buyTrade.quantity, buyTrade.amount);
-        Order order = binanceAPI.order(account, req);
+        Order order = binanceAPI.orderTest(account, req);
         doHandleOrder(order, currFallGrid, buyTrade);
     }
 

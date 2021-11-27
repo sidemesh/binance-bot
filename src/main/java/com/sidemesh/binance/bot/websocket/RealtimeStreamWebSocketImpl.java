@@ -28,7 +28,7 @@ public class RealtimeStreamWebSocketImpl implements RealtimeStream {
 
     public RealtimeStreamWebSocketImpl(ProxyInfo proxyInfo) {
         this.proxyInfo = proxyInfo;
-        symbolListenersMap.put(Symbol.GALA_USDT, null);
+        // symbolListenersMap.put(Symbol.GALA_USDT, null);
     }
 
     public RealtimeStreamWebSocketImpl() {
@@ -74,7 +74,7 @@ public class RealtimeStreamWebSocketImpl implements RealtimeStream {
 
     private void onMessage(ExecutorService pool, String message) {
         pool.submit(() -> {
-            log.debug("receive message = {}", message);
+            // log.debug("receive message = {}", message);
             final var event = EventMessage.ofJson(message);
             if (event.isTrade()) {
                 final var ls = symbolListenersMap.get(event.symbol);
@@ -90,6 +90,8 @@ public class RealtimeStreamWebSocketImpl implements RealtimeStream {
     private void reconnect() {
         if (!this.isClosed) {
             var client= connect();
+            // 重新发起订阅
+            client.subscribe(symbolListenersMap.keySet());
             log.info("ws reconnected. id = {}", client.id);
         }
     }
@@ -107,8 +109,11 @@ public class RealtimeStreamWebSocketImpl implements RealtimeStream {
         symbolListenersMap.put(symbol, list);
 
         // 订阅 symbol
-        if (isNeedSubscribe) {
-            bwsc.subscribe(symbol);
+        if (bwsc != null) {
+            // TODO 此处可能漏掉订阅
+            if (isNeedSubscribe) {
+                bwsc.subscribe(symbol);
+            }
         }
     }
 

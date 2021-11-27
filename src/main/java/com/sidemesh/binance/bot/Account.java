@@ -14,4 +14,11 @@ public class Account {
         return new Account(key, secret);
     }
 
+    public static Account fromEnv() {
+        var k = System.getenv("API_KEY");
+        var s = System.getenv("API_SECRET");
+
+        return of(k, s);
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.sidemesh.binance.bot.grid;
 
+import com.sidemesh.binance.bot.Symbol;
 import com.sidemesh.binance.bot.TradeQuantity;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -16,15 +17,16 @@ public class TradeQuantityCalcTest {
         tradeGrid =  TradeGrid.generate(new BigDecimal(100), fixedBoundTradeGridBuilder);
     }
 
+    // TODO
     @Test
     public void isQuantityCorrect() {
-        TradeQuantity tradeQuantity = TradeQuantity.instanceOf(BigDecimal.ONE, tradeGrid.getStepAmount());
+        TradeQuantity tradeQuantity = TradeQuantity.instanceOf(Symbol.REN_USDT, BigDecimal.ONE, tradeGrid.getStepAmount());
         Assertions.assertEquals(tradeQuantity.quantity.compareTo(BigDecimal.valueOf(10)), 0);
 
-        tradeQuantity = TradeQuantity.instanceOf(BigDecimal.TEN, tradeGrid.getStepAmount());
+        tradeQuantity = TradeQuantity.instanceOf(Symbol.REN_USDT, BigDecimal.TEN, tradeGrid.getStepAmount());
         Assertions.assertEquals(tradeQuantity.quantity.compareTo(BigDecimal.valueOf(1)), 0);
 
-        tradeQuantity = TradeQuantity.instanceOf(new BigDecimal("5.12311"), tradeGrid.getStepAmount());
+        tradeQuantity = TradeQuantity.instanceOf(Symbol.REN_USDT, new BigDecimal("5.12311"), tradeGrid.getStepAmount());
         Assertions.assertEquals(tradeQuantity.quantity.compareTo(new BigDecimal("1.9519393")), 0);
 
     }
