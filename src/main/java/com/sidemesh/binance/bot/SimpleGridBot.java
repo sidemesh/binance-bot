@@ -1,70 +1,67 @@
 package com.sidemesh.binance.bot;
 
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.sidemesh.binance.bot.api.BinanceAPI;
 import com.sidemesh.binance.bot.api.BinanceAPIException;
-import com.sidemesh.binance.bot.api.BinanceAPIv3;
+import com.sidemesh.binance.bot.grid.FixedBoundTradeGridBuilder;
 import com.sidemesh.binance.bot.grid.Grid;
 import com.sidemesh.binance.bot.grid.TradeGrid;
-import com.sidemesh.binance.bot.proxy.ClashProxy;
 import com.sidemesh.binance.bot.util.TradeUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
-import java.net.InetSocketAddress;
-import java.net.Proxy;
-import java.time.Duration;
-import java.util.Date;
-import java.util.concurrent.*;
+import java.time.Instant;
 
 @Slf4j
-public class SimpleGridBot implements Bot {
-    private String name;
-    private Symbol symbol;
-    private BigDecimal serviceChargeRate;
-    private TradeGrid tradeGrid;
-    private BinanceAPI binanceAPI;
-    private Account account;
-    private BotStatusEnum status = BotStatusEnum.STOP;
-    /**
-     * 持仓数量
-     */
-    private BigDecimal positQuantity;
-    /**
-     * 上一次成交网格
-     */
+public class SimpleGridBot implements Bot, RealtimeStreamListener {
+    // 机器人名称
+    private final String name;
+    // 交易对
+    private final Symbol symbol;
+    // 网格
+    private final TradeGrid tradeGrid;
+    // 币安 API 接口
+    private final BinanceAPI binanceAPI;
+    // 交易所账号
+    private final Account account;
+    private volatile BotStatusEnum status = BotStatusEnum.STOP;
+    // 上一次成交网格
     private Grid preTradeGrid;
+    // bot执行线程
+    private final BotWorker worker;
+    // 当前价格 / 当前市场成交价格
+    private RealtimeStreamData currentTrade;
+    // 手续费
+    private BigDecimal serviceChargeRate;
+    // 投资金额
+    private final BigDecimal money;
+    // 持仓数量
+    private BigDecimal positQuantity;
+    // 可用资金
+    private BigDecimal availableMoney;
 
-    /**
-     * 订单处理标志位
-     * 0：无订单处理中
-     * 1：有订单正在处理中
-     */
-    int orderProcessingFlag = 0;
-    /**
-     * 订单处理线程池
-     */
-    private ThreadPoolExecutor orderPool;
-
-    public SimpleGridBot(String name, Symbol symbol, BigDecimal serviceChargeRate, TradeGrid tradeGrid, Account account, BigDecimal positQuantity) {
+    public SimpleGridBot(String name,
+                         Symbol symbol,
+                         Account account,
+                         BigDecimal serviceChargeRate,
+                         BinanceAPI binanceAPI,
+                         BigDecimal money,
+                         BigDecimal lowPrice,
+                         BigDecimal highPrice,
+                         int grids,
+                         RealtimeStream rts) {
         check(symbol, "symbol");
-        check(tradeGrid, "tradeGrid");
         check(account, "account");
         this.name = name;
         this.symbol = symbol;
-        this.serviceChargeRate = serviceChargeRate;
-        this.tradeGrid = tradeGrid;
         this.account = account;
-        this.binanceAPI = new BinanceAPIv3();
-        this.positQuantity = positQuantity == null ? BigDecimal.ZERO : positQuantity;
-        ThreadFactoryBuilder builder = new ThreadFactoryBuilder();
-        orderPool = new ThreadPoolExecutor(1, 1, 0, TimeUnit.SECONDS,
-                // 阻塞队列为 1
-                new ArrayBlockingQueue<>(1),
-                builder.setNameFormat("bot-order-pool-%d").build(),
-                // 丢弃并发的订单
-                new ThreadPoolExecutor.DiscardPolicy());
-
+        this.binanceAPI = binanceAPI;
+        this.money = money;
+        this.serviceChargeRate = serviceChargeRate;
+        this.positQuantity = BigDecimal.ZERO;
+        this.availableMoney = money;
+        this.tradeGrid = TradeGrid.generate(money, new FixedBoundTradeGridBuilder(lowPrice, highPrice, grids));
+        this.worker = new BotWorker(name + "-worker");
+        rts.addListener(symbol, this);
     }
 
     private void check(Object o, String field) {
@@ -85,43 +82,49 @@ public class SimpleGridBot implements Bot {
 
     @Override
     public void run() {
-        // run
         status = BotStatusEnum.RUNNING;
+    }
+
+    private boolean isRunning() {
+        return status == BotStatusEnum.RUNNING;
     }
 
     @Override
     public void stop() {
+        // 停止的时候是否卖出全部持仓？
         status = BotStatusEnum.STOP;
     }
 
-    // todo 暂不支持并发
     @Override
-    public void onPriceUpdate(Object data) {
-        if (status != BotStatusEnum.RUNNING) {
-            return;
-        }
-        if (orderProcessingFlag == 1) {
-            return;
-        }
-
-        // todo get price
-        BigDecimal price = new BigDecimal("1.999");
-
-        // 表示正在处理
-        orderProcessingFlag = 1;
-        orderPool.submit(() -> {
-            try {
-                Grid currFallGrid = tradeGrid.getCurrFallGrid(price);
-                if (currFallGrid != null) {
-                    doTrade(price, currFallGrid);
-                }
-            } catch (BinanceAPIException e) {
-                log.error("执行交易发生异常 ", e);
-            } finally {
-                // 重置flag
-                orderProcessingFlag = 0;
+    public void update(RealtimeStreamData data) {
+        if (isRunning()) {
+            if (!worker.submit(() -> onPriceUpdate(data), false)) {
+                log.info("worker has task! abandon price update {}", data);
             }
-        });
+        }
+    }
+
+    private void onPriceUpdate(RealtimeStreamData data) {
+        // 跳过延迟的 ID
+        if (null == currentTrade || data.id() > currentTrade.id()) {
+            currentTrade = data;
+        } else {
+            return;
+        }
+
+        final var price = data.price();
+        try {
+            Grid currFallGrid = tradeGrid.getCurrFallGrid(price);
+            if (currFallGrid != null) {
+                doTrade(price, currFallGrid);
+            }
+        } catch (BinanceAPIException e) {
+            if (e.isLimited) {
+                log.info("api call limited! message = {}", data);
+            } else {
+                log.error("api call error", e);
+            }
+        }
     }
 
     private void doTrade(BigDecimal price, Grid currFallGrid) throws BinanceAPIException {
@@ -147,7 +150,7 @@ public class SimpleGridBot implements Bot {
         BigDecimal sellGridCount = BigDecimal.valueOf(Math.abs(currFallGrid.getOrder() - preTradeGrid.getOrder()));
         TradeQuantity sellTrade = TradeQuantity.instanceOf(price, tradeGrid.getStepAmount().subtract(sellGridCount));
         // 判断当前持仓数量
-        if (positQuantity.compareTo(sellTrade.getQuantity()) < 0) {
+        if (positQuantity.compareTo(sellTrade.quantity) < 0) {
             return;
         }
         OrderRequest req = builder
@@ -155,11 +158,11 @@ public class SimpleGridBot implements Bot {
                 .id(TradeUtil.generateTradeId())
                 .symbol(symbol)
                 .price(price)
-                .quantity(sellTrade.getQuantity())
-                .timestamp(new Date().getTime())
-                .rcwindow(100L)
+                .quantity(sellTrade.quantity)
+                .timestamp(Instant.now().getEpochSecond())
+                .rcwindow(3000L)
                 .build();
-        log.info("Bot {} {} 卖出 数量 {} 金额 {}", name, symbol, sellTrade.getQuantity(), sellTrade.getAmount());
+        log.info("Bot {} {} 卖出 数量 {} 金额 {}", name, symbol, sellTrade.quantity, sellTrade.quantity);
         Order order = binanceAPI.order(account, req);
         doHandleOrder(order, currFallGrid);
     }
@@ -173,11 +176,11 @@ public class SimpleGridBot implements Bot {
                 .id(TradeUtil.generateTradeId())
                 .symbol(symbol)
                 .price(price)
-                .quantity(buyTrade.getQuantity())
-                .timestamp(new Date().getTime())
-                .rcwindow(100L)
+                .quantity(buyTrade.quantity)
+                .timestamp(Instant.now().getEpochSecond())
+                .rcwindow(3000L)
                 .build();
-        log.info("Bot {} {} 买入 数量 {} 金额 {}", name, symbol, buyTrade.getQuantity(), buyTrade.getAmount());
+        log.info("Bot {} {} 买入 数量 {} 金额 {}", name, symbol, buyTrade.quantity, buyTrade.quantity);
         Order order = binanceAPI.order(account, req);
         doHandleOrder(order, currFallGrid);
     }

@@ -6,11 +6,15 @@ import com.sidemesh.binance.bot.Symbol;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class RealtimeStreamBackTestDataImpl implements RealtimeStream {
 
     private final DataLoader dataLoader;
     private final List<RealtimeStreamListener> listeners;
+
+    private volatile Thread thread;
 
     public RealtimeStreamBackTestDataImpl(Symbol symbol, String month) {
         dataLoader = new DataLoader(symbol, month);
@@ -19,21 +23,31 @@ public class RealtimeStreamBackTestDataImpl implements RealtimeStream {
 
     @Override
     public void run() {
-        List<Trade> trades;
-        try {
-            trades = dataLoader.load();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        thread = new Thread(() -> {
+            List<Trade> trades;
+            try {
+                trades = dataLoader.load();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
 
-        trades.forEach(t -> {
-            listeners.forEach(l -> l.update(t));
-        });
+            var pool = Executors.newFixedThreadPool(2);
+
+            trades.forEach(t -> {
+                pool.submit(() -> {
+                    listeners.forEach(l -> l.update(t));
+                });
+            });
+
+            pool.shutdown();
+        },"rtl-test");
+
+        thread.start();
     }
 
     @Override
     public void stop() {
-
+        thread.interrupt();
     }
 
     @Override

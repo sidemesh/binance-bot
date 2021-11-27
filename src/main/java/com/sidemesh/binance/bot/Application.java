@@ -26,7 +26,9 @@ public class Application {
         Javalin app = Javalin.create(cfg -> {
             cfg.showJavalinBanner = true;
         }).start(8080);
-        app.get("/api/v1/bots", ctx -> ctx.result("TODO"));
+        app.get("/api/v1/bots", ctx -> {
+            ctx.result("TODO");
+        });
     }
 
 }
