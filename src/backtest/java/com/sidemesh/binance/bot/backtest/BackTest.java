@@ -19,7 +19,7 @@ public class BackTest {
                 Account.of("1", "1"),
                 new BigDecimal(1),
                 new FakeBinanceAPI(),
-                new BigDecimal(100),
+                new BigDecimal(1010),
                 new BigDecimal("0.05"),
                 new BigDecimal("0.1"),
                 100,
