@@ -4,13 +4,13 @@ import com.sidemesh.binance.bot.json.JSON;
 import com.sidemesh.binance.bot.util.StringEnum;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.Instant;
 import java.util.UUID;
 
 public class OrderRequest extends JSON.ToJson {
 
     // 默认窗口 5s
-     private final static long DEFAULT_RC_WINDOW = 5000L;
+     private final static long DEFAULT_RC_WINDOW = 3000L;
 
     // 唯一ID
     public final String newClientOrderId;
@@ -145,7 +145,7 @@ public class OrderRequest extends JSON.ToJson {
                     // 不能立即成交就撤单
                     TimeInForce.FOK,
                     null == rcwindow ? OrderRequest.DEFAULT_RC_WINDOW : rcwindow,
-                    null == timestamp ? new Date().getTime() : timestamp
+                    null == timestamp ? Instant.now().toEpochMilli() : timestamp
             );
         }
 

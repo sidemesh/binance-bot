@@ -21,8 +21,7 @@ public class BlockingQueueBotWorker implements Runnable, BotWorker {
     public boolean submit(Runnable runnable) {
         if (!isProcessing) {
             // TODO 注意此处可能有大量并发
-            tasks.add(runnable);
-            return true;
+            return tasks.add(runnable);
         }
 
         return false;
