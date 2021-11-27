@@ -54,7 +54,7 @@ public class OrderRequest extends JSON.ToJson {
                 "type=" + this.type.str + "&" +
                 "quantity=" + this.quantity.toPlainString() + "&" +
                 "timeInForce=" + this.timeInForce.str + "&" +
-                "recvWindow=" + 50000L + "&" +
+                "recvWindow=" + recvWindow + "&" +
                 "newOrderRespType=" + this.newOrderRespType + "&" +
                 "timestamp=" + this.timestamp;
     }

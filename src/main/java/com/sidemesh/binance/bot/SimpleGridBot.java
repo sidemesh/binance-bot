@@ -30,15 +30,12 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
     private final BotWorker worker;
     // 当前价格 / 当前市场成交价格
     private RealtimeStreamData currentTrade;
-    // 手续费
-    private BigDecimal serviceChargeRate;
 
     private final InvestInfo investInfo;
 
     public SimpleGridBot(String name,
                          Symbol symbol,
                          Account account,
-                         BigDecimal serviceChargeRate,
                          BinanceAPI binanceAPI,
                          BigDecimal money,
                          BigDecimal lowPrice,
@@ -51,7 +48,6 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
         this.symbol = symbol;
         this.account = account;
         this.binanceAPI = binanceAPI;
-        this.serviceChargeRate = serviceChargeRate;
         this.investInfo = new InvestInfo(money, BigDecimal.ZERO);
         this.tradeGrid = TradeGrid.generate(money, new FixedBoundTradeGridBuilder(lowPrice, highPrice, grids));
         this.worker = new BotWorker(name + "-worker");
@@ -93,7 +89,7 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
     public void update(RealtimeStreamData data) {
         if (isRunning()) {
             if (!worker.submit(() -> onPriceUpdate(data), false)) {
-                log.info("worker has task! abandon price update {}", data);
+                log.debug("{} bot worker busy, abandon update event {}", name, data.id());
             }
         }
     }
@@ -118,7 +114,7 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
             }
         } catch (BinanceAPIException e) {
             if (e.isLimited) {
-                log.info("api call limited! message = {}", data);
+                log.info("api call limited! update data = {}", data);
             } else {
                 log.error("api call error", e);
             }

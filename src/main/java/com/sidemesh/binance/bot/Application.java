@@ -21,14 +21,13 @@ public class Application {
         var rts = new RealtimeStreamWebSocketImpl(proxy);
 
         var bot =  new SimpleGridBot(
-                "rl",
+                "simple-grid-bot-0",
                 Symbol.ANKR_USDT,
                 Account.fromEnv(),
-                new BigDecimal(1),
                 new BinanceAPIv3(proxy != null ? proxy.toProxy() : null, Duration.ofSeconds(10), Duration.ofSeconds(10)),
                 new BigDecimal(20000),
-                new BigDecimal("0.15"),
-                new BigDecimal("0.19"),
+                new BigDecimal("0.18"),
+                new BigDecimal("0.21"),
                 100,
                 rts
         );

@@ -8,26 +8,30 @@ import com.sidemesh.binance.bot.OrderResponse;
 import com.sidemesh.binance.bot.order.OrderImpl;
 import com.sidemesh.binance.bot.security.HMACSHA256;
 import com.sidemesh.binance.bot.util.FastApiSelector;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 
-import java.io.IOException;
 import java.net.Proxy;
 import java.time.Duration;
+import java.util.Objects;
 
 /**
  * 币安 API v3 实现
  */
+@Slf4j
 public class BinanceAPIv3 implements BinanceAPI {
 
     private final static String[] BINANCE_APIS = {"https://api.binance.com", "https://api1.binance.com", "https://api2.binance.com", "https://api3.binance.com"};
     private final static RequestBody OKHTTP_EMPTY_REQUEST_BODY = RequestBody.create(new byte[0]);
 
-    private final RequestLimiter limiter = new RequestLimiter(5);
     protected final OkHttpClient cli;
     protected final FastApiSelector fastApiSelector;
     protected volatile String baseApi;
+
+    // 请求限流器
+    private final RequestLimiter limiter = new RequestLimiter(5);
 
     public BinanceAPIv3(Proxy proxy, Duration timeout, Duration callTimeOut) {
         final var httpCli =  new OkHttpClient.Builder().connectTimeout(timeout).proxy(proxy).callTimeout(callTimeOut).build();
@@ -37,12 +41,8 @@ public class BinanceAPIv3 implements BinanceAPI {
         this.fastApiSelector = fas;
         // 立刻获取一个最优地址
         this.baseApi = BINANCE_APIS[0];
-        //this.baseApi = fas.once();
+        // this.baseApi = fas.once();
         // this.fastApiSelector.onUpdate(this::setBaseApi).loop(10, 10);
-    }
-
-    public BinanceAPIv3() {
-        this(null, Duration.ofSeconds(1), Duration.ofSeconds(1));
     }
 
     /**
@@ -72,32 +72,46 @@ public class BinanceAPIv3 implements BinanceAPI {
      * 通用的下单接口
      */
     protected Order order(String api, Account account, OrderRequest request) throws BinanceAPIException {
-        if (!limiter.acquire()) {
-            throw new BinanceAPIException(true);
-        }
+        if (!limiter.acquire()) throw BinanceAPIException.limited();
 
         final var paramas = request.toUrlParams();
-
-        // 为了性能仅采用 URL Params 模式填充数据
+        // 为了性能仅采用 URL Params 模式填充数据，并不设置 request body
         final var req = new Request.Builder()
                 .url(buildRequestUrl(api, signByHMACSHA256(account, paramas), paramas))
                 .header("X-MBX-APIKEY", account.key)
                 .post(OKHTTP_EMPTY_REQUEST_BODY)
                 .build();
 
-        okhttp3.Response executed = null;
-        BinanceAPIV3ErrorResponse errresp;
+        log.debug("send order request = {}", req.url());
+
+        // 请求返回
+        okhttp3.Response executed;
         try {
             executed = cli.newCall(req).execute();
-            if (executed.isSuccessful()) {
-                final var response = JSON.jackson.read(executed.body().string(), OrderResponse.class);
-                return new OrderImpl(request, response);
-            }
-            errresp = JSON.jackson.read(new String(executed.body().bytes()), BinanceAPIV3ErrorResponse.class);
         } catch (Exception e) {
-            throw new BinanceAPIException(e);
+            throw BinanceAPIException.error(e);
         }
-        throw new BinanceAPIException(false, errresp);
+
+        // 错误预声明
+        ResponseError err;
+        try {
+            final var bytes = Objects.requireNonNull(executed.body()).bytes();
+            if (executed.isSuccessful()) {
+                final var res = JSON.jackson.read(bytes, OrderResponse.class);
+                return new OrderImpl(request, res);
+            } else {
+                err = JSON.jackson.read(bytes, ResponseError.class);
+            }
+        } catch (Exception e) {
+            throw BinanceAPIException.error(e);
+        }
+
+        // 处理接口请求 status 非200错误
+        if (err != null) {
+            throw BinanceAPIException.errorResponse(err);
+        } else {
+            throw BinanceAPIException.message("api call unknown error!");
+        }
     }
 
     private void setBaseApi(String api) {

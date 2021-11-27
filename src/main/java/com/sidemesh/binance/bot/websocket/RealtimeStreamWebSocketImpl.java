@@ -74,7 +74,7 @@ public class RealtimeStreamWebSocketImpl implements RealtimeStream {
 
     private void onMessage(ExecutorService pool, String message) {
         pool.submit(() -> {
-            // log.debug("receive message = {}", message);
+            log.debug("receive message = {}", message);
             final var event = EventMessage.ofJson(message);
             if (event.isTrade()) {
                 final var ls = symbolListenersMap.get(event.symbol);
@@ -82,7 +82,7 @@ public class RealtimeStreamWebSocketImpl implements RealtimeStream {
                     ls.forEach(it -> pool.submit(() -> it.update(event)));
                 }
             } else {
-                log.debug("{} is not a trade message. skip!", message);
+                log.info("{} is not a trade message. abandon!", message);
             }
         });
     }
@@ -92,7 +92,7 @@ public class RealtimeStreamWebSocketImpl implements RealtimeStream {
             var client= connect();
             // 重新发起订阅
             client.subscribe(symbolListenersMap.keySet());
-            log.info("ws reconnected. id = {}", client.id);
+            log.info("websocket reconnected. id = {}", client.id);
         }
     }
 

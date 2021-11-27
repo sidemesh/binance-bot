@@ -46,10 +46,12 @@ public class EventMessage implements RealtimeStreamData {
     @Override
     public String toString() {
         return "EventMessage{" +
-                "id='" + id + '\'' +
+                "id=" + id +
+                ", symbol=" + symbol +
                 ", result=" + result +
-                ", event=" + event +
+                ", event='" + event + '\'' +
                 ", price=" + price +
+                ", tid=" + tid +
                 '}';
     }
 

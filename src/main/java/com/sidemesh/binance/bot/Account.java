@@ -1,9 +1,16 @@
 package com.sidemesh.binance.bot;
 
+import java.math.BigDecimal;
+
 public class Account {
 
     public final String key;
     public final String secret;
+    /**
+     * 当前账号手续费
+     * https://www.binance.com/zh-CN/fee/futureFee
+     */
+    public final BigDecimal serviceChargeRate = new BigDecimal("0.02");
 
     public Account(String key, String secret) {
         this.key = key;
