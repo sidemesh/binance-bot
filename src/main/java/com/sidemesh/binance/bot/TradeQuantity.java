@@ -16,9 +16,8 @@ public class TradeQuantity {
      * @param tradeAmount 购买/卖出金额
      * @return
      */
-    public static TradeQuantity instanceOf(BigDecimal symbolPrice, BigDecimal tradeAmount) {
-        int scale = Math.max(symbolPrice.scale(), tradeAmount.scale());
-        return new TradeQuantity(tradeAmount.divide(symbolPrice, scale + 2, RoundingMode.HALF_UP),
+    public static TradeQuantity instanceOf(Symbol symbol, BigDecimal symbolPrice, BigDecimal tradeAmount) {
+        return new TradeQuantity(tradeAmount.divide(symbolPrice, symbol.quantityPrecision.scale(), RoundingMode.HALF_UP),
                 tradeAmount);
     }
 

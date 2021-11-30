@@ -36,9 +36,9 @@ public class ApplicationOptions {
     public static ApplicationOptions formEnv() {
         ApplicationOptions opts = new ApplicationOptions();
 
-        /*
         var elp = System.getenv("ENABLE-LOCAL-PROXY");
         opts.enableLocalProxy = elp != null && !elp.isEmpty() && Boolean.parseBoolean(elp);
+        /*
 
         var eas = System.getenv("ENABLE-API-SERVER");
         opts.enableApiServer = eas != null && !eas.isEmpty() && Boolean.parseBoolean(eas);

@@ -1,12 +1,17 @@
 package com.sidemesh.binance.bot;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
 @Data
+@NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class OrderResponse {
 
     private Symbol symbol;

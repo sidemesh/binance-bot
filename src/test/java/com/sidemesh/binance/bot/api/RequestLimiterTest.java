@@ -7,11 +7,16 @@ public class RequestLimiterTest {
 
 
     @Test
-    public void testAcquire() {
-        var limiter = new RequestLimiter(1);
-
-        Assertions.assertTrue(limiter.acquire());
+    public void testAcquire() throws InterruptedException {
+        var limiter = new RequestLimiter(5);
+        for (var i = 0; i < 5; i ++) {
+            Assertions.assertTrue(limiter.acquire());
+        }
         Assertions.assertFalse(limiter.acquire());
+        Thread.sleep(1000L);
+        for (var i = 0; i < 5; i ++) {
+            Assertions.assertTrue(limiter.acquire());
+        }
     }
 
 }

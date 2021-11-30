@@ -26,6 +26,9 @@ public class EventMessage implements RealtimeStreamData {
     @JsonProperty("p")
     public BigDecimal price;
 
+    @JsonProperty("t")
+    public Long tid;
+
     @Override
     public BigDecimal price() {
         return price;
@@ -37,16 +40,18 @@ public class EventMessage implements RealtimeStreamData {
 
     @Override
     public long id() {
-        return this.id;
+        return tid;
     }
 
     @Override
     public String toString() {
         return "EventMessage{" +
-                "id='" + id + '\'' +
+                "id=" + id +
+                ", symbol=" + symbol +
                 ", result=" + result +
-                ", event=" + event +
+                ", event='" + event + '\'' +
                 ", price=" + price +
+                ", tid=" + tid +
                 '}';
     }
 

@@ -1,5 +1,7 @@
 package com.sidemesh.binance.bot;
 
+import com.sidemesh.binance.bot.worker.BlockingQueueBotWorker;
+import com.sidemesh.binance.bot.worker.BotWorker;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +12,7 @@ public class BotWorkerTest {
 
     @Test
     public void test() throws InterruptedException {
-        BotWorker w = new BotWorker("test");
+        BotWorker w = new BlockingQueueBotWorker("test");
 
         CountDownLatch countDownLatch = new CountDownLatch(1);
         var isSubmit = w.submit(() -> {
@@ -20,12 +22,12 @@ public class BotWorkerTest {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }, true);
+        });
         Assertions.assertTrue(isSubmit);
 
         var notImportant = w.submit(() -> {
             System.out.println("hello");
-        }, false);
+        });
 
         Assertions.assertFalse(notImportant);
 

@@ -17,7 +17,6 @@ public class BackTest {
                 "test-01",
                 Symbol.REN_USDT,
                 Account.of("1", "1"),
-                new BigDecimal(1),
                 new FakeBinanceAPI(),
                 new BigDecimal(1010),
                 new BigDecimal("0.05"),
