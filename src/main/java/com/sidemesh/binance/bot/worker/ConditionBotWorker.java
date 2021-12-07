@@ -11,9 +11,6 @@ public class ConditionBotWorker implements Runnable, BotWorker {
 
     // 当 worker 被销毁后应该丢弃
     private volatile boolean isDestroy = false;
-    // 线程间可见
-    private volatile boolean isProcessing = false;
-
     private final Lock consumerLock;
     private final Condition consumerLockCondition;
     private volatile Runnable task;
@@ -26,19 +23,16 @@ public class ConditionBotWorker implements Runnable, BotWorker {
     }
 
     public boolean submit(Runnable runnable) {
-        if (!isProcessing) {
-            try {
-                if (consumerLock.tryLock()) {
-                    // TODO is need check is processing??
-                    task = runnable;
-                    consumerLockCondition.signalAll();
-                    return true;
-                }
-            } finally {
-                consumerLock.unlock();
+        try {
+            if (consumerLock.tryLock()) {
+                // TODO is need check is processing??
+                task = runnable;
+                consumerLockCondition.signalAll();
+                return true;
             }
+        } finally {
+            consumerLock.unlock();
         }
-
         return false;
     }
 
@@ -48,7 +42,6 @@ public class ConditionBotWorker implements Runnable, BotWorker {
             try {
                 consumerLock.lock();
                 consumerLockCondition.await();
-                isProcessing = true;
                 final var t = task;
                 task = null;
                 if (t != null) {
@@ -59,7 +52,6 @@ public class ConditionBotWorker implements Runnable, BotWorker {
                 // ignore
             } finally {
                 consumerLock.unlock();
-                isProcessing = false;
             }
         }
     }
