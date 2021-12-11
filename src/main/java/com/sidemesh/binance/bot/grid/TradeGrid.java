@@ -39,6 +39,10 @@ public class TradeGrid {
 
     @Getter
     private BigDecimal stepAmount;
+    /**
+     * 哑节点
+     */
+    private final Grid topDummyGrid;
 
     public static TradeGrid generate(BigDecimal investAmount, TradeGridBuilder tradeGridBuilder) {
         List<Grid> grids = tradeGridBuilder.create();
@@ -68,6 +72,10 @@ public class TradeGrid {
         // 由于 order 由 1 开始，所以 0 设为哑结点
         gridIndexes[0] = null;
         this.grids.forEach(g -> gridIndexes[g.getOrder()] = g);
+
+        // 添加哑节点
+        topDummyGrid = new Grid(topGrid.getHighPrice(),topGrid.getHighPrice().add(new BigDecimal("99999999")));
+        topDummyGrid.setOrder(topGrid.getOrder() + 1);
     }
 
     /**
@@ -80,7 +88,7 @@ public class TradeGrid {
         if (currPrice.compareTo(bottomGrid.getLowPrice()) < 0) {
             return null;
         } else if (currPrice.compareTo(topGrid.getHighPrice()) >= 0) {
-            return null;
+            return topDummyGrid;
         } else {
             return binarySearchGrids(currPrice, bottomGrid.getOrder(), topGrid.getOrder());
         }

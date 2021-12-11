@@ -34,7 +34,7 @@ public class RealtimeStreamBackTestDataImpl implements RealtimeStream {
 
             trades.forEach(t -> {
                 try {
-                    Thread.sleep(10L);
+                    Thread.sleep(5L);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
