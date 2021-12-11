@@ -44,10 +44,6 @@ public class TradeGrid {
 
     @Getter
     private BigDecimal stepAmount;
-    /**
-     * 哑节点
-     */
-    private final Grid topDummyGrid;
 
     public static TradeGrid generate(BigDecimal investAmount, TradeGridBuilder tradeGridBuilder) {
         List<Grid> grids = tradeGridBuilder.create();

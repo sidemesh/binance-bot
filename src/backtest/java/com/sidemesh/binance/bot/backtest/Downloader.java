@@ -37,9 +37,14 @@ class Downloader {
 
         Response execute = cli.newCall(req).execute();
         var sink = Okio.buffer(Okio.sink(file));
-        sink.writeAll(execute.body().source());
-        sink.close();
-        unzip(file, path);
+        try {
+            sink.writeAll(execute.body().source());
+            unzip(file, path);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            sink.close();
+        }
     }
 
     private static void unzip(File file, String to) throws ZipException {

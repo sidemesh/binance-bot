@@ -12,16 +12,16 @@ import java.math.BigDecimal;
 public class BackTest {
 
     public static void main(String[] args) throws InterruptedException {
-        var realtime = new RealtimeStreamBackTestDataImpl(Symbol.REN_USDT, "2020-05");
+        var realtime = new RealtimeStreamBackTestDataImpl(Symbol.SHIB_USDT, "2021-11");
         var bot = new SimpleGridBot(
                 "test-01",
-                Symbol.REN_USDT,
+                Symbol.SHIB_USDT,
                 Account.of("1", "1"),
                 new FakeBinanceAPI(),
-                new BigDecimal(1010),
-                new BigDecimal("0.05"),
-                new BigDecimal("0.1"),
-                100,
+                new BigDecimal(510),
+                new BigDecimal("0.00007710"),
+                new BigDecimal("0.00003410"),
+                50,
                 realtime
         );
         bot.run();

@@ -14,7 +14,9 @@ public enum Symbol implements StringEnum<Symbol> {
     GALA_USDT("GALAUSDT","0.00001", "1"),
     ANKR_USDT("ANKRUSDT","0.0000001", "0.1"),
     CHESS_USDT("CHESSUSDT","0.001", "0.1"),
-    BTC_USDT("BTCUSDT", "0.0000001", "0.1");
+    BTC_USDT("BTCUSDT", "0.0000001", "0.1"),
+    SHIB_USDT("SHIBUSDT", "0.00000001", "1"),
+    ;
 
     //
     public final BigDecimal pricePrecision;
