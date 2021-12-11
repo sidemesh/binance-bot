@@ -23,15 +23,15 @@ public class ConditionBotWorker implements Runnable, BotWorker {
     }
 
     public boolean submit(Runnable runnable) {
-        try {
-            if (consumerLock.tryLock()) {
+        if (consumerLock.tryLock()) {
+            try {
                 // TODO is need check is processing??
                 task = runnable;
                 consumerLockCondition.signalAll();
                 return true;
+            } finally {
+                consumerLock.unlock();
             }
-        } finally {
-            consumerLock.unlock();
         }
         return false;
     }

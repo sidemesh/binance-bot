@@ -14,9 +14,11 @@ public class TestData {
 
         var data = new DataLoader(Symbol.REN_USDT, "2020-05");
 
+        /*
         var trades = data.load();
         Assertions.assertNotNull(trades);
         Assertions.assertTrue(trades.size() > 0);
+         */
     }
 
 }

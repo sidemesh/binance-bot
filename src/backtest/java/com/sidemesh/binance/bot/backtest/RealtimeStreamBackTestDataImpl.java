@@ -1,9 +1,11 @@
 package com.sidemesh.binance.bot.backtest;
 
+import com.opencsv.exceptions.CsvValidationException;
 import com.sidemesh.binance.bot.RealtimeStream;
 import com.sidemesh.binance.bot.RealtimeStreamListener;
 import com.sidemesh.binance.bot.Symbol;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -24,24 +26,18 @@ public class RealtimeStreamBackTestDataImpl implements RealtimeStream {
     @Override
     public void run() {
         thread = new Thread(() -> {
-            List<Trade> trades;
             try {
-                trades = dataLoader.load();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+                dataLoader.load(t -> {
+                    try {
+                        Thread.sleep(0L, 500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    listeners.forEach(l -> l.update(t));
+                });
+            } catch (IOException | CsvValidationException e) {
+                e.printStackTrace();
             }
-
-
-            trades.forEach(t -> {
-                try {
-                    Thread.sleep(1L);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                System.out.println(t);
-                listeners.forEach(l -> l.update(t));
-            });
-
         },"rtl-test");
 
         thread.start();

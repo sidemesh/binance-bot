@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class DataLoader {
 
@@ -31,7 +32,7 @@ public class DataLoader {
         return new File(filePath).exists();
     }
 
-    public List<Trade> load() throws IOException, CsvValidationException {
+    public void load(Consumer<Trade> consumer) throws IOException, CsvValidationException {
         if (!isDownloaded()) {
             Downloader.monthly(symbol, month, BASE_PATH);
         }
@@ -40,9 +41,9 @@ public class DataLoader {
         var reader = Files.newBufferedReader(Path.of(filePath), StandardCharsets.UTF_8);
         var csvReader = new CSVReader(reader);
 
-        final List<Trade> trades = new ArrayList<>();
-        csvReader.forEach(it -> trades.add(toTrade(it)));
-        return trades;
+        csvReader.forEach(it -> {
+            consumer.accept(toTrade(it));
+        });
     }
 
     private Trade toTrade(String[] line) {

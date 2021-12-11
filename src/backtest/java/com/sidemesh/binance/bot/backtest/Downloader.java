@@ -33,6 +33,9 @@ class Downloader {
         final var cli = new OkHttpClient.Builder().build();
         final var url = String.format("https://data.binance.vision/data/spot/monthly/trades/%s/%s-trades-%s.zip",
                 symbol.toUpperCaseStr(), symbol.toUpperCaseStr(), month);
+
+        log.info("Download url {}", url);
+
         final var req = new Request.Builder().url(url).get().build();
 
         Response execute = cli.newCall(req).execute();
