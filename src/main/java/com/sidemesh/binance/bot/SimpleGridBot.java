@@ -6,14 +6,12 @@ import com.sidemesh.binance.bot.grid.FixedBoundTradeGridBuilder;
 import com.sidemesh.binance.bot.grid.Grid;
 import com.sidemesh.binance.bot.grid.TradeGrid;
 import com.sidemesh.binance.bot.util.TradeUtil;
-import com.sidemesh.binance.bot.worker.BlockingQueueBotWorker;
 import com.sidemesh.binance.bot.worker.BotWorker;
 import com.sidemesh.binance.bot.worker.ConditionBotWorker;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.List;
 
 @Slf4j
 public class SimpleGridBot implements Bot, RealtimeStreamListener {
@@ -98,7 +96,7 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
     public void update(RealtimeStreamData data) {
         if (isRunning()) {
             if (!worker.submit(() -> onPriceUpdate(data))) {
-//                log.info("{} bot worker busy, abandon update event {}", name, data.id());
+                log.info("{} bot worker busy, abandon event {}", name, data.id());
             }
         }
     }
@@ -131,9 +129,9 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
     }
 
     private void doTrade(BigDecimal price, Grid currFallGrid) throws BinanceAPIException {
-        if (preTradeGrid == currFallGrid) {
-            return;
-        }
+        // 格子没有变化直接返回
+        if (preTradeGrid == currFallGrid) return;
+
         log.info("Bot {} {} {} 当前价格 {} 当前格子#{} --> 进入格子#{}", name, symbol, investInfo, price, preTradeGrid.getOrder(), currFallGrid.getOrder());
         int preTradeOrder = preTradeGrid.getOrder();
         // 判断是否为空仓

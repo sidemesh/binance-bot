@@ -28,7 +28,6 @@ public class RealtimeStreamWebSocketImpl implements RealtimeStream {
 
     public RealtimeStreamWebSocketImpl(ProxyInfo proxyInfo) {
         this.proxyInfo = proxyInfo;
-        // symbolListenersMap.put(Symbol.GALA_USDT, null);
     }
 
     public RealtimeStreamWebSocketImpl() {
@@ -98,6 +97,7 @@ public class RealtimeStreamWebSocketImpl implements RealtimeStream {
 
     @Override
     public synchronized void addListener(Symbol symbol, RealtimeStreamListener listener) {
+        log.info("add a {} listener", symbol);
         // 如果不存在 KEY 则需要订阅
         final var isNeedSubscribe = !symbolListenersMap.containsKey(symbol);
 
