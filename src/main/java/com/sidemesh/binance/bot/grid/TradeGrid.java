@@ -60,12 +60,14 @@ public class TradeGrid {
         // 手续费非0时 判断格子收益是否满足
         if (serviceCharge.compareTo(BigDecimal.ZERO) != 0) {
             Grid topGrid = tradeGrid.getTopGrid();
-            BigDecimal sellAmount = tradeGrid.stepAmount.divide(topGrid.getLowPrice(), RoundingMode.HALF_UP)
-                    .multiply(BigDecimal.ONE.subtract(serviceCharge))
-                    .multiply(topGrid.getHighPrice())
-                    .multiply(BigDecimal.ONE.subtract(serviceCharge));
-            if (sellAmount.compareTo(tradeGrid.stepAmount) <= 0) {
-                throw new IllegalArgumentException(String.format("格子收益不足抵扣属续费！[成本=%s 收益=%s]", tradeGrid.stepAmount, sellAmount));
+            /*
+            以买入数量为一个币的情况下带入计算的
+            一个格子的收益 > 底部和顶部成交时总手续费
+             */
+            BigDecimal subtract = topGrid.getHighPrice().subtract(topGrid.getLowPrice());
+            BigDecimal totalService = topGrid.getLowPrice().multiply(serviceCharge).add(topGrid.getHighPrice().multiply(serviceCharge));
+            if (totalService.compareTo(subtract) <= 0) {
+                throw new IllegalArgumentException(String.format("格子收益不足抵扣属续费！[收益=%s 手续费=%s]", subtract, totalService));
             }
         }
         tradeGrid.serviceCharge = serviceCharge;
