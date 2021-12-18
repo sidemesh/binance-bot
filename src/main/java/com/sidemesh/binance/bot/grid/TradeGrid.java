@@ -37,6 +37,11 @@ public class TradeGrid {
     @Getter
     private final Grid topGrid;
 
+    /**
+     * 顶部哑节点
+     */
+    private final Grid topDummyGrid;
+
     @Getter
     private BigDecimal stepAmount;
 
@@ -68,19 +73,20 @@ public class TradeGrid {
         // 由于 order 由 1 开始，所以 0 设为哑结点
         gridIndexes[0] = null;
         this.grids.forEach(g -> gridIndexes[g.getOrder()] = g);
+
+        // 添加哑节点
+        topDummyGrid = new Grid(topGrid.getHighPrice(),topGrid.getHighPrice().add(new BigDecimal("99999999")));
+        topDummyGrid.setOrder(topGrid.getOrder() + 1);
     }
 
     /**
      * 获取当前价格所处的网格
-     *
-     * @param currPrice
-     * @return
      */
     public Grid getCurrFallGrid(BigDecimal currPrice) {
         if (currPrice.compareTo(bottomGrid.getLowPrice()) < 0) {
             return null;
         } else if (currPrice.compareTo(topGrid.getHighPrice()) >= 0) {
-            return null;
+            return topDummyGrid;
         } else {
             return binarySearchGrids(currPrice, bottomGrid.getOrder(), topGrid.getOrder());
         }
@@ -88,11 +94,6 @@ public class TradeGrid {
 
     /**
      * 二分查找
-     *
-     * @param currPrice
-     * @param startOrder
-     * @param topOrder
-     * @return
      */
     private Grid binarySearchGrids(BigDecimal currPrice, int startOrder, int topOrder) {
         if (startOrder == topOrder)  return gridIndexes[startOrder];

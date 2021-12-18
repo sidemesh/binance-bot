@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.List;
 
 @Slf4j
 public class SimpleGridBot implements Bot, RealtimeStreamListener {
@@ -35,6 +36,7 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
     private RealtimeStreamData currentTrade;
 
     private final InvestInfo investInfo;
+    private DealGridInfo dealGridInfo;
 
     public SimpleGridBot(String name,
                          Symbol symbol,
@@ -56,6 +58,7 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
         this.worker = new ConditionBotWorker(name + "-worker");
         // 目测性能好一些，需要 benchmark
         // this.worker = new BlockingQueueBotWorker(name + "-worker");
+        this.dealGridInfo = new DealGridInfo();
         rts.addListener(symbol, this);
     }
 
@@ -94,7 +97,7 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
     public void update(RealtimeStreamData data) {
         if (isRunning()) {
             if (!worker.submit(() -> onPriceUpdate(data))) {
-                log.info("{} bot worker busy, abandon update event {}", name, data.id());
+//                log.info("{} bot worker busy, abandon update event {}", name, data.id());
             }
         }
     }
@@ -127,6 +130,9 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
     }
 
     private void doTrade(BigDecimal price, Grid currFallGrid) throws BinanceAPIException {
+        if (preTradeGrid == currFallGrid) {
+            return;
+        }
         log.info("Bot {} {} {} 当前价格 {} 当前格子#{} --> 进入格子#{}", name, symbol, investInfo, price, preTradeGrid.getOrder(), currFallGrid.getOrder());
         int preTradeOrder = preTradeGrid.getOrder();
         // 判断是否为空仓
@@ -143,25 +149,36 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
 
     private void sell(BigDecimal price, Grid currFallGrid) throws BinanceAPIException {
         final var builder = OrderRequest.newLimitOrderBuilder();
-        BigDecimal sellGridCount = BigDecimal.valueOf(Math.abs(currFallGrid.getOrder() - preTradeGrid.getOrder()));
-        // 交易数量 = （格子数量 *
-        TradeQuantity sellTrade = TradeQuantity.instanceOf(symbol, price, tradeGrid.getStepAmount().multiply(sellGridCount));
-        // 判断当前持仓数量 (卖出的数量大于当前持仓 卖出全部持仓)
-        BigDecimal sellQuantity = sellTrade.quantity;
-        if (investInfo.getPositQuantity().compareTo(sellQuantity) < 0) {
-            sellQuantity = investInfo.getPositQuantity();
+        var option = dealGridInfo.packCanSells(currFallGrid);
+        if (option.isEmpty()) {
+            return;
         }
-
+        var packed = option.get();
+        // 判断当前持仓数量 (卖出的数量大于当前持仓 卖出全部持仓)
         OrderRequest req = builder
                 .sell()
                 .id(TradeUtil.generateTradeId())
                 .symbol(symbol)
                 .price(price)
-                .quantity(sellQuantity)
+                .quantity(packed.quantity())
+                .timestamp(Instant.now().getEpochSecond())
+                .rcwindow(3000L)
                 .build();
-        log.info("Bot {} {} 卖出 数量 {} 金额 {}", name, symbol, sellTrade.quantity, sellTrade.amount);
-        Order order = binanceAPI.orderTest(account, req);
-        doHandleOrder(order, currFallGrid, sellTrade);
+        log.info("Bot {} {} 卖出 数量 {}", name, symbol, packed.quantity());
+        Order order = binanceAPI.order(account, req);
+        if (order.isDeal()) {
+            OrderRequest request = order.getRequest();
+            var resp = order.getResponse();
+            BigDecimal executedQty = resp.getExecutedQty();
+            BigDecimal sellAmount = executedQty.multiply(resp.getPrice());
+            BigDecimal income = sellAmount.subtract(packed.totalPrice());
+            investInfo.sellSome(sellAmount, executedQty, income);
+            preTradeGrid = currFallGrid;
+            dealGridInfo.onSell(packed);
+            log.info("bot {} {} 卖出成功! 交易数量 {}  {}", name, symbol, executedQty, investInfo.getInfo());
+        } else {
+            log.info("bot {} {} 卖出失败! ", name, symbol);
+        }
     }
 
     private void buy(BigDecimal price, Grid currFallGrid) throws BinanceAPIException {
@@ -176,31 +193,17 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
                 .quantity(buyTrade.quantity)
                 .build();
         log.info("Bot {} {} 买入 数量 {} 金额 {}", name, symbol, buyTrade.quantity, buyTrade.amount);
-        Order order = binanceAPI.orderTest(account, req);
-        doHandleOrder(order, currFallGrid, buyTrade);
-    }
-
-
-    /**
-     * 处理交易结果
-     *
-     * @param order
-     * @param fallGrid
-     * @param tradeQuantity
-     */
-    private void doHandleOrder(Order order, Grid fallGrid, TradeQuantity tradeQuantity) {
+        Order order = binanceAPI.order(account, req);
         if (order.isDeal()) {
             OrderRequest request = order.getRequest();
             BigDecimal executedQty = order.getResponse().getExecutedQty();
-            if (request.side == OrderRequest.Side.BUY) {
-                investInfo.buySome(tradeQuantity.amount, executedQty);
-            } else {
-                investInfo.sellSome(tradeQuantity.amount, executedQty);
-            }
-            preTradeGrid = fallGrid;
-            log.info("bot {} {} 交易成功! 交易数量 {}  {}", name, symbol, executedQty, investInfo.getInfo(request.price));
+            investInfo.buySome(buyTrade.amount, executedQty);
+            dealGridInfo.onBuy(currFallGrid, price, buyTrade.quantity);
+            preTradeGrid = currFallGrid;
+            log.info("bot {} {} 买入成功! 交易数量 {}  {}", name, symbol, executedQty, investInfo.getInfo());
         } else {
-            log.info("bot {} {} 交易失败! ", name, symbol);
+            log.info("bot {} {} 买入失败! ", name, symbol);
         }
     }
+
 }

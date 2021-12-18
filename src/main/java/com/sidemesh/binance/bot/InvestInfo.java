@@ -6,6 +6,8 @@ import java.math.BigDecimal;
  * 投资信息
  */
 public class InvestInfo {
+    // 收益总金额
+    private BigDecimal incomeTotal = BigDecimal.ZERO;
     // 投资金额
     private BigDecimal invest;
     // 持仓数量
@@ -42,10 +44,12 @@ public class InvestInfo {
      *
      * @param amount
      * @param quantity
+     * @param income 卖出收益
      */
-    public void sellSome(BigDecimal amount, BigDecimal quantity) {
+    public void sellSome(BigDecimal amount, BigDecimal quantity, BigDecimal income) {
         invest = invest.add(amount);
         positQuantity = positQuantity.subtract(quantity);
+        incomeTotal = incomeTotal.add(income);
     }
 
     /**
@@ -71,10 +75,9 @@ public class InvestInfo {
                 ",持仓=" + positQuantity;
     }
 
-    public String getInfo(BigDecimal price) {
-        final var totalInvest = invest.add(positQuantity.multiply(price));
+    public String getInfo() {
         return "投资额剩余=" + invest +
                 ",持仓=" + positQuantity +
-                ",净收益=" + totalInvest.subtract(invest);
+                ",总收益=" + incomeTotal;
     }
 }

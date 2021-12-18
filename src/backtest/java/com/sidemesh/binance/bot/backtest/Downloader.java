@@ -33,13 +33,21 @@ class Downloader {
         final var cli = new OkHttpClient.Builder().build();
         final var url = String.format("https://data.binance.vision/data/spot/monthly/trades/%s/%s-trades-%s.zip",
                 symbol.toUpperCaseStr(), symbol.toUpperCaseStr(), month);
+
+        log.info("Download url {}", url);
+
         final var req = new Request.Builder().url(url).get().build();
 
         Response execute = cli.newCall(req).execute();
         var sink = Okio.buffer(Okio.sink(file));
-        sink.writeAll(execute.body().source());
-        sink.close();
-        unzip(file, path);
+        try {
+            sink.writeAll(execute.body().source());
+            unzip(file, path);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            sink.close();
+        }
     }
 
     private static void unzip(File file, String to) throws ZipException {
