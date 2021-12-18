@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 固定 上下边界 的网格生成器
@@ -24,6 +25,14 @@ public class FixedBoundTradeGridBuilder implements TradeGridBuilder {
     private int gridNumber;
 
     public FixedBoundTradeGridBuilder(BigDecimal lowerPrice, BigDecimal upperPrice, int gridNumber) {
+        Objects.requireNonNull(lowerPrice, "lowerPrice must not be null");
+        Objects.requireNonNull(upperPrice, "upperPrice must not be null");
+        if (lowerPrice.compareTo(upperPrice) >= 0) {
+            throw new IllegalArgumentException("lowerPrice should less than upperPrice!");
+        }
+        if (gridNumber <= 0) {
+            throw new IllegalArgumentException("gridNumber must more than 1");
+        }
         this.lowerPrice = lowerPrice;
         this.upperPrice = upperPrice;
         this.gridNumber = gridNumber;

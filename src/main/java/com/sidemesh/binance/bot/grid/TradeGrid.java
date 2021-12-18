@@ -44,14 +44,33 @@ public class TradeGrid {
 
     @Getter
     private BigDecimal stepAmount;
+    @Getter
+    private BigDecimal serviceCharge;
 
-    public static TradeGrid generate(BigDecimal investAmount, TradeGridBuilder tradeGridBuilder) {
+    public static TradeGrid generate(BigDecimal investAmount, BigDecimal serviceCharge, TradeGridBuilder tradeGridBuilder) {
         List<Grid> grids = tradeGridBuilder.create();
         TradeGrid tradeGrid = new TradeGrid(grids);
         tradeGrid.stepAmount = investAmount.divide(BigDecimal.valueOf(grids.size()), investAmount.scale() + 2, RoundingMode.HALF_UP);
-        if (BigDecimal.TEN.compareTo(tradeGrid.getStepAmount()) >= 0) {
-            throw new IllegalArgumentException("invest Amount too small");
+        if (BigDecimal.TEN.compareTo(tradeGrid.getStepAmount()) > 0) {
+            throw new IllegalArgumentException(String.format("invest Amount too small [invest=%s, step=%s]", investAmount, tradeGrid.stepAmount));
         }
+        if (serviceCharge.compareTo(BigDecimal.ONE) >= 0 || serviceCharge.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("手续费输入有误，不在0到1之间");
+        }
+        // 手续费非0时 判断格子收益是否满足
+        if (serviceCharge.compareTo(BigDecimal.ZERO) != 0) {
+            Grid topGrid = tradeGrid.getTopGrid();
+            /*
+            以买入数量为一个币的情况下带入计算的
+            一个格子的收益 > 底部和顶部成交时总手续费
+             */
+            BigDecimal subtract = topGrid.getHighPrice().subtract(topGrid.getLowPrice());
+            BigDecimal totalService = topGrid.getLowPrice().multiply(serviceCharge).add(topGrid.getHighPrice().multiply(serviceCharge));
+            if (totalService.compareTo(subtract) <= 0) {
+                throw new IllegalArgumentException(String.format("格子收益不足抵扣属续费！[收益=%s 手续费=%s]", subtract, totalService));
+            }
+        }
+        tradeGrid.serviceCharge = serviceCharge;
         return tradeGrid;
     }
 
@@ -75,7 +94,7 @@ public class TradeGrid {
         this.grids.forEach(g -> gridIndexes[g.getOrder()] = g);
 
         // 添加哑节点
-        topDummyGrid = new Grid(topGrid.getHighPrice(),topGrid.getHighPrice().add(new BigDecimal("99999999")));
+        topDummyGrid = new Grid(topGrid.getHighPrice(), topGrid.getHighPrice().add(new BigDecimal("99999999")));
         topDummyGrid.setOrder(topGrid.getOrder() + 1);
     }
 
@@ -96,7 +115,7 @@ public class TradeGrid {
      * 二分查找
      */
     private Grid binarySearchGrids(BigDecimal currPrice, int startOrder, int topOrder) {
-        if (startOrder == topOrder)  return gridIndexes[startOrder];
+        if (startOrder == topOrder) return gridIndexes[startOrder];
         int mid = (topOrder + startOrder) / 2 + 1;
         Grid midGrid = gridIndexes[mid];
         if (currPrice.compareTo(midGrid.getLowPrice()) < 0) {

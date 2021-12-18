@@ -34,9 +34,10 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
     private final BotWorker worker;
     // 当前价格 / 当前市场成交价格
     private RealtimeStreamData currentTrade;
-
+    // 投资盈利信息
     private final InvestInfo investInfo;
-    private DealGridInfo dealGridInfo;
+    // 格子交易记录
+    private final DealGridInfo dealGridInfo;
 
     public SimpleGridBot(String name,
                          Symbol symbol,
@@ -54,7 +55,7 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
         this.account = account;
         this.binanceAPI = binanceAPI;
         this.investInfo = new InvestInfo(money, BigDecimal.ZERO);
-        this.tradeGrid = TradeGrid.generate(money, new FixedBoundTradeGridBuilder(lowPrice, highPrice, grids));
+        this.tradeGrid = TradeGrid.generate(money, account.serviceChargeRate, new FixedBoundTradeGridBuilder(lowPrice, highPrice, grids));
         this.worker = new ConditionBotWorker(name + "-worker");
         // 目测性能好一些，需要 benchmark
         // this.worker = new BlockingQueueBotWorker(name + "-worker");

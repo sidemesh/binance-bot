@@ -21,7 +21,7 @@ public class BackTest {
                 new BigDecimal(1010),
                 new BigDecimal("0.05"),
                 new BigDecimal("0.1"),
-                100,
+                80,
                 realtime
         );
         bot.run();
