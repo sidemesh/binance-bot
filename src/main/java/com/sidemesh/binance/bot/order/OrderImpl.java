@@ -26,6 +26,6 @@ public class OrderImpl implements Order {
 
     @Override
     public boolean isDeal() {
-        return false;
+        return null != response && response.isSuccess();
     }
 }

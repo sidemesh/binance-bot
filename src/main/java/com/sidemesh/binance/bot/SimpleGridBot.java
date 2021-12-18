@@ -123,7 +123,7 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
             if (e.isLimited) {
                 log.info("api call limited! update data = {}", data);
             } else {
-                log.error("api call error", e);
+                log.error("api call error: " + e.getMessage(), e);
             }
         }
     }

@@ -109,7 +109,7 @@ public class BinanceAPIv3 implements BinanceAPI {
 
         // 处理接口请求 status 非200错误
         if (err != null) {
-            throw BinanceAPIException.errorResponse(err);
+            throw BinanceAPIException.message(err.toString());
         } else {
             throw BinanceAPIException.message("api call unknown error!");
         }
