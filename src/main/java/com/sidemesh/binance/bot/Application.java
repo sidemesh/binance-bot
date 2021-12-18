@@ -26,7 +26,6 @@ public class Application {
                 Account.fromEnv(),
                 new BinanceAPIv3(proxy != null ? proxy.toProxy() : null, Duration.ofSeconds(10), Duration.ofSeconds(10)),
                 new BigDecimal(20000),
-                new BigDecimal("0.01"),
                 new BigDecimal("1"),
                 new BigDecimal("100"),
                 20,

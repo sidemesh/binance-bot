@@ -124,21 +124,4 @@ public class TradeGrid {
             return midGrid;
         }
     }
-
-    public static void main(String[] args) {
-        // 手续费 10%
-        // 当前价格 1  10买的 9个 10.001 卖
-        // (10 * 10%) * 1.01 > 10
-        // 9 * 当前价格 *
-        BigDecimal 成本 = BigDecimal.TEN;
-        BigDecimal low = BigDecimal.valueOf(0.1);
-        BigDecimal hig = BigDecimal.valueOf(0.12);
-
-        BigDecimal serviceCharge = new BigDecimal("0.01");
-        BigDecimal multiply = 成本.divide(low).multiply(BigDecimal.ONE.subtract(serviceCharge))
-                .multiply(hig)
-                .multiply(BigDecimal.ONE.subtract(serviceCharge));
-        System.out.println(multiply);
-
-    }
 }
