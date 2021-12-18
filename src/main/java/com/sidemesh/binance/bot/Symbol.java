@@ -17,6 +17,7 @@ public enum Symbol implements StringEnum<Symbol> {
     BTC_USDT("BTCUSDT", "0.0000001", "0.1"),
     SHIB_USDT("SHIBUSDT", "0.00000001", "1"),
     CAKE_USDT("CAKEUSDT", "0.01", "0.01"),
+    CHZ_USDT("CHZUSDT", "0.0001", "1"),
     ;
 
     //
