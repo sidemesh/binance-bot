@@ -1,6 +1,7 @@
 package com.sidemesh.binance.bot;
 
 import com.sidemesh.binance.bot.api.BinanceAPIv3;
+import com.sidemesh.binance.bot.dto.CreateBotRequest;
 import com.sidemesh.binance.bot.proxy.ClashProxy;
 import com.sidemesh.binance.bot.proxy.ProxyInfo;
 import com.sidemesh.binance.bot.websocket.RealtimeStreamWebSocketImpl;
@@ -17,31 +18,74 @@ public class Application {
         log.info("binance-bot v0.0.1");
         var opts = ApplicationOptions.formEnv();
 
-        ProxyInfo proxy = opts.isEnableLocalProxy() ? ClashProxy.newLocalClashProxy() : null;
-        var rts = new RealtimeStreamWebSocketImpl(proxy);
-
-        var bot =  new SimpleGridBot(
-                "simple-grid-bot-0",
-                Symbol.CHESS_USDT,
-                Account.fromEnv(),
-                new BinanceAPIv3(proxy != null ? proxy.toProxy() : null, Duration.ofSeconds(10), Duration.ofSeconds(10)),
-                new BigDecimal(20000),
-                new BigDecimal("1"),
-                new BigDecimal("100"),
-                20,
-                rts
-        );
+        // 代理
+        final var proxy = opts.isEnableLocalProxy() ? ClashProxy.newLocalClashProxy() : null;
+        final var rts = new RealtimeStreamWebSocketImpl(proxy);
         rts.run();
-        bot.run();
-    }
 
-    private static void runApiServer() {
+        // bot hub
+        final var botHub = new BotHub();
+
         Javalin app = Javalin.create(cfg -> {
             cfg.showJavalinBanner = true;
         }).start(8080);
-        app.get("/api/v1/bots", ctx -> {
-            ctx.result("TODO");
+
+        // 创建机器人
+        app.put("/api/v1/bots", ctx -> {
+            var req = ctx.bodyValidator(CreateBotRequest.class)
+                    .check(it -> {
+                        var r = it.getLowPrice().compareTo(it.getHighPrice());
+                        return r < 0;
+                    }, "high price must greater than low price")
+                    .check(it -> {
+                        var r = it.getAmountUSDT().compareTo(BigDecimal.ZERO);
+                        return r > 0;
+                    }, "amount USDT must greater than 0")
+                    .get();
+
+            try {
+                var bot =createBot(req.getSymbol(),
+                        req.getName(),
+                        proxy,
+                        req.getAmountUSDT(),
+                        req.getLowPrice(),
+                        req.getHighPrice(),
+                        req.getGrids(),
+                        rts);
+                bot.run();
+                botHub.add(bot);
+            } catch (IllegalArgumentException e) {
+                ctx.status(400);
+                ctx.result(e.getMessage());
+                return;
+            }
+
+            ctx.result("created!");
         });
+    }
+
+    private static Bot createBot(Symbol symbol,
+                                       String name,
+                                       ProxyInfo proxyInfo,
+                                       BigDecimal amountUSDT,
+                                       BigDecimal lowPrice,
+                                       BigDecimal highPrice,
+                                       int grids,
+                                       RealtimeStream rtl) {
+        log.info("create new bot symbol:{} name:{} amountUSDT:{} lowPrice:{} highPrice:{} grids:{}"
+                , symbol, name, amountUSDT, lowPrice, highPrice, grids );
+        var apiClient = new BinanceAPIv3(proxyInfo!= null ? proxyInfo.toProxy() : null,
+                Duration.ofSeconds(2), Duration.ofSeconds(2));
+        return new SimpleGridBot(
+                name,
+                symbol,
+                Account.fromEnv(),
+                apiClient,
+                amountUSDT,
+                lowPrice,
+                highPrice,
+                grids,
+                rtl);
     }
 
 }

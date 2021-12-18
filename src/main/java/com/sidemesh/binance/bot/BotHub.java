@@ -7,9 +7,7 @@ import java.util.Set;
 
 public class BotHub {
 
-    private static Set<Bot> bots = new HashSet<>();
-
-    private BotHub() {}
+    private static final Set<Bot> bots = new HashSet<>();
 
     public BotHub add(Bot bot) {
         bots.add(bot);

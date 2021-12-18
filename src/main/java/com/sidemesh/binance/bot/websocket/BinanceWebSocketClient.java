@@ -4,14 +4,13 @@ import com.google.common.collect.Sets;
 import com.sidemesh.binance.bot.Symbol;
 import com.sidemesh.binance.bot.proxy.ProxyInfo;
 import com.sidemesh.binance.bot.websocket.message.SubscribeMessage;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.WebSocket;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.util.Set;
@@ -22,8 +21,8 @@ import java.util.function.Consumer;
 /**
  * web socket 客户端
  */
+@Slf4j
 class BinanceWebSocketClient extends okhttp3.WebSocketListener {
-    private static final Logger log = LoggerFactory.getLogger(BinanceWebSocketClient.class);
     private static final String BINANCE_WSS = "wss://stream.binance.com:9443/ws";
 
     public final String id;
@@ -77,9 +76,13 @@ class BinanceWebSocketClient extends okhttp3.WebSocketListener {
     }
 
     public void subscribe(Set<Symbol> symbols) {
-        log.info("subscribe symbols {}", symbols);
-        var msg = new SubscribeMessage(symbols, messageId.addAndGet(1L));
-        ws.send(msg.toJson());
+        if (!symbols.isEmpty()) {
+            log.info("subscribe symbols {}", symbols);
+            var msg = new SubscribeMessage(symbols, messageId.addAndGet(1L));
+            ws.send(msg.toJson());
+        } else {
+            log.info("skip subscribe empty symbols {}", symbols);
+        }
     }
 
     /**
