@@ -14,7 +14,7 @@ public class TradeQuantityCalcTest {
     @BeforeAll
     public static void setUp() {
         FixedBoundTradeGridBuilder fixedBoundTradeGridBuilder = new FixedBoundTradeGridBuilder(BigDecimal.valueOf(1), BigDecimal.valueOf(10), 10);
-        tradeGrid =  TradeGrid.generate(new BigDecimal(100), fixedBoundTradeGridBuilder);
+        tradeGrid = TradeGrid.generate(new BigDecimal(100), BigDecimal.valueOf(0.001), fixedBoundTradeGridBuilder);
     }
 
     // TODO
@@ -25,10 +25,6 @@ public class TradeQuantityCalcTest {
 
         tradeQuantity = TradeQuantity.instanceOf(Symbol.REN_USDT, BigDecimal.TEN, tradeGrid.getStepAmount());
         Assertions.assertEquals(tradeQuantity.quantity.compareTo(BigDecimal.valueOf(1)), 0);
-
-        tradeQuantity = TradeQuantity.instanceOf(Symbol.REN_USDT, new BigDecimal("5.12311"), tradeGrid.getStepAmount());
-        Assertions.assertEquals(tradeQuantity.quantity.compareTo(new BigDecimal("1.9519393")), 0);
-
     }
 
 }

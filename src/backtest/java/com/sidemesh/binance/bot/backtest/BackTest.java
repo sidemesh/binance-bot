@@ -19,9 +19,10 @@ public class BackTest {
                 Account.of("1", "1"),
                 new FakeBinanceAPI(),
                 new BigDecimal(1010),
+                new BigDecimal("0.01"),
                 new BigDecimal("0.05"),
                 new BigDecimal("0.1"),
-                100,
+                80,
                 realtime
         );
         bot.run();
