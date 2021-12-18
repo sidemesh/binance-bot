@@ -176,7 +176,7 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
             dealGridInfo.onSell(packed);
             log.info("bot {} {} 卖出成功! 交易数量 {}  {}", name, symbol, executedQty, investInfo.getInfo());
         } else {
-            log.info("bot {} {} 卖出失败! ", name, symbol);
+            log.info("bot {} {} 卖出失败! 订单状态 {} ", name, symbol, order.getResponse().getStatus());
         }
     }
 
@@ -201,7 +201,7 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
             preTradeGrid = currFallGrid;
             log.info("bot {} {} 买入成功! 交易数量 {}  {}", name, symbol, executedQty, investInfo.getInfo());
         } else {
-            log.info("bot {} {} 买入失败! ", name, symbol);
+            log.info("bot {} {} 买入失败! 订单状态 {}", name, symbol, order.getResponse().getStatus());
         }
     }
 
