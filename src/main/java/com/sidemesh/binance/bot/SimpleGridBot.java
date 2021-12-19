@@ -161,7 +161,6 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
                 .price(price)
                 .quantity(packed.quantity())
                 .timestamp(Instant.now().getEpochSecond())
-                .rcwindow(3000L)
                 .build();
         log.info("Bot {} {} 卖出 数量 {}", name, symbol, packed.quantity());
         Order order = binanceAPI.order(account, req);
