@@ -96,7 +96,7 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
     public void update(RealtimeStreamData data) {
         if (isRunning()) {
             if (!worker.submit(() -> onPriceUpdate(data))) {
-                log.info("{} bot worker busy, abandon event {}", name, data.id());
+                log.info("{} bot worker busy, abandon event {} price {}", name, data.id(), data.price());
             }
         }
     }
@@ -116,9 +116,7 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
 
         try {
             Grid currFallGrid = tradeGrid.getCurrFallGrid(price);
-            if (currFallGrid != null) {
-                doTrade(price, currFallGrid);
-            }
+            if (currFallGrid != null) doTrade(price, currFallGrid);
         } catch (BinanceAPIException e) {
             if (e.isLimited) {
                 log.info("api call limited! update data = {}", data);
@@ -147,13 +145,11 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
     }
 
     private void sell(BigDecimal price, Grid currFallGrid) throws BinanceAPIException {
-        final var builder = OrderRequest.newLimitOrderBuilder();
         var option = dealGridInfo.packCanSells(currFallGrid);
-        if (option.isEmpty()) {
-            return;
-        }
+        if (option.isEmpty()) return;
         var packed = option.get();
         // 判断当前持仓数量 (卖出的数量大于当前持仓 卖出全部持仓)
+        final var builder = OrderRequest.newLimitOrderBuilder();
         OrderRequest req = builder
                 .sell()
                 .id(TradeUtil.generateTradeId())
@@ -165,7 +161,7 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
         log.info("Bot {} {} 卖出 数量 {}", name, symbol, packed.quantity());
         Order order = binanceAPI.order(account, req);
         if (order.isDeal()) {
-            OrderRequest request = order.getRequest();
+            // OrderRequest request = order.getRequest();
             var resp = order.getResponse();
             BigDecimal executedQty = resp.getExecutedQty();
             BigDecimal sellAmount = executedQty.multiply(resp.getPrice());
@@ -193,7 +189,7 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
         log.info("Bot {} {} 买入 数量 {} 金额 {}", name, symbol, buyTrade.quantity, buyTrade.amount);
         Order order = binanceAPI.order(account, req);
         if (order.isDeal()) {
-            OrderRequest request = order.getRequest();
+            // OrderRequest request = order.getRequest();
             BigDecimal executedQty = order.getResponse().getExecutedQty();
             investInfo.buySome(buyTrade.amount, executedQty);
             dealGridInfo.onBuy(currFallGrid, price, buyTrade.quantity);
