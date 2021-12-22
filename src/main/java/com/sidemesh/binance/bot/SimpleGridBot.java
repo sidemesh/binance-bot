@@ -102,11 +102,10 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
     }
 
     private void onPriceUpdate(RealtimeStreamData data) {
-        if (currentTrade != null && currentTrade.id() > data.id()) {
-            return;
-        }
+        if (currentTrade != null && currentTrade.id() > data.id()) return;
         currentTrade = data;
         final var price = data.price();
+
         // 没有游标设置游标
         if (preTradeGrid == null) {
             // 确定当前所处格子
@@ -120,6 +119,8 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
         } catch (BinanceAPIException e) {
             if (e.isLimited) {
                 log.info("api call limited! update data = {}", data);
+            } else if (e.isInsufficientBalance()) {
+                log.info("api call balance insufficient!");
             } else {
                 log.error("api call error: " + e.getMessage(), e);
             }
