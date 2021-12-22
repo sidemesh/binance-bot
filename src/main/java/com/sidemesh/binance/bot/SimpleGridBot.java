@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.List;
 
 @Slf4j
 public class SimpleGridBot implements Bot, RealtimeStreamListener {
@@ -99,6 +100,14 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
                 log.info("{} bot worker busy, abandon event {} price {}", name, data.id(), data.price());
             }
         }
+    }
+
+    /**
+     * 获取网格
+     */
+    @Override
+    public List<Grid> grids() {
+        return this.tradeGrid.getGrids();
     }
 
     private void onPriceUpdate(RealtimeStreamData data) {

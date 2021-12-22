@@ -37,6 +37,13 @@
         </dependency>
 
         <dependency>
+            <groupId>com.faunadb</groupId>
+            <artifactId>faunadb-java</artifactId>
+            <version>5.0.0-beta</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
             <version>${logback.version}</version>

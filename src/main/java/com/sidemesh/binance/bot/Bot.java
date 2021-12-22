@@ -1,5 +1,9 @@
 package com.sidemesh.binance.bot;
 
+import com.sidemesh.binance.bot.grid.Grid;
+
+import java.util.List;
+
 public interface Bot {
 
     /**
@@ -22,5 +26,10 @@ public interface Bot {
      * 停止机器人
      */
     void stop();
+
+    /**
+     * 获取当前机器人网格
+     */
+    List<Grid> grids();
 
 }
