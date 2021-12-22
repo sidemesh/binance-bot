@@ -118,12 +118,12 @@ public class OrderRequest extends JSON.ToJson {
         }
 
         /*
-         * 禁止设置时间戳，防止错误的使用秒
+         * 应该禁止设置时间戳，防止错误的使用秒
+         */
         public LimitOrderBuilder timestamp(long tz) {
             this.timestamp = tz;
             return this;
         }
-         */
 
         public LimitOrderBuilder rcwindow(long rcw) {
             this.rcwindow = rcw;
