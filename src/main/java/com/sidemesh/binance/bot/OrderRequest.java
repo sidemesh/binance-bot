@@ -11,7 +11,7 @@ public class OrderRequest extends JSON.ToJson {
 
     // 默认窗口 5s
     // 赋值不能大于 60000
-     private final static long DEFAULT_RC_WINDOW = 30000L;
+     private final static long DEFAULT_RC_WINDOW = 10000L;
 
     // 唯一ID
     public final String newClientOrderId;
@@ -21,6 +21,10 @@ public class OrderRequest extends JSON.ToJson {
     public final BigDecimal price;
     public final BigDecimal quantity;
     public final TimeInForce timeInForce;
+    /*
+     * 签名接口均需要传递 timestamp参数，其值应当是请求发送时刻的unix时间戳(毫秒)。
+     * 服务器收到请求时会判断请求中的时间戳，如果是5000毫秒之前发出的，则请求会被认为无效。这个时间空窗值可以通过发送可选参数 recvWindow来定义。
+     */
     public final Long recvWindow;
     public final Long timestamp;
     public final RespType newOrderRespType;
@@ -113,10 +117,13 @@ public class OrderRequest extends JSON.ToJson {
             return this;
         }
 
+        /*
+         * 禁止设置时间戳，防止错误的使用秒
         public LimitOrderBuilder timestamp(long tz) {
             this.timestamp = tz;
             return this;
         }
+         */
 
         public LimitOrderBuilder rcwindow(long rcw) {
             this.rcwindow = rcw;
