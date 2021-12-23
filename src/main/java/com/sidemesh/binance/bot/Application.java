@@ -23,9 +23,6 @@ public class Application {
         final var rts = new RealtimeStreamWebSocketImpl(proxy);
         rts.run();
 
-        // bot hub
-        final var botHub = new BotHub();
-
         Javalin app = Javalin.create(cfg -> {
             cfg.showJavalinBanner = true;
         }).start(8080);
@@ -44,7 +41,7 @@ public class Application {
                     .get();
 
             try {
-                var bot =createBot(req.getSymbol(),
+                var bot=createGridBot(req.getSymbol(),
                         req.getName(),
                         proxy,
                         req.getAmountUSDT(),
@@ -53,7 +50,7 @@ public class Application {
                         req.getGrids(),
                         rts);
                 bot.run();
-                botHub.add(bot);
+                BotHub.shared.add(bot);
             } catch (IllegalArgumentException e) {
                 ctx.status(400);
                 ctx.result(e.getMessage());
@@ -64,7 +61,7 @@ public class Application {
         });
     }
 
-    private static Bot createBot(Symbol symbol,
+    private static GridBot createGridBot(Symbol symbol,
                                        String name,
                                        ProxyInfo proxyInfo,
                                        BigDecimal amountUSDT,

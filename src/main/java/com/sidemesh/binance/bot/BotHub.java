@@ -1,5 +1,7 @@
 package com.sidemesh.binance.bot;
 
+import com.sidemesh.binance.bot.log.Log;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
@@ -9,8 +11,13 @@ public class BotHub {
 
     private static final Set<Bot> bots = new HashSet<>();
 
-    public BotHub add(Bot bot) {
+    public static final BotHub shared = new BotHub();
+
+    private BotHub() {}
+
+    public BotHub add(GridBot bot) {
         bots.add(bot);
+        Log.shared.log(bot);
         return this;
     }
 

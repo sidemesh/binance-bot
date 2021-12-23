@@ -1,9 +1,11 @@
 package com.sidemesh.binance.bot.log;
 
-import com.sidemesh.binance.bot.Bot;
+import com.sidemesh.binance.bot.GridBot;
 
 public interface Log {
 
-    void log(Bot bot);
+    Log shared = new FirebaseLogImpl();
+
+    void log(GridBot bot);
 
 }

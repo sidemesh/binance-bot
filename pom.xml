@@ -37,10 +37,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.faunadb</groupId>
-            <artifactId>faunadb-java</artifactId>
-            <version>5.0.0-beta</version>
-            <scope>compile</scope>
+            <groupId>com.google.firebase</groupId>
+            <artifactId>firebase-admin</artifactId>
+            <version>8.1.0</version>
         </dependency>
 
         <dependency>

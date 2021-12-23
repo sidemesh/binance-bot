@@ -12,10 +12,15 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
-public class SimpleGridBot implements Bot, RealtimeStreamListener {
+public class SimpleGridBot implements GridBot, RealtimeStreamListener {
+
+    private final String id;
+    private final Date createdAt;
     // 机器人名称
     private final String name;
     // 交易对
@@ -49,6 +54,10 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
                          RealtimeStream rts) {
         check(symbol, "symbol");
         check(account, "account");
+
+        this.id = UUID.randomUUID().toString();
+        this.createdAt = new Date();
+
         this.name = name;
         this.symbol = symbol;
         this.account = account;
@@ -66,6 +75,16 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
         if (o == null) {
             throw new IllegalArgumentException("missing " + field);
         }
+    }
+
+    @Override
+    public String id() {
+        return this.id;
+    }
+
+    @Override
+    public Date createdAt() {
+        return this.createdAt;
     }
 
     @Override

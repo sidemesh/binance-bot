@@ -1,11 +1,12 @@
 package com.sidemesh.binance.bot.grid;
 
+import com.sidemesh.binance.bot.util.Convert;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
 
-public class Grid {
+public class Grid implements Convert.ToMap {
     /**
      * 网格序号
      * 1 ---> max
