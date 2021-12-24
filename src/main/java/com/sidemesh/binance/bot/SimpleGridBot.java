@@ -231,13 +231,13 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
      */
     private void tryUseOrderBookBestPriceTrade(boolean isSell) {
         // 判断状态，防止重复递归
-        if (!isTriedUseBestPriceTrade) {
-            this.isTriedUseBestPriceTrade = true;
-            onPriceUpdate(isSell ? latestBookTicker.bestSellPrice : latestBookTicker.bestBuyPrice);
-        } else {
-            // 重置状态
+        if (isTriedUseBestPriceTrade) {
             this.isTriedUseBestPriceTrade = false;
+            return;
         }
+
+        this.isTriedUseBestPriceTrade = true;
+        onPriceUpdate(isSell ? latestBookTicker.bestSellPrice : latestBookTicker.bestBuyPrice);
     }
 
     /*
