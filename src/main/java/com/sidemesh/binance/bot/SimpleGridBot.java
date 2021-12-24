@@ -119,6 +119,9 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
     }
 
     private void onPriceUpdate(RealtimeStreamData data) {
+        // 重置状态
+        this.resetStates();
+
         if (currentTrade != null && currentTrade.id() > data.id()) return;
         currentTrade = data;
         final var price = data.price();
@@ -193,7 +196,7 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
         } else {
             log.info("bot {} {} 卖出失败! 订单状态 {} ", name, symbol, order.getResponse().getStatus());
             // 尝试使用最优价格进行交易
-            this.tryUseOrderBookBestPriceTrade(true);
+            this.tryUseOrderBookBestPriceTrade(latestBookTicker.bestSellPrice);
         }
     }
 
@@ -220,7 +223,7 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
         } else {
             log.info("bot {} {} 买入失败! 订单状态 {}", name, symbol, order.getResponse().getStatus());
             // 尝试使用最优价格进行交易
-            this.tryUseOrderBookBestPriceTrade(false);
+            this.tryUseOrderBookBestPriceTrade(latestBookTicker.bestBuyPrice);
         }
     }
 
@@ -229,15 +232,21 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
      * event -> doTrade -> trade failed -> best retry -> check is best retried -> [retry : abandon!]
      * ->  trade failed -> best retry ->  check is best retried -> done!
      */
-    private void tryUseOrderBookBestPriceTrade(boolean isSell) {
+    private void tryUseOrderBookBestPriceTrade(final BigDecimal price) {
+        log.info("try use order book best price trade. flag = {} price = {}", isTriedUseBestPriceTrade, price);
         // 判断状态，防止重复递归
-        if (!isTriedUseBestPriceTrade) {
-            this.isTriedUseBestPriceTrade = true;
-            onPriceUpdate(isSell ? latestBookTicker.bestSellPrice : latestBookTicker.bestBuyPrice);
-        } else {
-            // 重置状态
+        if (isTriedUseBestPriceTrade) {
+            // 此行可移除
             this.isTriedUseBestPriceTrade = false;
+            return;
         }
+
+        this.isTriedUseBestPriceTrade = true;
+        onPriceUpdate(price);
+    }
+
+    private void resetStates() {
+        this.isTriedUseBestPriceTrade = false;
     }
 
     /*
