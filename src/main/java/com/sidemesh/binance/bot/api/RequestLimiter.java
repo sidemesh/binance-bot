@@ -28,8 +28,8 @@ class RequestLimiter {
     }
 
     private boolean sync() {
-        final var now = Instant.now().getEpochSecond();
-        if ((now - preSyncTz) > 0) {
+        final var now = Instant.now().toEpochMilli();
+        if ((now - preSyncTz) > 1000) {
             synchronized (this) {
                 if (current > 0) {
                     // 已进行同步
