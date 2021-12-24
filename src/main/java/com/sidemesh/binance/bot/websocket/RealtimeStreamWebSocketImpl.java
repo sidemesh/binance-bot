@@ -4,8 +4,9 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.sidemesh.binance.bot.RealtimeStream;
 import com.sidemesh.binance.bot.RealtimeStreamListener;
 import com.sidemesh.binance.bot.Symbol;
-import com.sidemesh.binance.bot.websocket.event.EventMessage;
+import com.sidemesh.binance.bot.websocket.event.BookTickerMessage;
 import com.sidemesh.binance.bot.proxy.ProxyInfo;
+import com.sidemesh.binance.bot.websocket.event.TradeMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,16 +75,41 @@ public class RealtimeStreamWebSocketImpl implements RealtimeStream {
     private void onMessage(ExecutorService pool, String message) {
         pool.submit(() -> {
             log.debug("receive message = {}", message);
-            final var event = EventMessage.ofJson(message);
+            if (tryHandleTradeMessage(pool, message)) return;
+            if (tryHandleBookTickerMessage(pool, message)) return;
+            log.warn("can't handle message {} abandon!", message);
+        });
+    }
+
+    private boolean tryHandleTradeMessage(ExecutorService pool, String message) {
+        if (message.contains("trade")) {
+            final var event = TradeMessage.ofJson(message);
             if (event.isTrade()) {
-                final var ls = symbolListenersMap.get(event.symbol);
-                if (ls != null) {
-                    ls.forEach(it -> pool.submit(() -> it.update(event)));
-                }
+                symbolListenersMap.computeIfPresent(event.symbol, (k, list) -> {
+                    list.forEach(it -> pool.submit(() -> it.update(event)));
+                    return list;
+                });
+                return true;
             } else {
                 log.info("{} is not a trade message. abandon!", message);
             }
-        });
+        }
+
+        return false;
+    }
+
+    private boolean tryHandleBookTickerMessage(ExecutorService pool, String message) {
+        final var event = BookTickerMessage.ofJson(message);
+        if (event.isBookTickerMessage()) {
+            symbolListenersMap.computeIfPresent(event.symbol, (k, list) -> {
+                list.forEach(it -> pool.submit(() -> it.update(event)));
+                return list;
+            });
+            return true;
+        } else {
+            log.info("{} is not a boot ticker message. abandon!", message);
+        }
+        return false;
     }
 
     private void reconnect() {
