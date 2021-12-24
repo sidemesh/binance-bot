@@ -119,6 +119,9 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
     }
 
     private void onPriceUpdate(RealtimeStreamData data) {
+        // 重置状态
+        this.resetStates();
+
         if (currentTrade != null && currentTrade.id() > data.id()) return;
         currentTrade = data;
         final var price = data.price();
@@ -238,6 +241,10 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
 
         this.isTriedUseBestPriceTrade = true;
         onPriceUpdate(isSell ? latestBookTicker.bestSellPrice : latestBookTicker.bestBuyPrice);
+    }
+
+    private void resetStates() {
+        this.isTriedUseBestPriceTrade = false;
     }
 
     /*
