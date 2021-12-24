@@ -233,6 +233,7 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
      * ->  trade failed -> best retry ->  check is best retried -> done!
      */
     private void tryUseOrderBookBestPriceTrade(boolean isSell) {
+        log.info("try use order book best price trade flag = {} is sell order side = {}", isTriedUseBestPriceTrade, isSell);
         // 判断状态，防止重复递归
         if (isTriedUseBestPriceTrade) {
             this.isTriedUseBestPriceTrade = false;
@@ -240,6 +241,8 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
         }
 
         this.isTriedUseBestPriceTrade = true;
+        var bestPrice = isSell ? latestBookTicker.bestSellPrice : latestBookTicker.bestBuyPrice;
+        log.info("try use {} price trade", bestPrice);
         onPriceUpdate(isSell ? latestBookTicker.bestSellPrice : latestBookTicker.bestBuyPrice);
     }
 
