@@ -192,7 +192,7 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
             log.info("bot {} {} 卖出成功! 交易数量 {}  {}", name, symbol, executedQty, investInfo.getInfo());
         } else {
             log.info("bot {} {} 卖出失败! 订单状态 {} ", name, symbol, order.getResponse().getStatus());
-            // 尝试使用最优价值进行交易
+            // 尝试使用最优价格进行交易
             this.tryUseOrderBookBestPriceTrade(true);
         }
     }
@@ -219,7 +219,7 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
             log.info("bot {} {} 买入成功! 交易数量 {}  {}", name, symbol, executedQty, investInfo.getInfo());
         } else {
             log.info("bot {} {} 买入失败! 订单状态 {}", name, symbol, order.getResponse().getStatus());
-            // 尝试使用最优价值进行交易
+            // 尝试使用最优价格进行交易
             this.tryUseOrderBookBestPriceTrade(false);
         }
     }
@@ -239,5 +239,18 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
             this.isTriedUseBestPriceTrade = false;
         }
     }
+
+    /*
+     *  临时状态管理
+    private static class State {
+
+        public boolean isTriedUseBestPriceTrade = false;
+
+        public void reset() {
+            this.isTriedUseBestPriceTrade = false;
+        }
+
+    }
+     */
 
 }

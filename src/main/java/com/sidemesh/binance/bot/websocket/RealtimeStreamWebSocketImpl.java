@@ -85,10 +85,8 @@ public class RealtimeStreamWebSocketImpl implements RealtimeStream {
         if (message.contains("trade")) {
             final var event = TradeMessage.ofJson(message);
             if (event.isTrade()) {
-                symbolListenersMap.computeIfPresent(event.symbol, (k, list) -> {
-                    list.forEach(it -> pool.submit(() -> it.update(event)));
-                    return list;
-                });
+                if (symbolListenersMap.containsKey(event.symbol))
+                    symbolListenersMap.get(event.symbol).forEach(it -> pool.submit(() -> it.update(event)));
                 return true;
             } else {
                 log.info("{} is not a trade message. abandon!", message);
@@ -101,10 +99,8 @@ public class RealtimeStreamWebSocketImpl implements RealtimeStream {
     private boolean tryHandleBookTickerMessage(ExecutorService pool, String message) {
         final var event = BookTickerMessage.ofJson(message);
         if (event.isBookTickerMessage()) {
-            symbolListenersMap.computeIfPresent(event.symbol, (k, list) -> {
-                list.forEach(it -> pool.submit(() -> it.update(event)));
-                return list;
-            });
+            if (symbolListenersMap.containsKey(event.symbol))
+                symbolListenersMap.get(event.symbol).forEach(it -> pool.submit(() -> it.update(event)));
             return true;
         } else {
             log.info("{} is not a boot ticker message. abandon!", message);
