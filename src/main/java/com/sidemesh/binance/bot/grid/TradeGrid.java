@@ -66,7 +66,8 @@ public class TradeGrid {
              */
             BigDecimal subtract = topGrid.getHighPrice().subtract(topGrid.getLowPrice());
             BigDecimal totalService = topGrid.getLowPrice().multiply(serviceCharge).add(topGrid.getHighPrice().multiply(serviceCharge));
-            if (totalService.compareTo(subtract) <= 0) {
+            // 如果收益小于手续费
+            if (subtract.compareTo(totalService) <= 0) {
                 throw new IllegalArgumentException(String.format("格子收益不足抵扣属续费！[收益=%s 手续费=%s]", subtract, totalService));
             }
         }

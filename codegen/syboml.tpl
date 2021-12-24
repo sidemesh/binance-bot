@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 
 public enum Symbol implements StringEnum<Symbol> {
 
+    // generated code
     LINK_USDT("LINKUSDT", "0.0000001", "0.1"),
     NEAR_USDT("NEARUSDT", "0.0000001", "0.1"),
     ETH_USDT("ETHUSDT","0.0000001", "0.1"),
