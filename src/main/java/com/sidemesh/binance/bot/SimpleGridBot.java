@@ -6,12 +6,12 @@ import com.sidemesh.binance.bot.grid.FixedBoundTradeGridBuilder;
 import com.sidemesh.binance.bot.grid.Grid;
 import com.sidemesh.binance.bot.grid.TradeGrid;
 import com.sidemesh.binance.bot.util.TradeUtil;
+import com.sidemesh.binance.bot.websocket.event.BookTickerMessage;
 import com.sidemesh.binance.bot.worker.BotWorker;
 import com.sidemesh.binance.bot.worker.ConditionBotWorker;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
-import java.time.Instant;
 
 @Slf4j
 public class SimpleGridBot implements Bot, RealtimeStreamListener {
@@ -36,6 +36,13 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
     private final InvestInfo investInfo;
     // 格子交易记录
     private final DealGridInfo dealGridInfo;
+
+    // -------------------- 最优价格相关逻辑
+    // 最优买卖价格
+    private volatile BookTickerMessage latestBookTicker;
+    // 是否已尝试过使用最优价格交易
+    private boolean isTriedUseBestPriceTrade;
+    // ---------------------- 最优价格相关逻辑
 
     public SimpleGridBot(String name,
                          Symbol symbol,
@@ -101,11 +108,24 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
         }
     }
 
+    /*
+     * 仅考虑线程可见性，有序性通过 ID 进行保证
+     */
+    @Override
+    public void update(BookTickerMessage msg) {
+        if (this.latestBookTicker == null || this.latestBookTicker.id < msg.id) {
+            this.latestBookTicker = msg;
+        }
+    }
+
     private void onPriceUpdate(RealtimeStreamData data) {
         if (currentTrade != null && currentTrade.id() > data.id()) return;
         currentTrade = data;
         final var price = data.price();
+        this.onPriceUpdate(price);
+    }
 
+    private void onPriceUpdate(final BigDecimal price) {
         // 没有游标设置游标
         if (preTradeGrid == null) {
             // 确定当前所处格子
@@ -118,7 +138,7 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
             if (currFallGrid != null) doTrade(price, currFallGrid);
         } catch (BinanceAPIException e) {
             if (e.isLimited) {
-                log.info("api call limited! update data = {}", data);
+                log.info("api call limited! update price = {}", price);
             } else if (e.isInsufficientBalance()) {
                 log.info("api call balance insufficient!");
             } else {
@@ -172,6 +192,8 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
             log.info("bot {} {} 卖出成功! 交易数量 {}  {}", name, symbol, executedQty, investInfo.getInfo());
         } else {
             log.info("bot {} {} 卖出失败! 订单状态 {} ", name, symbol, order.getResponse().getStatus());
+            // 尝试使用最优价格进行交易
+            this.tryUseOrderBookBestPriceTrade(true);
         }
     }
 
@@ -197,7 +219,38 @@ public class SimpleGridBot implements Bot, RealtimeStreamListener {
             log.info("bot {} {} 买入成功! 交易数量 {}  {}", name, symbol, executedQty, investInfo.getInfo());
         } else {
             log.info("bot {} {} 买入失败! 订单状态 {}", name, symbol, order.getResponse().getStatus());
+            // 尝试使用最优价格进行交易
+            this.tryUseOrderBookBestPriceTrade(false);
         }
     }
+
+    /*
+     * 流程如下：
+     * event -> doTrade -> trade failed -> best retry -> check is best retried -> [retry : abandon!]
+     * ->  trade failed -> best retry ->  check is best retried -> done!
+     */
+    private void tryUseOrderBookBestPriceTrade(boolean isSell) {
+        // 判断状态，防止重复递归
+        if (!isTriedUseBestPriceTrade) {
+            this.isTriedUseBestPriceTrade = true;
+            onPriceUpdate(isSell ? latestBookTicker.bestSellPrice : latestBookTicker.bestBuyPrice);
+        } else {
+            // 重置状态
+            this.isTriedUseBestPriceTrade = false;
+        }
+    }
+
+    /*
+     *  临时状态管理
+    private static class State {
+
+        public boolean isTriedUseBestPriceTrade = false;
+
+        public void reset() {
+            this.isTriedUseBestPriceTrade = false;
+        }
+
+    }
+     */
 
 }
