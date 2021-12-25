@@ -2,48 +2,59 @@ package com.sidemesh.binance.bot.grid;
 
 import com.google.common.base.Objects;
 import com.sidemesh.binance.bot.Account;
+import com.sidemesh.binance.bot.Symbol;
 import com.sidemesh.binance.bot.util.GridsUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.function.Consumer;
 
 /**
  * 当网格数较大时应使用二分法
  */
-public class LinkedGrid {
-
-    // 头
+public class LinkedGrids {
+    // 网格基础信息
+    public final GridsInfo info;
+    // 头 low price
     private final Node head;
-    // 尾
+    // 尾 high price
     private final Node tail;
 
-    /**
-     * 上一次标记的价格点
+    /*
+     * 标记的价格点
      */
     private Node index = null;
 
-    private LinkedGrid(BigDecimal low, BigDecimal high, int grids) {
-        if (high.compareTo(low) <= 0) {
-            throw new IllegalArgumentException("low price must < high price. low price = " + low + " high price = " + high);
-        }
+    private LinkedGrids(Symbol symbol, BigDecimal invest, BigDecimal low, BigDecimal high, int grids) {
+        // 重设精度
+        // TODO 四舍五入可能存在问题
+        low = low.setScale(symbol.pricePrecision.scale(), RoundingMode.HALF_UP);
+        high = high.setScale(symbol.pricePrecision.scale(), RoundingMode.HALF_UP);
 
-        if (grids <= 1) {
-            throw new IllegalArgumentException("grids must > 1. girds = " + grids);
-        }
+        this.info = new GridsInfo(symbol, invest, low, high, grids);
 
-        var segment = GridsUtil.computeGirdsSegment(low, high, grids);
         var n = this.head = new Node(0, low);
-
         for (var i = 1; i < grids; i++) {
-            var node = new Node(i, n.price.add(segment));
+            var node = new Node(i, n.price.add(info.stepAmount));
             n.next = node;
             node.pre = n;
             n = node;
         }
 
         this.tail = n;
+    }
+
+    public void print() {
+        var sb = new StringBuilder();
+        var n = head;
+        while (n != null) {
+            sb.append("-").append(n.price).append("-");
+            n = n.next;
+        }
+        System.out.println(info.toString());
+        System.out.println(sb);
     }
 
     public Node getIndex() {
@@ -197,7 +208,7 @@ public class LinkedGrid {
     }
 
     private static class Builder {
-
+        private Symbol symbol;
         // 投资金额
         private BigDecimal invest;
         // 网格底部价格
@@ -254,8 +265,17 @@ public class LinkedGrid {
             return this;
         }
 
-        public LinkedGrid build() {
+        public Symbol getSymbol() {
+            return symbol;
+        }
+
+        public void setSymbol(Symbol symbol) {
+            this.symbol = symbol;
+        }
+
+        public LinkedGrids build() {
             GridsUtil.commonValidate(
+                    symbol,
                     invest,
                     low,
                     high,
@@ -263,7 +283,7 @@ public class LinkedGrid {
                     account.serviceChargeRate,
                     account.minimumOrderUSDTAmount
             );
-            return new LinkedGrid(low, high, grids);
+            return new LinkedGrids(symbol, invest, low, high, grids);
         }
 
         public static Builder newBuilder() {

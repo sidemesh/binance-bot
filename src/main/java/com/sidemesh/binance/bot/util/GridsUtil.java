@@ -1,5 +1,7 @@
 package com.sidemesh.binance.bot.util;
 
+import com.sidemesh.binance.bot.Symbol;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
@@ -7,16 +9,24 @@ public class GridsUtil {
 
     private GridsUtil() {}
 
-    public static BigDecimal computeGirdsSegment(BigDecimal low, BigDecimal high, int grids) {
-        return high.subtract(low).divide(new BigDecimal(grids), RoundingMode.HALF_UP);
+    public static BigDecimal computeGirdsSegment(Symbol symbol, BigDecimal low, BigDecimal high, int grids) {
+        return high.subtract(low).divide(new BigDecimal(grids), symbol.pricePrecision.scale(), RoundingMode.HALF_UP);
     }
 
-    public static void commonValidate(BigDecimal invest,
+    public static void commonValidate(
+                                Symbol symbol,
+                                BigDecimal invest,
                                 BigDecimal low,
                                 BigDecimal high,
                                 int grids,
                                 BigDecimal serviceCharge,
+                                // 这个值应当从 symbol 中获取
+                                // https://www.binance.com/zh-CN/trade-rule
                                 BigDecimal minimumOrderUSDTAmount) {
+        if (symbol == null) {
+            throw new IllegalArgumentException("symbol must not be null!");
+        }
+
         if (low == null) {
             throw new IllegalArgumentException("low price must not be null!");
         }
@@ -54,7 +64,7 @@ public class GridsUtil {
          一个格子的收益 > 底部和顶部成交时总手续费
          */
         // 判断一个格子的手续费
-        var segment = GridsUtil.computeGirdsSegment(low, high, grids);
+        var segment = GridsUtil.computeGirdsSegment(symbol, low, high, grids);
         var g1 = low.add(segment);
         var serviceChargeTotal = low.multiply(serviceCharge).add(g1.multiply(serviceCharge));
 
