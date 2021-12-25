@@ -2,6 +2,10 @@ package com.sidemesh.binance.bot;
 
 import java.math.BigDecimal;
 
+/**
+ * 交易规则
+ * https://www.binance.com/zh-CN/trade-rule
+ */
 public class Account {
 
     public final String key;
