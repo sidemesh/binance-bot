@@ -10,8 +10,6 @@ import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Consumer;
 
 public class DataLoader {
@@ -41,9 +39,7 @@ public class DataLoader {
         var reader = Files.newBufferedReader(Path.of(filePath), StandardCharsets.UTF_8);
         var csvReader = new CSVReader(reader);
 
-        csvReader.forEach(it -> {
-            consumer.accept(toTrade(it));
-        });
+        csvReader.forEach(it -> consumer.accept(toTrade(it)));
     }
 
     private Trade toTrade(String[] line) {
