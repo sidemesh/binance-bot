@@ -74,7 +74,6 @@ public class LinkedGrids {
         if (compared < 0) {
             // 跌穿网格不进行任何操作
             if (index == head) return skipUpdate();
-            // pre 一定不为 null
             var n = index.pre;
             while (n != null) {
                 // price > n.price
