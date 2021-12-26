@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 
 public class RequestLimiterTest {
 
-
     @Test
     public void testAcquire() throws InterruptedException {
         var limiter = new RequestLimiter(5);
