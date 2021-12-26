@@ -24,8 +24,8 @@ public class LinkedGrids {
     private LinkedGrids(GridsInfo info) {
         this.info = info;
         var n = this.head = new Node(0, info.low);
-        for (var i = 1; i < info.grids; i++) {
-            var node = new Node(i, n.price.add(info.stepAmount));
+        for (var i = 0; i < info.grids; i++) {
+            var node = new Node(n.order + 1, n.price.add(info.stepAmount));
             n.next = node;
             node.pre = n;
             n = node;
@@ -67,7 +67,7 @@ public class LinkedGrids {
      * 如果价格与当前 index 相等则不返回 callback
      */
     public UpdateResult tryUpdate(BigDecimal price) {
-        var compared = index.price.compareTo(price);
+        var compared = price.compareTo(index.price);
 
         // 🎯网格没有任何变化
         if (compared == 0) return skipUpdate();
@@ -132,7 +132,7 @@ public class LinkedGrids {
     }
 
     private UpdateResult skipUpdate() {
-        return new UpdateResult(index, null, null);
+        return new UpdateResult(index, index, null);
     }
 
     /**

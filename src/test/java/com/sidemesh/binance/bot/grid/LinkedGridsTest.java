@@ -2,6 +2,7 @@ package com.sidemesh.binance.bot.grid;
 
 import com.sidemesh.binance.bot.Account;
 import com.sidemesh.binance.bot.Symbol;
+import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -57,6 +58,54 @@ public class LinkedGridsTest {
         g.init(new BigDecimal("5.5"));
         Assertions.assertSame(g.getTail(), g.getIndex());
     }
+
+    @Test
+    public void testUpdateRandom() {
+        for (var i = 0; i < 1000; i++) {
+            var f = RandomUtils.nextFloat(0.1f, 5.9f);
+            var g = newLinkedGrids();
+            g.init(new BigDecimal(f));
+
+            f = RandomUtils.nextFloat(0.1f, 5.9f);
+            var res = g.tryUpdate(new BigDecimal(f));
+            Assertions.assertNotNull(res);
+        }
+    }
+
+    @Test
+    public void testRemainUpdate() {
+        var g = newLinkedGrids();
+        g.init(new BigDecimal("4.4"));
+
+        var res = g.tryUpdate(new BigDecimal("4.4"));
+        Assertions.assertTrue(res.isRemain());
+        Assertions.assertFalse(res.isDown());
+        Assertions.assertFalse(res.isRise());
+    }
+
+    @Test
+    public void testRemainUpdate2() {
+        var g = newLinkedGrids();
+        g.init(new BigDecimal("4.4"));
+
+        var res = g.tryUpdate(new BigDecimal("4.41"));
+        Assertions.assertTrue(res.isRemain());
+        Assertions.assertFalse(res.isDown());
+        Assertions.assertFalse(res.isRise());
+    }
+
+    @Test
+    public void testDownUpdate() {
+        var g = newLinkedGrids();
+        g.init(new BigDecimal("5.2"));
+
+        var res = g.tryUpdate(new BigDecimal("4.41"));
+        Assertions.assertFalse(res.isRemain());
+        Assertions.assertTrue(res.isDown());
+        Assertions.assertFalse(res.isRise());
+    }
+
+    // TOODO
 
     private LinkedGrids newLinkedGrids() {
         return Builder
