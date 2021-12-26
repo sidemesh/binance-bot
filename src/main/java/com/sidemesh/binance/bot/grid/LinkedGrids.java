@@ -175,9 +175,6 @@ public class LinkedGrids {
         return this.index != null;
     }
 
-    /*
-     * new index 永远不会为 null
-     */
     @Slf4j
     public static class UpdateResult {
         // 回调函数
