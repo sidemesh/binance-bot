@@ -74,7 +74,9 @@ public class LinkedGrids {
         if (compared < 0) {
             // 跌穿网格不进行任何操作
             if (index == head) return skipUpdate();
-            var n = index.pre;
+            return tryUpdateByDown(price, index);
+            /*
+            var n = index;
             while (n != null) {
                 // price > n.price
                 // 当 price 价格大于节点价格时，则不继续向下查询。
@@ -87,6 +89,7 @@ public class LinkedGrids {
             // 跌穿网格
             if (null == n) n = head;
             return new UpdateResult(index, n, this::updateIndex);
+             */
         }
 
         /*
@@ -94,7 +97,9 @@ public class LinkedGrids {
          */
         // 涨穿网格不进行任何操作
         if (index == tail) return skipUpdate();
-        var n = index.next;
+        return tryUpdateByRise(price, index);
+        /*
+        var n = index;
         while (n != null) {
             // 如果当前价格大于节点价格，则继续查询
             compared = price.compareTo(n.price);
@@ -105,6 +110,21 @@ public class LinkedGrids {
         // 涨穿网格
         if (null == n) n = tail;
         return new UpdateResult(index, n, this::updateIndex);
+         */
+    }
+
+    private UpdateResult tryUpdateByDown(BigDecimal price, Node n) {
+        if (null == n) return new UpdateResult(index, head, this::updateIndex);
+        var compared = price.compareTo(n.price);
+        if (compared >= 0) return new UpdateResult(index, n, this::updateIndex);
+        return tryUpdateByDown(price, n.pre);
+    }
+
+    private UpdateResult tryUpdateByRise(BigDecimal price, Node n) {
+        if (null == n) return new UpdateResult(index, tail, this::updateIndex);
+        var compared =  price.compareTo(n.price);
+        if (compared <= 0) return new UpdateResult(index, n, this::updateIndex);
+        return tryUpdateByRise(price, n.next);
     }
 
     private void updateIndex(Node node) {
