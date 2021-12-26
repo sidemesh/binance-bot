@@ -62,19 +62,16 @@ public class LinkedGrids {
      * 如果价格与当前 index 相等则不返回 callback
      */
     public UpdateResult tryUpdate(BigDecimal price) {
-        /*
-           🎯网格没有任何变化
-         */
         var compared = index.price.compareTo(price);
+
+        // 🎯网格没有任何变化
         if (compared == 0) return skipUpdate();
 
-        /*
-           📉下跌
-         */
+        // 📉下跌
         if (compared < 0) {
-            // 跌穿网格不进行任何操作
+            // 已为跌穿网格不进行任何操作
             if (index == head) return skipUpdate();
-            return tryUpdateByDown(price, index);
+            return tryUpdateForDown(price, index);
             /*
             var n = index;
             while (n != null) {
@@ -92,12 +89,10 @@ public class LinkedGrids {
              */
         }
 
-        /*
-           📈上涨
-         */
+        // 📈上涨
         // 涨穿网格不进行任何操作
         if (index == tail) return skipUpdate();
-        return tryUpdateByRise(price, index);
+        return tryUpdateForRise(price, index);
         /*
         var n = index;
         while (n != null) {
@@ -113,18 +108,18 @@ public class LinkedGrids {
          */
     }
 
-    private UpdateResult tryUpdateByDown(BigDecimal price, Node n) {
+    private UpdateResult tryUpdateForDown(BigDecimal price, Node n) {
         if (null == n) return new UpdateResult(index, head, this::updateIndex);
         var compared = price.compareTo(n.price);
         if (compared >= 0) return new UpdateResult(index, n, this::updateIndex);
-        return tryUpdateByDown(price, n.pre);
+        return tryUpdateForDown(price, n.pre);
     }
 
-    private UpdateResult tryUpdateByRise(BigDecimal price, Node n) {
+    private UpdateResult tryUpdateForRise(BigDecimal price, Node n) {
         if (null == n) return new UpdateResult(index, tail, this::updateIndex);
         var compared =  price.compareTo(n.price);
         if (compared <= 0) return new UpdateResult(index, n, this::updateIndex);
-        return tryUpdateByRise(price, n.next);
+        return tryUpdateForRise(price, n.next);
     }
 
     private void updateIndex(Node node) {
