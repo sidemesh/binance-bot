@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 public class GridsInfo {
+
     // 网格交易对
     public final Symbol symbol;
     // 网格数量
@@ -23,6 +24,11 @@ public class GridsInfo {
     public final BigDecimal stepAmount;
 
     public GridsInfo(Symbol symbol, BigDecimal invest, BigDecimal low, BigDecimal high, int grids) {
+        // 重设精度
+        // TODO 四舍五入可能存在问题
+        low = low.setScale(symbol.pricePrecision.scale(), RoundingMode.HALF_UP);
+        high = high.setScale(symbol.pricePrecision.scale(), RoundingMode.HALF_UP);
+
         this.symbol = symbol;
         this.grids = grids;
         this.invest = invest;
@@ -30,7 +36,7 @@ public class GridsInfo {
         // TODO 四舍五入可能存在BUG
         // 例如交易 LTC_USDT 最小波动为 1 当计算为 1.5 时，实际数量为 2 出现较大偏差
         this.transactionQuantityOfPerGrid =
-                invest.divide(new BigDecimal(grids), symbol.quantityPrecision.scale(), RoundingMode.HALF_UP);;
+                invest.divide(new BigDecimal(grids), symbol.quantityPrecision.scale(), RoundingMode.HALF_UP);
         this.low = low;
         this.high = high;
 

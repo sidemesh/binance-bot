@@ -5,10 +5,8 @@ import com.sidemesh.binance.bot.Account;
 import com.sidemesh.binance.bot.Symbol;
 import com.sidemesh.binance.bot.util.GridsUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.function.Consumer;
 
 /**
@@ -21,22 +19,15 @@ public class LinkedGrids {
     private final Node head;
     // 尾 high price
     private final Node tail;
-
     /*
      * 标记的价格点
      */
     private Node index = null;
 
-    private LinkedGrids(Symbol symbol, BigDecimal invest, BigDecimal low, BigDecimal high, int grids) {
-        // 重设精度
-        // TODO 四舍五入可能存在问题
-        low = low.setScale(symbol.pricePrecision.scale(), RoundingMode.HALF_UP);
-        high = high.setScale(symbol.pricePrecision.scale(), RoundingMode.HALF_UP);
-
-        this.info = new GridsInfo(symbol, invest, low, high, grids);
-
-        var n = this.head = new Node(0, low);
-        for (var i = 1; i < grids; i++) {
+    private LinkedGrids(GridsInfo info) {
+        this.info = info;
+        var n = this.head = new Node(0, info.low);
+        for (var i = 1; i < info.grids; i++) {
             var node = new Node(i, n.price.add(info.stepAmount));
             n.next = node;
             node.pre = n;
@@ -44,6 +35,10 @@ public class LinkedGrids {
         }
 
         this.tail = n;
+    }
+
+    private LinkedGrids(Symbol symbol, BigDecimal invest, BigDecimal low, BigDecimal high, int grids) {
+        this(new GridsInfo(symbol, invest, low, high, grids));
     }
 
     public void print() {
@@ -67,11 +62,6 @@ public class LinkedGrids {
      * 如果价格与当前 index 相等则不返回 callback
      */
     public UpdateResult tryUpdate(BigDecimal price) {
-        if (null == index) {
-            init(price);
-            return skipUpdate();
-        }
-
         /*
            🎯网格没有任何变化
          */
@@ -84,18 +74,20 @@ public class LinkedGrids {
         if (compared < 0) {
             // 跌穿网格不进行任何操作
             if (index == head) return skipUpdate();
+            // pre 一定不为 null
             var n = index.pre;
             while (n != null) {
-                compared = n.price.compareTo(price);
-                if (compared <= 0) {
-                    n = n.pre;
-                } else {
-                    break;
-                }
+                // price > n.price
+                // 当 price 价格大于节点价格时，则不继续向下查询。
+                compared = price.compareTo(n.price);
+                if (compared >= 0) break;
+                // 继续查询下一个节点
+                n = n.pre;
             }
-            // 穿过网格
-            assert n != null;
-            return new UpdateResult(node -> this.index = node, n);
+
+            // 跌穿网格
+            if (null == n) n = head;
+            return new UpdateResult(index, n, this::updateIndex);
         }
 
         /*
@@ -105,19 +97,23 @@ public class LinkedGrids {
         if (index == tail) return skipUpdate();
         var n = index.next;
         while (n != null) {
-            compared = n.price.compareTo(price);
-            if (compared >= 0) {
-                n = n.next;
-            } else {
-                break;
-            }
+            // 如果当前价格大于节点价格，则继续查询
+            compared = price.compareTo(n.price);
+            if (compared <= 0) break;
+            n = n.next;
         }
-        assert n != null;
-        return new UpdateResult(node -> this.index = node, n);
+
+        // 涨穿网格
+        if (null == n) n = tail;
+        return new UpdateResult(index, n, this::updateIndex);
+    }
+
+    private void updateIndex(Node node) {
+        this.index = node;
     }
 
     private UpdateResult skipUpdate() {
-        return UpdateResult.skip(index);
+        return new UpdateResult(index, null, null);
     }
 
     /**
@@ -125,7 +121,9 @@ public class LinkedGrids {
      * 当价格大于等于网格 high price 直接设置为 high price index node
      * 当价格在网格区间，则按照 low level 进行寻找选中。
      */
-    private void init(BigDecimal price) {
+    public void init(BigDecimal price) {
+        if (isInit()) throw new RuntimeException("already init!");
+
         if (head.price.compareTo(price) <= 0) {
             index = head;
             return;
@@ -147,6 +145,10 @@ public class LinkedGrids {
         index = n;
     }
 
+    public boolean isInit() {
+        return this.index != null;
+    }
+
     /*
      * new index 永远不会为 null
      */
@@ -154,10 +156,13 @@ public class LinkedGrids {
     public static class UpdateResult {
         // 回调函数
         private final Consumer<Node> updateIndexFn;
-        // 新的索引
+        // 新的游标
         public final Node newIndex;
+        // 当前的游标
+        public final Node index;
 
-        private UpdateResult(Consumer<Node> fn, @NotNull Node newIndex) {
+        private UpdateResult(Node index, Node newIndex, Consumer<Node> fn) {
+            this.index = index;
             this.updateIndexFn = fn;
             this.newIndex = newIndex;
         }
@@ -167,11 +172,38 @@ public class LinkedGrids {
                 log.warn("update index function is null");
                 return;
             }
+            if (null == newIndex) {
+                log.warn("new index is null");
+                return;
+            }
             updateIndexFn.accept(newIndex);
         }
 
-        private static UpdateResult skip(Node index) {
-            return new UpdateResult(null, index);
+        // 是否为下跌
+        public boolean isDown() {
+            if (newIndex == null || index == null) {
+                return false;
+            }
+
+            return newIndex.order < index.order;
+        }
+
+        // 是否为上涨
+        public boolean isRise() {
+            if (newIndex == null || index == null) {
+                return false;
+            }
+
+            return newIndex.order > index.order;
+        }
+
+        // 是否不变
+        public boolean isRemain() {
+            if (newIndex == null || index == null) {
+                return false;
+            }
+
+            return newIndex.order == index.order;
         }
 
     }
