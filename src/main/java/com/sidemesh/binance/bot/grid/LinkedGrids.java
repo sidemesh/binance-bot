@@ -1,9 +1,6 @@
 package com.sidemesh.binance.bot.grid;
 
-import com.google.common.base.Objects;
-import com.sidemesh.binance.bot.Account;
 import com.sidemesh.binance.bot.Symbol;
-import com.sidemesh.binance.bot.util.GridsUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
@@ -37,7 +34,7 @@ public class LinkedGrids {
         this.tail = n;
     }
 
-    private LinkedGrids(Symbol symbol, BigDecimal invest, BigDecimal low, BigDecimal high, int grids) {
+    LinkedGrids(Symbol symbol, BigDecimal invest, BigDecimal low, BigDecimal high, int grids) {
         this(new GridsInfo(symbol, invest, low, high, grids));
     }
 
@@ -54,6 +51,14 @@ public class LinkedGrids {
 
     public Node getIndex() {
         return this.index;
+    }
+
+    public Node getHead() {
+        return this.head;
+    }
+
+    public Node getTail() {
+        return this.tail;
     }
 
     /**
@@ -138,25 +143,32 @@ public class LinkedGrids {
     public void init(BigDecimal price) {
         if (isInit()) throw new RuntimeException("already init!");
 
-        if (head.price.compareTo(price) <= 0) {
+        if (price.compareTo(head.price) <= 0) {
             index = head;
             return;
         }
         
-        if (tail.price.compareTo(price) >= 0) {
+        if (price.compareTo(tail.price) >= 0) {
             index = tail;
             return;
         }
         
         var n = head;
+        var selected = n;
         while (n != null) {
-            var compared = n.price.compareTo(price);
-            if (compared >= 0) {
+            var compared = price.compareTo(n.price);
+            if (compared == 0) {
+                selected = n;
                 break;
             }
-            n = n.next;
+            if (compared > 0) {
+                selected = n;
+                n = n.next;
+                continue;
+            }
+            break;
         }
-        index = n;
+        index = selected;
     }
 
     public boolean isInit() {
@@ -237,103 +249,6 @@ public class LinkedGrids {
         @Override
         public int order() {
             return order;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Node node = (Node) o;
-            return Objects.equal(price, node.price) && Objects.equal(pre, node.pre) && Objects.equal(next, node.next);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hashCode(price, pre, next);
-        }
-    }
-
-    private static class Builder {
-        private Symbol symbol;
-        // 投资金额
-        private BigDecimal invest;
-        // 网格底部价格
-        private BigDecimal low;
-        // 网格顶部价格
-        private BigDecimal high;
-        // 网格数量
-        private int grids;
-        // 账户用于计算手续费
-        private Account account;
-
-        public BigDecimal getInvest() {
-            return invest;
-        }
-
-        public Builder setInvest(BigDecimal invest) {
-            this.invest = invest;
-            return this;
-        }
-
-        public BigDecimal getLow() {
-            return low;
-        }
-
-        public Builder setLow(BigDecimal low) {
-            this.low = low;
-            return this;
-        }
-
-        public BigDecimal getHigh() {
-            return high;
-        }
-
-        public Builder setHigh(BigDecimal high) {
-            this.high = high;
-            return this;
-        }
-
-        public int getGrids() {
-            return grids;
-        }
-
-        public Builder setGrids(int grids) {
-            this.grids = grids;
-            return this;
-        }
-
-        public Account getAccount() {
-            return account;
-        }
-
-        public Builder setAccount(Account account) {
-            this.account = account;
-            return this;
-        }
-
-        public Symbol getSymbol() {
-            return symbol;
-        }
-
-        public void setSymbol(Symbol symbol) {
-            this.symbol = symbol;
-        }
-
-        public LinkedGrids build() {
-            GridsUtil.commonValidate(
-                    symbol,
-                    invest,
-                    low,
-                    high,
-                    grids,
-                    account.serviceChargeRate,
-                    account.minimumOrderUSDTAmount
-            );
-            return new LinkedGrids(symbol, invest, low, high, grids);
-        }
-
-        public static Builder newBuilder() {
-            return new Builder();
         }
 
     }
