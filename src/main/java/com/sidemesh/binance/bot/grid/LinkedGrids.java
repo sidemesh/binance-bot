@@ -20,7 +20,9 @@ public class LinkedGrids {
     /*
      * 标记的价格点
      */
-    private Node index = null;
+    private Node index;
+
+    private boolean isInit = false;
 
     private LinkedGrids(GridsInfo info) {
         this.info = info;
@@ -33,6 +35,8 @@ public class LinkedGrids {
         }
 
         this.tail = n;
+        // 预初始化，保证初始化算法可以完成
+        this.index = head;
     }
 
     LinkedGrids(Symbol symbol, BigDecimal invest, BigDecimal low, BigDecimal high, int grids) {
@@ -67,8 +71,8 @@ public class LinkedGrids {
      * 如果网格已进行初始化，则按照 index 寻找：
      * 如果价格与当前 index 相等则不返回 callback
      */
-    public UpdateResult tryUpdate(BigDecimal price) {
-        var compared = price.compareTo(index.price);
+    public UpdateResult tryUpdate(final BigDecimal price) {
+        final var compared = price.compareTo(index.price);
 
         // 🎯网格没有任何变化
         if (compared == 0) return skipUpdate();
@@ -88,20 +92,22 @@ public class LinkedGrids {
     /**
      * 递归调用下跌逻辑
      */
-    private UpdateResult tryUpdateForDown(BigDecimal price, Node n) {
+    private UpdateResult tryUpdateForDown(final BigDecimal price, final Node n) {
         if (null == n) return new UpdateResult(index, head, this::updateIndex);
-        var compared = price.compareTo(n.price);
-        if (compared >= 0) return new UpdateResult(index, n.next, this::updateIndex);
+        final var compared = price.compareTo(n.price);
+        if (compared > 0) return new UpdateResult(index, n.next, this::updateIndex);
+        if (compared == 0) return new UpdateResult(index, n, this::updateIndex);
         return tryUpdateForDown(price, n.pre);
     }
 
     /**
      * 递归调用上涨逻辑
      */
-    private UpdateResult tryUpdateForRise(BigDecimal price, Node n) {
+    private UpdateResult tryUpdateForRise(final BigDecimal price, final Node n) {
         if (null == n) return new UpdateResult(index, tail, this::updateIndex);
-        var compared =  price.compareTo(n.price);
-        if (compared <= 0) return new UpdateResult(index, n.pre, this::updateIndex);
+        final var compared =  price.compareTo(n.price);
+        if (compared < 0) return new UpdateResult(index, n.pre, this::updateIndex);
+        if (compared == 0) return new UpdateResult(index, n, this::updateIndex);
         return tryUpdateForRise(price, n.next);
     }
 
@@ -117,7 +123,7 @@ public class LinkedGrids {
      * 跳过更新，new index 和 index 都为当前 index
      */
     private UpdateResult skipUpdate() {
-        return new UpdateResult(index, index, null);
+        return new UpdateResult(index, index, this::updateIndex);
     }
 
     /**
@@ -127,37 +133,12 @@ public class LinkedGrids {
      */
     public void init(BigDecimal price) {
         if (isInit()) throw new RuntimeException("already init!");
-
-        if (price.compareTo(head.price) <= 0) {
-            index = head;
-            return;
-        }
-        
-        if (price.compareTo(tail.price) >= 0) {
-            index = tail;
-            return;
-        }
-        
-        var n = head;
-        var selected = n;
-        while (n != null) {
-            var compared = price.compareTo(n.price);
-            if (compared == 0) {
-                selected = n;
-                break;
-            }
-            if (compared > 0) {
-                selected = n;
-                n = n.next;
-                continue;
-            }
-            break;
-        }
-        index = selected;
+        this.tryUpdate(price).updateIndex();
+        this.isInit = true;
     }
 
     public boolean isInit() {
-        return this.index != null;
+        return this.isInit;
     }
 
     @Slf4j
