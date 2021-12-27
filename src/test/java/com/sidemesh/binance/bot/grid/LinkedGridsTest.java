@@ -61,7 +61,7 @@ public class LinkedGridsTest {
 
     @Test
     public void testUpdateRandom() {
-        for (var i = 0; i < 1000; i++) {
+        for (var i = 0; i < 10000; i++) {
             var f = RandomUtils.nextFloat(0.1f, 5.9f);
             var g = newLinkedGrids();
             g.init(new BigDecimal(f));
