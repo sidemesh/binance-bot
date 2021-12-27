@@ -134,19 +134,17 @@ public class LinkedGridsTest {
     public void testRiseTopOverflow() {
         var g = newLinkedGrids();
         g.init(new BigDecimal("5.1"));
-
         var res = g.tryUpdate(new BigDecimal("5.4"));
         Assertions.assertFalse(res.isRemain());
         Assertions.assertFalse(res.isDown());
         Assertions.assertTrue(res.isRise());
-
+        // now is tail
         res.updateIndex();
 
         res = g.tryUpdate(new BigDecimal("99"));
-
-        Assertions.assertFalse(res.isRemain());
+        Assertions.assertTrue(res.isRemain());
         Assertions.assertFalse(res.isDown());
-        Assertions.assertTrue(res.isRise());
+        Assertions.assertFalse(res.isRise());
     }
 
     private LinkedGrids newLinkedGrids() {
