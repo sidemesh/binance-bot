@@ -2,6 +2,7 @@ package com.sidemesh.binance.bot.grid;
 
 import com.sidemesh.binance.bot.Symbol;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 import java.util.function.Consumer;
@@ -71,66 +72,50 @@ public class LinkedGrids {
 
         // 🎯网格没有任何变化
         if (compared == 0) return skipUpdate();
-
-        // 📉下跌
         if (compared < 0) {
+            // 📉下跌
             // 已为跌穿网格不进行任何操作
             if (index == head) return skipUpdate();
             return tryUpdateForDown(price, index);
-            /*
-            var n = index;
-            while (n != null) {
-                // price > n.price
-                // 当 price 价格大于节点价格时，则不继续向下查询。
-                compared = price.compareTo(n.price);
-                if (compared >= 0) break;
-                // 继续查询下一个节点
-                n = n.pre;
-            }
-
-            // 跌穿网格
-            if (null == n) n = head;
-            return new UpdateResult(index, n, this::updateIndex);
-             */
+        } else {
+            // 📈上涨
+            // 涨穿网格不进行任何操作
+            if (index == tail) return skipUpdate();
+            return tryUpdateForRise(price, index);
         }
-
-        // 📈上涨
-        // 涨穿网格不进行任何操作
-        if (index == tail) return skipUpdate();
-        return tryUpdateForRise(price, index);
-        /*
-        var n = index;
-        while (n != null) {
-            // 如果当前价格大于节点价格，则继续查询
-            compared = price.compareTo(n.price);
-            if (compared <= 0) break;
-            n = n.next;
-        }
-
-        // 涨穿网格
-        if (null == n) n = tail;
-        return new UpdateResult(index, n, this::updateIndex);
-         */
     }
 
+    /**
+     * 递归调用下跌逻辑
+     */
     private UpdateResult tryUpdateForDown(BigDecimal price, Node n) {
         if (null == n) return new UpdateResult(index, head, this::updateIndex);
         var compared = price.compareTo(n.price);
-        if (compared >= 0) return new UpdateResult(index, n, this::updateIndex);
+        if (compared >= 0) return new UpdateResult(index, n.next, this::updateIndex);
         return tryUpdateForDown(price, n.pre);
     }
 
+    /**
+     * 递归调用上涨逻辑
+     */
     private UpdateResult tryUpdateForRise(BigDecimal price, Node n) {
         if (null == n) return new UpdateResult(index, tail, this::updateIndex);
         var compared =  price.compareTo(n.price);
-        if (compared <= 0) return new UpdateResult(index, n, this::updateIndex);
+        if (compared <= 0) return new UpdateResult(index, n.pre, this::updateIndex);
         return tryUpdateForRise(price, n.next);
     }
 
+    /**
+     * 更新索引
+     * @param node 新的索引
+     */
     private void updateIndex(Node node) {
-        this.index = node;
+        if (node != null && node != this.index) this.index = node;
     }
 
+    /**
+     * 跳过更新，new index 和 index 都为当前 index
+     */
     private UpdateResult skipUpdate() {
         return new UpdateResult(index, index, null);
     }
@@ -183,11 +168,23 @@ public class LinkedGrids {
         public final Node newIndex;
         // 当前的游标
         public final Node index;
+        // 状态
+        public final UpdateResultStatus status;
 
-        private UpdateResult(Node index, Node newIndex, Consumer<Node> fn) {
+        private UpdateResult(@NotNull Node index,
+                             @NotNull Node newIndex,
+                             Consumer<Node> fn) {
             this.index = index;
             this.updateIndexFn = fn;
             this.newIndex = newIndex;
+
+            if (index.order == newIndex.order) {
+                this.status = UpdateResultStatus.REMAIN;
+            } else if (index.order > newIndex.order) {
+                this.status = UpdateResultStatus.DOWN;
+            } else {
+                this.status = UpdateResultStatus.RISE;
+            }
         }
 
         public void updateIndex() {
@@ -195,40 +192,33 @@ public class LinkedGrids {
                 log.warn("update index function is null");
                 return;
             }
-            if (null == newIndex) {
-                log.warn("new index is null");
-                return;
-            }
             updateIndexFn.accept(newIndex);
         }
 
         // 是否为下跌
         public boolean isDown() {
-            if (newIndex == null || index == null) {
-                return false;
-            }
-
-            return newIndex.order < index.order;
+            return UpdateResultStatus.DOWN.equals(this.status);
         }
 
         // 是否为上涨
         public boolean isRise() {
-            if (newIndex == null || index == null) {
-                return false;
-            }
-
-            return newIndex.order > index.order;
+            return UpdateResultStatus.RISE.equals(this.status);
         }
 
         // 是否不变
         public boolean isRemain() {
-            if (newIndex == null || index == null) {
-                return false;
-            }
-
-            return newIndex.order == index.order;
+            return UpdateResultStatus.REMAIN.equals(this.status);
         }
 
+    }
+
+    public enum UpdateResultStatus {
+        // 上涨
+        RISE,
+        // 下跌
+        DOWN,
+        // 保持
+        REMAIN,
     }
 
     private static class Node implements OrderedGird {
