@@ -105,7 +105,49 @@ public class LinkedGridsTest {
         Assertions.assertFalse(res.isRise());
     }
 
-    // TOODO
+    @Test
+    public void testRise() {
+        var g = newLinkedGrids();
+        g.init(new BigDecimal("4.5"));
+
+        var res = g.tryUpdate(new BigDecimal("5.3"));
+        Assertions.assertFalse(res.isRemain());
+        Assertions.assertFalse(res.isDown());
+        Assertions.assertTrue(res.isRise());
+    }
+
+    @Test
+    public void testUpdateIndex() {
+        var g = newLinkedGrids();
+        g.init(new BigDecimal("4.5"));
+
+        var res = g.tryUpdate(new BigDecimal("5.3"));
+        Assertions.assertFalse(res.isRemain());
+        Assertions.assertFalse(res.isDown());
+        Assertions.assertTrue(res.isRise());
+
+        res.updateIndex();
+        Assertions.assertSame(g.getIndex(), res.newIndex);
+    }
+
+    @Test
+    public void testRiseTopOverflow() {
+        var g = newLinkedGrids();
+        g.init(new BigDecimal("5.1"));
+
+        var res = g.tryUpdate(new BigDecimal("5.4"));
+        Assertions.assertFalse(res.isRemain());
+        Assertions.assertFalse(res.isDown());
+        Assertions.assertTrue(res.isRise());
+
+        res.updateIndex();
+
+        res = g.tryUpdate(new BigDecimal("99"));
+
+        Assertions.assertFalse(res.isRemain());
+        Assertions.assertFalse(res.isDown());
+        Assertions.assertTrue(res.isRise());
+    }
 
     private LinkedGrids newLinkedGrids() {
         return Builder
