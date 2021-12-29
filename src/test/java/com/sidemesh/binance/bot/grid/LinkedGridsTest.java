@@ -67,7 +67,7 @@ public class LinkedGridsTest {
             g.init(new BigDecimal(f));
 
             f = RandomUtils.nextFloat(0.1f, 5.9f);
-            var res = g.tryUpdate(new BigDecimal(f));
+            var res = g.findIndex(new BigDecimal(f));
             Assertions.assertNotNull(res);
         }
     }
@@ -77,7 +77,7 @@ public class LinkedGridsTest {
         var g = newLinkedGrids();
         g.init(new BigDecimal("4.4"));
 
-        var res = g.tryUpdate(new BigDecimal("4.4"));
+        var res = g.findIndex(new BigDecimal("4.4"));
         Assertions.assertTrue(res.isRemain());
         Assertions.assertFalse(res.isDown());
         Assertions.assertFalse(res.isRise());
@@ -88,7 +88,7 @@ public class LinkedGridsTest {
         var g = newLinkedGrids();
         g.init(new BigDecimal("4.4"));
 
-        var res = g.tryUpdate(new BigDecimal("4.41"));
+        var res = g.findIndex(new BigDecimal("4.41"));
         Assertions.assertTrue(res.isRemain());
         Assertions.assertFalse(res.isDown());
         Assertions.assertFalse(res.isRise());
@@ -99,7 +99,7 @@ public class LinkedGridsTest {
         var g = newLinkedGrids();
         g.init(new BigDecimal("5.2"));
 
-        var res = g.tryUpdate(new BigDecimal("4.41"));
+        var res = g.findIndex(new BigDecimal("4.41"));
         Assertions.assertFalse(res.isRemain());
         Assertions.assertTrue(res.isDown());
         Assertions.assertFalse(res.isRise());
@@ -110,7 +110,7 @@ public class LinkedGridsTest {
         var g = newLinkedGrids();
         g.init(new BigDecimal("4.5"));
 
-        var res = g.tryUpdate(new BigDecimal("5.3"));
+        var res = g.findIndex(new BigDecimal("5.3"));
         Assertions.assertFalse(res.isRemain());
         Assertions.assertFalse(res.isDown());
         Assertions.assertTrue(res.isRise());
@@ -121,7 +121,7 @@ public class LinkedGridsTest {
         var g = newLinkedGrids();
         g.init(new BigDecimal("4.5"));
 
-        var res = g.tryUpdate(new BigDecimal("5.3"));
+        var res = g.findIndex(new BigDecimal("5.3"));
         Assertions.assertFalse(res.isRemain());
         Assertions.assertFalse(res.isDown());
         Assertions.assertTrue(res.isRise());
@@ -134,14 +134,14 @@ public class LinkedGridsTest {
     public void testRiseTopOverflow() {
         var g = newLinkedGrids();
         g.init(new BigDecimal("5.1"));
-        var res = g.tryUpdate(new BigDecimal("5.4"));
+        var res = g.findIndex(new BigDecimal("5.4"));
         Assertions.assertFalse(res.isRemain());
         Assertions.assertFalse(res.isDown());
         Assertions.assertTrue(res.isRise());
         // now is tail
         res.updateIndex();
 
-        res = g.tryUpdate(new BigDecimal("99"));
+        res = g.findIndex(new BigDecimal("99"));
         Assertions.assertTrue(res.isRemain());
         Assertions.assertFalse(res.isDown());
         Assertions.assertFalse(res.isRise());
