@@ -1,7 +1,7 @@
 package com.sidemesh.binance.bot;
 
 import com.google.common.collect.Lists;
-import com.sidemesh.binance.bot.grid.Grid;
+import com.sidemesh.binance.bot.grid.OrderedGird;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -21,7 +21,7 @@ public class DealGridInfo {
      * @param quantity 数量
      * @return DealGridInfo
      */
-    public DealGrid onBuy(Grid buyGrid, BigDecimal price, BigDecimal quantity) {
+    public DealGrid onBuy(OrderedGird buyGrid, BigDecimal price, BigDecimal quantity) {
         DealGrid dealGrid = new DealGrid(buyGrid, price, quantity);
         dealGridList.add(dealGrid);
         return dealGrid;
@@ -29,12 +29,12 @@ public class DealGridInfo {
 
     /**
      * 打包可以卖出的持仓
-     * @param currGrid 支持判断的当前网格
+     * @param curr 支持判断的当前网格
      * @return 打包的持仓
      */
-    public Optional<SellPacked> packCanSells(Grid currGrid) {
+    public Optional<SellPacked> packCanSells(OrderedGird curr) {
         var list = dealGridList.stream()
-                .filter(dealGrid -> currGrid.getOrder() > (dealGrid.buyGrid.getOrder() + 1))
+                .filter(it -> curr.order() > it.grid.order())
                 .collect(Collectors.toList());
         return list.isEmpty() ? Optional.empty() : Optional.of(new SellPacked(list));
     }
@@ -73,7 +73,7 @@ public class DealGridInfo {
     @AllArgsConstructor
     @Getter
     public static class DealGrid {
-        public final Grid buyGrid;
+        public final OrderedGird grid;
         public final BigDecimal price;
         public final BigDecimal quantity;
 

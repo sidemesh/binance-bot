@@ -8,8 +8,6 @@ import com.sidemesh.binance.bot.Symbol;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 public class RealtimeStreamBackTestDataImpl implements RealtimeStream {
 
@@ -28,11 +26,7 @@ public class RealtimeStreamBackTestDataImpl implements RealtimeStream {
         thread = new Thread(() -> {
             try {
                 dataLoader.load(t -> {
-                    try {
-                        Thread.sleep(0L, 500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    busySleep(60000);
                     listeners.forEach(l -> l.update(t));
                 });
             } catch (IOException | CsvValidationException e) {
@@ -51,5 +45,14 @@ public class RealtimeStreamBackTestDataImpl implements RealtimeStream {
     @Override
     public void addListener(Symbol symbol, RealtimeStreamListener listener) {
         listeners.add(listener);
+    }
+
+    private void busySleep(long nanos)
+    {
+        long elapsed;
+        final long startTime = System.nanoTime();
+        do {
+            elapsed = System.nanoTime() - startTime;
+        } while (elapsed < nanos);
     }
 }
