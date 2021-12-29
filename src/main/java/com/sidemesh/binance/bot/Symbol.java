@@ -108,8 +108,6 @@ public enum Symbol implements StringEnum<Symbol> {
     
     BTG_BTC("BTGBTC", "0.000001", "0.01"),
     
-    EVX_BTC("EVXBTC", "0.00000001", "1"),
-    
     REQ_BTC("REQBTC", "0.00000001", "1"),
     
     VIB_BTC("VIBBTC", "0.00000001", "1"),
@@ -143,8 +141,6 @@ public enum Symbol implements StringEnum<Symbol> {
     KMD_ETH("KMDETH", "0.0000001", "1"),
     
     NULS_BTC("NULSBTC", "0.00000001", "1"),
-    
-    RDN_BTC("RDNBTC", "0.00000001", "1"),
     
     XMR_BTC("XMRBTC", "0.000001", "0.001"),
     
@@ -237,8 +233,6 @@ public enum Symbol implements StringEnum<Symbol> {
     BRD_ETH("BRDETH", "0.00000001", "1"),
     
     NAV_BTC("NAVBTC", "0.00000001", "1"),
-    
-    APPC_BTC("APPCBTC", "0.00000001", "1"),
     
     RLC_BTC("RLCBTC", "0.00000001", "0.1"),
     
@@ -622,8 +616,6 @@ public enum Symbol implements StringEnum<Symbol> {
     
     CHZ_USDT("CHZUSDT", "0.0001", "1"),
     
-    BICO_USDT("BICOUSDT", "0.001", "0.01"),
-
     BAND_BTC("BANDBTC", "0.0000001", "0.1"),
     
     BAND_USDT("BANDUSDT", "0.001", "0.1"),
@@ -2800,7 +2792,12 @@ public enum Symbol implements StringEnum<Symbol> {
     
     UST_USDT("USTUSDT", "0.0001", "1"),
     
->>>>>>> 087ca23 (symbol code gen)
+    JOE_BTC("JOEBTC", "0.00000001", "0.01"),
+    
+    JOE_BUSD("JOEBUSD", "0.001", "0.01"),
+    
+    JOE_USDT("JOEUSDT", "0.001", "0.01"),
+    
     ;
     // generate code from binance api
     // generate code from binance api
