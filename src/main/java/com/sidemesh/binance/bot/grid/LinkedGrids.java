@@ -71,44 +71,44 @@ public class LinkedGrids {
      * 如果网格已进行初始化，则按照 index 寻找：
      * 如果价格与当前 index 相等则不返回 callback
      */
-    public UpdateResult tryUpdate(final BigDecimal price) {
+    public IndexResult findIndex(final BigDecimal price) {
         final var compared = price.compareTo(index.price);
 
         // 🎯网格没有任何变化
-        if (compared == 0) return skipUpdate();
+        if (compared == 0) return skip();
         if (compared < 0) {
             // 📉下跌
             // 已为跌穿网格不进行任何操作
-            if (index == head) return skipUpdate();
-            return tryUpdateForDown(price, index);
+            if (index == head) return skip();
+            return findIndexForDown(price, index);
         } else {
             // 📈上涨
             // 涨穿网格不进行任何操作
-            if (index == tail) return skipUpdate();
-            return tryUpdateForRise(price, index);
+            if (index == tail) return skip();
+            return findIndexForRise(price, index);
         }
     }
 
     /**
      * 递归调用下跌逻辑
      */
-    private UpdateResult tryUpdateForDown(final BigDecimal price, final Node n) {
-        if (null == n) return new UpdateResult(index, head, this::updateIndex);
+    private IndexResult findIndexForDown(final BigDecimal price, final Node n) {
+        if (null == n) return newIndexResult(head);
         final var compared = price.compareTo(n.price);
-        if (compared > 0) return new UpdateResult(index, n.next, this::updateIndex);
-        if (compared == 0) return new UpdateResult(index, n, this::updateIndex);
-        return tryUpdateForDown(price, n.pre);
+        if (compared > 0) return newIndexResult(n.next);
+        if (compared == 0) return newIndexResult(n);
+        return findIndexForDown(price, n.pre);
     }
 
     /**
      * 递归调用上涨逻辑
      */
-    private UpdateResult tryUpdateForRise(final BigDecimal price, final Node n) {
-        if (null == n) return new UpdateResult(index, tail, this::updateIndex);
+    private IndexResult findIndexForRise(final BigDecimal price, final Node n) {
+        if (null == n) return newIndexResult(tail);
         final var compared =  price.compareTo(n.price);
-        if (compared < 0) return new UpdateResult(index, n.pre, this::updateIndex);
-        if (compared == 0) return new UpdateResult(index, n, this::updateIndex);
-        return tryUpdateForRise(price, n.next);
+        if (compared < 0) return newIndexResult(n.pre);
+        if (compared == 0) return newIndexResult(n);
+        return findIndexForRise(price, n.next);
     }
 
     /**
@@ -122,8 +122,12 @@ public class LinkedGrids {
     /**
      * 跳过更新，new index 和 index 都为当前 index
      */
-    private UpdateResult skipUpdate() {
-        return new UpdateResult(index, index, this::updateIndex);
+    private IndexResult skip() {
+        return newIndexResult(index);
+    }
+
+    private IndexResult newIndexResult(Node newIndex) {
+        return new IndexResult(index, newIndex, this::updateIndex);
     }
 
     /**
@@ -133,7 +137,7 @@ public class LinkedGrids {
      */
     public void init(BigDecimal price) {
         if (isInit()) throw new RuntimeException("already init!");
-        this.tryUpdate(price).updateIndex();
+        this.findIndex(price).updateIndex();
         this.isInit = true;
     }
 
@@ -141,8 +145,18 @@ public class LinkedGrids {
         return this.isInit;
     }
 
+    /**
+     * 尝试进行初始化
+     * 如果没有初始化则进行初始化。
+     * @param price 价格
+     */
+    public void try2Init(BigDecimal price) {
+        if (isInit()) return;
+        init(price);
+    }
+
     @Slf4j
-    public static class UpdateResult {
+    public static class IndexResult {
         // 回调函数
         private final Consumer<Node> updateIndexFn;
         // 新的游标
@@ -150,21 +164,21 @@ public class LinkedGrids {
         // 当前的游标
         public final Node index;
         // 状态
-        public final UpdateResultStatus status;
+        public final IndexResultStatus status;
 
-        private UpdateResult(@NotNull Node index,
-                             @NotNull Node newIndex,
-                             Consumer<Node> fn) {
+        private IndexResult(@NotNull Node index,
+                            @NotNull Node newIndex,
+                            Consumer<Node> fn) {
             this.index = index;
             this.updateIndexFn = fn;
             this.newIndex = newIndex;
 
             if (index.order == newIndex.order) {
-                this.status = UpdateResultStatus.REMAIN;
+                this.status = IndexResultStatus.REMAIN;
             } else if (index.order > newIndex.order) {
-                this.status = UpdateResultStatus.DOWN;
+                this.status = IndexResultStatus.DOWN;
             } else {
-                this.status = UpdateResultStatus.RISE;
+                this.status = IndexResultStatus.RISE;
             }
         }
 
@@ -178,22 +192,22 @@ public class LinkedGrids {
 
         // 是否为下跌
         public boolean isDown() {
-            return UpdateResultStatus.DOWN.equals(this.status);
+            return IndexResultStatus.DOWN.equals(this.status);
         }
 
         // 是否为上涨
         public boolean isRise() {
-            return UpdateResultStatus.RISE.equals(this.status);
+            return IndexResultStatus.RISE.equals(this.status);
         }
 
         // 是否不变
         public boolean isRemain() {
-            return UpdateResultStatus.REMAIN.equals(this.status);
+            return IndexResultStatus.REMAIN.equals(this.status);
         }
 
     }
 
-    public enum UpdateResultStatus {
+    public enum IndexResultStatus {
         // 上涨
         RISE,
         // 下跌
@@ -202,7 +216,7 @@ public class LinkedGrids {
         REMAIN,
     }
 
-    private static class Node implements OrderedGird {
+    public static class Node implements OrderedGird {
 
         public final int order;
         public final BigDecimal price;

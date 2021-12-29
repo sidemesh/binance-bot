@@ -1,19 +1,18 @@
 package com.sidemesh.binance.bot.backtest;
 
 import com.sidemesh.binance.bot.Symbol;
-import com.sidemesh.binance.bot.proxy.ProxyInfo;
 import lombok.extern.slf4j.Slf4j;
-import net.lingala.zip4j.ZipFile;
-import net.lingala.zip4j.exception.ZipException;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okio.Okio;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Objects;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 @Slf4j
 class Downloader {
@@ -39,18 +38,33 @@ class Downloader {
         final var req = new Request.Builder().url(url).get().build();
 
         Response execute = cli.newCall(req).execute();
-        var sink = Okio.buffer(Okio.sink(file));
-        try {
-            sink.writeAll(execute.body().source());
-            unzip(file, path);
+        try (var sink = Okio.buffer(Okio.sink(file))) {
+            sink.writeAll(Objects.requireNonNull(execute.body()).source());
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            sink.close();
         }
+
+        unzip(file, path);
+        log.info("downloaded!!!");
     }
 
-    private static void unzip(File file, String to) throws ZipException {
-        new ZipFile(file).extractAll(to);
+    private static void unzip(File file, String to) throws IOException {
+        ZipInputStream zis = new ZipInputStream(new FileInputStream(file));
+        ZipEntry entry;
+        while ((entry = zis.getNextEntry()) != null) {
+            if (entry.isDirectory()) {
+                log.warn("unzip has folder! {}", entry.getName());
+                continue;
+            }
+            log.info("Extracting: {}", entry.getName());
+            int count;
+            byte[] data = new byte[2048];
+            // write the files to the disk
+            BufferedOutputStream dest = new BufferedOutputStream(new FileOutputStream(to + "/" + entry.getName()));
+            while ((count = zis.read(data)) != -1) dest.write(data, 0, count);
+            dest.flush();
+            dest.close();
+            zis.closeEntry();
+        }
     }
 }
