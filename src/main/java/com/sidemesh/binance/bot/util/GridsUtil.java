@@ -55,8 +55,10 @@ public class GridsUtil {
         }
 
         // 判断是否满足最小交易金额
-        if (invest.divide(new BigDecimal(grids), RoundingMode.HALF_UP).compareTo(minimumOrderUSDTAmount) < 0) {
-            throw new IllegalArgumentException("minimum order amount not met. minimumOrderUSDTAmount=" + minimumOrderUSDTAmount);
+        // 不应该使用四舍五入法则 例如：9.98 四舍五入则为 10 但实际成交并不满足
+        // 应使用 down 模式，例如：9.98 小数点 0 位，实际值位 9 符合不满足逻辑
+        if (invest.divide(new BigDecimal(grids), RoundingMode.DOWN).compareTo(minimumOrderUSDTAmount) <= 0) {
+            throw new IllegalArgumentException("minimum order amount not met, must > the minimumOrderUSDTAmount=" + minimumOrderUSDTAmount);
         }
 
          /*
