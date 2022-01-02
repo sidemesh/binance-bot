@@ -35,7 +35,6 @@ public class StoreServiceJsonFileImpl implements StoreService {
                 Files.writeString(botInfoFile.toPath(), botMeta.toJson(botMeta), StandardOpenOption.CREATE_NEW);
             } catch (IOException e) {
                 log.error("save bot to json file error [file={}, error={}]", botInfoFile.getAbsolutePath(), e);
-                throw new RuntimeException(e);
             }
         });
     }
@@ -52,7 +51,6 @@ public class StoreServiceJsonFileImpl implements StoreService {
                     Files.writeString(botInfoFile.toPath(), botMeta.toJson(botMeta));
                 } catch (IOException e) {
                     log.error("update bot json file error [file={}, error={}]", botInfoFile.getAbsolutePath(), e);
-                    throw new RuntimeException(e);
                 }
             }
         });
@@ -80,7 +78,6 @@ public class StoreServiceJsonFileImpl implements StoreService {
                         SimpleGridBot.SimpleBotMeta.class);
             } catch (IOException e) {
                 log.info("get bot json file error [file={}, error={}]", botInfoFile.getAbsolutePath(), e);
-                e.printStackTrace();
             }
         }
         return null;
@@ -98,12 +95,11 @@ public class StoreServiceJsonFileImpl implements StoreService {
                             // todo botMeta 使用哪个类实例化？
                             list.add(JSON.jackson.read(Files.readString(path), SimpleGridBot.SimpleBotMeta.class));
                         } catch (IOException e) {
-                            e.printStackTrace();
+                            log.info("list bot json file error [file={}, error={}]", path, e);
                         }
                     });
         } catch (IOException e) {
             log.error("read all bot json file error [basePath={}, error={}]", BASE_PATH, e);
-            throw new RuntimeException(e);
         }
         return list;
     }
