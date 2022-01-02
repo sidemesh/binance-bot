@@ -190,7 +190,7 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
 
     private void buy(BigDecimal price, LinkedGrids.IndexResult ir) throws BinanceAPIException {
         OrderRequest.LimitOrderBuilder builder = OrderRequest.newLimitOrderBuilder();
-        BigDecimal buyGridCount = BigDecimal.valueOf(Math.abs(ir.index.order - ir.newIndex.order));
+        BigDecimal buyGridCount = ir.orderOffset();
         TradeQuantity tq = TradeQuantity.instanceOf(symbol, price, grids.info.orderAmountOfPerGrid.multiply(buyGridCount));
         OrderRequest req = builder
                 .buy()

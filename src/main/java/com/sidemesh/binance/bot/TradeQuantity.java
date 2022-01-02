@@ -11,13 +11,12 @@ public class TradeQuantity {
     public final BigDecimal amount;
 
     /**
-     *
      * @param symbolPrice 币种 当前价格
-     * @param tradeAmount 购买/卖出金额
-     * @return
+     * @param tradeAmount 购买金额
      */
     public static TradeQuantity instanceOf(Symbol symbol, BigDecimal symbolPrice, BigDecimal tradeAmount) {
-        return new TradeQuantity(tradeAmount.divide(symbolPrice, symbol.quantityPrecision.scale(), RoundingMode.HALF_UP),
+        // 不能小，可以大
+        return new TradeQuantity(tradeAmount.divide(symbolPrice, symbol.quantityPrecision.scale(), RoundingMode.UP),
                 tradeAmount);
     }
 

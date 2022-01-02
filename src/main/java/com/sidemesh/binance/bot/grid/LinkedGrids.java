@@ -205,6 +205,11 @@ public class LinkedGrids {
             return IndexResultStatus.REMAIN.equals(this.status);
         }
 
+        // index 之间的偏移量
+        public BigDecimal orderOffset() {
+            return new BigDecimal(Math.abs(index.order - newIndex.order));
+        }
+
     }
 
     public enum IndexResultStatus {
