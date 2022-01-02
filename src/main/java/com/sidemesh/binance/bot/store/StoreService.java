@@ -30,6 +30,13 @@ public interface StoreService {
     void deleteBot(String botName);
 
     /**
+     * 根据名称获取
+     * @param botName
+     * @return
+     */
+    BotMeta getByName(String botName);
+
+    /**
      * 获取列表
      * @return
      */

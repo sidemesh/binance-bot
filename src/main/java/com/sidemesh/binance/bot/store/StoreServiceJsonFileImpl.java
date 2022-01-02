@@ -71,6 +71,22 @@ public class StoreServiceJsonFileImpl implements StoreService {
     }
 
     @Override
+    public BotMeta getByName(String botName) {
+        File botInfoFile = getBotInfoFile(botName);
+        // 如果bot存在
+        if (botInfoFile.exists()) {
+            try {
+                return JSON.jackson.read(Files.readString(botInfoFile.toPath()),
+                        SimpleGridBot.SimpleBotMeta.class);
+            } catch (IOException e) {
+                log.info("get bot json file error [file={}, error={}]", botInfoFile.getAbsolutePath(), e);
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    @Override
     public List<BotMeta> getList() {
         List<BotMeta> list = new ArrayList<>();
         File dir = new File(BASE_PATH);
@@ -79,6 +95,7 @@ public class StoreServiceJsonFileImpl implements StoreService {
                     .filter(path -> path.toString().endsWith(BOT_INFO))
                     .forEach(path -> {
                         try {
+                            // todo botMeta 使用哪个类实例化？
                             list.add(JSON.jackson.read(Files.readString(path), SimpleGridBot.SimpleBotMeta.class));
                         } catch (IOException e) {
                             e.printStackTrace();
