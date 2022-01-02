@@ -155,6 +155,20 @@ public class LinkedGrids {
         init(price);
     }
 
+    /**
+     * 重置index 到指定order
+     * @param order
+     */
+    public void resetIndex(int order) {
+        Node node = head;
+        while (node != null) {
+            if (node.order == order) {
+                index = node;
+            }
+            node = head.next;
+        }
+    }
+
     @Slf4j
     public static class IndexResult {
         // 回调函数

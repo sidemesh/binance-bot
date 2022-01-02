@@ -23,4 +23,10 @@ public interface Bot {
      */
     void stop();
 
+    /**
+     * 获取bot元数据
+     * @return
+     */
+    BotMeta botMeta();
+
 }

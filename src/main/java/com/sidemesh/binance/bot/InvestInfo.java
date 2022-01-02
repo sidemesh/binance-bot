@@ -1,10 +1,14 @@
 package com.sidemesh.binance.bot;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.NoArgsConstructor;
+
 import java.math.BigDecimal;
 
 /**
  * 投资信息
  */
+@NoArgsConstructor
 public class InvestInfo {
     // 收益总金额
     private BigDecimal incomeTotal = BigDecimal.ZERO;
@@ -57,6 +61,7 @@ public class InvestInfo {
      *
      * @return
      */
+    @JsonIgnore
     public boolean isEmptyQuantity() {
         return BigDecimal.ZERO.compareTo(positQuantity) == 0;
     }
@@ -75,6 +80,7 @@ public class InvestInfo {
                 ",持仓=" + positQuantity;
     }
 
+    @JsonIgnore
     public String getInfo() {
         return "投资额剩余=" + invest +
                 ",持仓=" + positQuantity +
