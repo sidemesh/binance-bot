@@ -16,8 +16,8 @@ import java.util.concurrent.Executors;
 
 @Slf4j
 public class StoreServiceJsonFileImpl implements StoreService {
-    public final static String BASE_PATH = System.getProperty("user.dir") + "/.binance-bot/botdata/";
-    private static final String BOT_INFO = "-info.json";
+    private static final String BASE_PATH = System.getProperty("user.dir") + "/.binance-bot/botdata/";
+    private static final String BOT_STAT_SUFFIX = "-stat.json";
 
     private static final ExecutorService pool = Executors.newSingleThreadExecutor();
 
@@ -31,6 +31,7 @@ public class StoreServiceJsonFileImpl implements StoreService {
             }
             try {
                 createDirIfNotExist(botStatFile);
+                botStat.setStatus(null); // 不持久化状态
                 Files.writeString(botStatFile.toPath(), botStat.toJson(), StandardOpenOption.CREATE_NEW);
             } catch (IOException e) {
                 log.error("save bot to json file error [file={}, error={}]", botStatFile.getAbsolutePath(), e);
@@ -46,6 +47,7 @@ public class StoreServiceJsonFileImpl implements StoreService {
             // 如果bot存在
             if (botStatFile.exists()) {
                 try {
+                    botStat.setStatus(null); // 不持久化状态
                     // overwrite file
                     Files.writeString(botStatFile.toPath(), botStat.toJson());
                 } catch (IOException e) {
@@ -88,10 +90,9 @@ public class StoreServiceJsonFileImpl implements StoreService {
         File dir = new File(BASE_PATH);
         try {
             Files.list(dir.toPath())
-                    .filter(path -> path.toString().endsWith(BOT_INFO))
+                    .filter(path -> path.toString().endsWith(BOT_STAT_SUFFIX))
                     .forEach(path -> {
                         try {
-                            // todo botMeta 使用哪个类实例化？
                             list.add(JSON.jackson.read(Files.readString(path), BotStat.class));
                         } catch (IOException e) {
                             log.info("list bot json file error [file={}, error={}]", path, e);
@@ -112,6 +113,6 @@ public class StoreServiceJsonFileImpl implements StoreService {
     }
 
     private File getBotStatFile(String botName) {
-        return new File(BASE_PATH + botName + BOT_INFO);
+        return new File(BASE_PATH + botName + BOT_STAT_SUFFIX);
     }
 }

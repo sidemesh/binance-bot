@@ -78,7 +78,13 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
         storeService.save(this);
     }
 
-
+    /**
+     * 通过持久化的数据 创建bot
+     * @param botStat 数据
+     * @param binanceAPI
+     * @param account
+     * @param rts
+     */
     public SimpleGridBot(BotStat botStat,
                          BinanceAPI binanceAPI,
                          Account account,
@@ -113,7 +119,6 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
     @Override
     public void run() {
         status = BotStatusEnum.RUNNING;
-        storeService.updateIfExist(this);
     }
 
     private boolean isRunning() {
@@ -124,7 +129,6 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
     public void stop() {
         // 停止的时候是否卖出全部持仓？
         status = BotStatusEnum.STOP;
-        storeService.updateIfExist(this);
     }
 
     @Override
