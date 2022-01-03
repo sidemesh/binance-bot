@@ -121,6 +121,7 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
     @Override
     public void run() {
         status = BotStatusEnum.RUNNING;
+        storeService.updateBotIfExist(this);
     }
 
     private boolean isRunning() {
@@ -131,6 +132,7 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
     public void stop() {
         // 停止的时候是否卖出全部持仓？
         status = BotStatusEnum.STOP;
+        storeService.updateBotIfExist(this);
     }
 
     @Override
@@ -315,7 +317,7 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
 
         @Override
         public Bot createBotFrom(BinanceAPI binanceAPI, RealtimeStream realtimeStream) {
-            return new SimpleGridBot(name,
+            SimpleGridBot bot = new SimpleGridBot(name,
                     symbol,
                     Account.fromEnv(),
                     binanceAPI,
@@ -323,6 +325,8 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
                     investInfo,
                     dealGridInfo,
                     realtimeStream);
+            bot.stop();
+            return bot;
         }
     }
 }

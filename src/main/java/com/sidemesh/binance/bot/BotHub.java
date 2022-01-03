@@ -1,30 +1,54 @@
 package com.sidemesh.binance.bot;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import com.sidemesh.binance.bot.api.BinanceAPI;
+import com.sidemesh.binance.bot.store.StoreService;
+import com.sidemesh.binance.bot.store.StoreServiceJsonFileImpl;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class BotHub {
 
-    private static final Set<Bot> bots = new HashSet<>();
+    private static final Map<String, Bot> botMap = new HashMap<>();
+    private final StoreService storeService = new StoreServiceJsonFileImpl();
 
     public BotHub add(Bot bot) {
-        bots.add(bot);
+        if (get(bot.name()).isPresent()) {
+            throw new IllegalArgumentException("bot exist botName=" + bot.name());
+        }
+        botMap.put(bot.name(), bot);
         return this;
     }
 
     public Collection<Bot> all() {
-        return bots;
+        return botMap.values();
     }
 
     public Optional<Bot> get(String name) {
-        for (var b : bots) {
-            if (b.name().equals(name)) {
-                return Optional.of(b);
-            }
+        return Optional.ofNullable(botMap.get(name));
+    }
+
+    public Bot remove(String name) {
+        return botMap.remove(name);
+    }
+
+    public Bot destroy(String name) {
+        Bot bot = botMap.remove(name);
+        if (bot != null) {
+            storeService.deleteBot(name);
         }
-        return Optional.empty();
+        return bot;
+    }
+
+    public List<Bot> load(BinanceAPI binanceAPI, RealtimeStream rts) {
+        List<Bot> loadBots = storeService.getList().stream()
+                .map(meta -> meta.createBotFrom(binanceAPI, rts))
+                .filter(bot -> get(bot.name()).isEmpty())
+                .collect(Collectors.toList());
+        for (Bot bot : loadBots) {
+            add(bot);
+        }
+        return loadBots;
     }
 
 }
