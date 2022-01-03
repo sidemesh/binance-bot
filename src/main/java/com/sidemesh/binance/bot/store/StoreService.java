@@ -18,11 +18,11 @@ public interface StoreService {
     void save(Bot bot);
 
     /**
-     * 更新 如果存在
+     * 更新
      * @param bot
      * @return
      */
-    void updateIfExist(Bot bot);
+    void update(Bot bot);
 
     /**
      * 删除

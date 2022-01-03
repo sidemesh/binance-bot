@@ -78,7 +78,6 @@ public class InvestInfo {
      *
      * @return
      */
-    @JsonIgnore
     public boolean isEmptyQuantity() {
         return BigDecimal.ZERO.compareTo(positQuantity) == 0;
     }
@@ -97,7 +96,6 @@ public class InvestInfo {
                 ",持仓=" + positQuantity;
     }
 
-    @JsonIgnore
     public String getInfo() {
         return "投资额剩余=" + invest +
                 ",持仓=" + positQuantity +

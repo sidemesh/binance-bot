@@ -40,7 +40,7 @@ public class StoreServiceJsonFileImpl implements StoreService {
     }
 
     @Override
-    public void updateIfExist(Bot bot) {
+    public void update(Bot bot) {
         pool.submit(() -> {
             BotStat botStat = bot.getBotStat();
             File botStatFile = getBotStatFile(botStat.getName());

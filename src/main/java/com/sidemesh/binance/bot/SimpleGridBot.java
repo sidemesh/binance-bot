@@ -226,7 +226,7 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
             investInfo.sellSome(sellAmount, executedQty, income);
             ir.updateIndex();
             dealGridInfo.onSell(packed);
-            storeService.updateIfExist(this);
+            storeService.update(this);
             log.info("bot {} {} 卖出成功! 交易数量 {}  {}", name, symbol, executedQty, investInfo.getInfo());
         } else {
             log.info("bot {} {} 卖出失败! 订单状态 {} ", name, symbol, order.getResponse().getStatus());
@@ -254,7 +254,7 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
             investInfo.buySome(tq.amount, executedQty);
             dealGridInfo.onBuy(ir.newIndex, price, tq.quantity);
             ir.updateIndex();
-            storeService.updateIfExist(this);
+            storeService.update(this);
             log.info("bot {} {} 买入成功! 交易数量 {}  {}", name, symbol, executedQty, investInfo.getInfo());
         } else {
             log.info("bot {} {} 买入失败! 订单状态 {}", name, symbol, order.getResponse().getStatus());
