@@ -161,11 +161,17 @@ public class LinkedGrids {
      */
     public void resetIndex(int order) {
         Node node = head;
+        boolean isReset = false;
         while (node != null) {
             if (node.order == order) {
                 index = node;
+                isReset = true;
+                break;
             }
-            node = head.next;
+            node = node.next;
+        }
+        if (!isReset) {
+            throw new IllegalStateException("reset index fail");
         }
     }
 

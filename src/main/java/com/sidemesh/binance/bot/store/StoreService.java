@@ -1,7 +1,7 @@
 package com.sidemesh.binance.bot.store;
 
 import com.sidemesh.binance.bot.Bot;
-import com.sidemesh.binance.bot.BotMeta;
+import com.sidemesh.binance.bot.BotStat;
 
 import java.util.List;
 
@@ -9,37 +9,38 @@ import java.util.List;
  * 存储API
  */
 public interface StoreService {
+
     /**
      * 保存
      * @param bot
      * @return
      */
-    void saveBot(Bot bot);
+    void save(Bot bot);
 
     /**
      * 更新 如果存在
      * @param bot
      * @return
      */
-    void updateBotIfExist(Bot bot);
+    void updateIfExist(Bot bot);
 
     /**
      * 删除
      * @param botName
      */
-    void deleteBot(String botName);
+    void delete(String botName);
 
     /**
      * 根据名称获取
      * @param botName
      * @return
      */
-    BotMeta getByName(String botName);
+    BotStat getByName(String botName);
 
     /**
      * 获取列表
      * @return
      */
-    List<BotMeta> getList();
+    List<BotStat> list();
 
 }

@@ -2,9 +2,7 @@ package com.sidemesh.binance.bot;
 
 import com.google.common.collect.Lists;
 import com.sidemesh.binance.bot.grid.OrderedGird;
-import com.sidemesh.binance.bot.json.JSON;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 
 import java.math.BigDecimal;
@@ -12,10 +10,18 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Data
 public class DealGridInfo {
 
-    private final List<DealGrid> dealGridList = Lists.newLinkedList();
+    @Getter
+    private final List<DealGrid> dealGridList;
+
+    public DealGridInfo() {
+        dealGridList = Lists.newLinkedList();
+    }
+
+    public DealGridInfo(List<DealGrid> dealGridList) {
+        this.dealGridList = dealGridList;
+    }
 
     /**
      * 当买入网格

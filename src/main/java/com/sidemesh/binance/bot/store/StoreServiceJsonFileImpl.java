@@ -1,8 +1,7 @@
 package com.sidemesh.binance.bot.store;
 
 import com.sidemesh.binance.bot.Bot;
-import com.sidemesh.binance.bot.BotMeta;
-import com.sidemesh.binance.bot.SimpleGridBot;
+import com.sidemesh.binance.bot.BotStat;
 import com.sidemesh.binance.bot.json.JSON;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,69 +22,69 @@ public class StoreServiceJsonFileImpl implements StoreService {
     private static final ExecutorService pool = Executors.newSingleThreadExecutor();
 
     @Override
-    public void saveBot(Bot bot) {
+    public void save(Bot bot) {
         pool.submit(() -> {
-            BotMeta botMeta = bot.botMeta();
-            File botInfoFile = getBotInfoFile(botMeta.getName());
-            if (botInfoFile.exists()) {
+            BotStat botStat = bot.getBotStat();
+            File botStatFile = getBotStatFile(botStat.getName());
+            if (botStatFile.exists()) {
                 throw new IllegalStateException("botFile had already created!");
             }
             try {
-                createDirIfNotExist(botInfoFile);
-                Files.writeString(botInfoFile.toPath(), botMeta.toJson(botMeta), StandardOpenOption.CREATE_NEW);
+                createDirIfNotExist(botStatFile);
+                Files.writeString(botStatFile.toPath(), botStat.toJson(), StandardOpenOption.CREATE_NEW);
             } catch (IOException e) {
-                log.error("save bot to json file error [file={}, error={}]", botInfoFile.getAbsolutePath(), e);
+                log.error("save bot to json file error [file={}, error={}]", botStatFile.getAbsolutePath(), e);
             }
         });
     }
 
     @Override
-    public void updateBotIfExist(Bot bot) {
+    public void updateIfExist(Bot bot) {
         pool.submit(() -> {
-            BotMeta botMeta = bot.botMeta();
-            File botInfoFile = getBotInfoFile(botMeta.getName());
+            BotStat botStat = bot.getBotStat();
+            File botStatFile = getBotStatFile(botStat.getName());
             // 如果bot存在
-            if (botInfoFile.exists()) {
+            if (botStatFile.exists()) {
                 try {
                     // overwrite file
-                    Files.writeString(botInfoFile.toPath(), botMeta.toJson(botMeta));
+                    Files.writeString(botStatFile.toPath(), botStat.toJson());
                 } catch (IOException e) {
-                    log.error("update bot json file error [file={}, error={}]", botInfoFile.getAbsolutePath(), e);
+                    log.error("update bot json file error [file={}, error={}]", botStatFile.getAbsolutePath(), e);
                 }
             }
         });
     }
 
     @Override
-    public void deleteBot(String botName) {
+    public void delete(String botName) {
         pool.submit(() -> {
-            File botInfoFile = getBotInfoFile(botName);
+            File botStatFile = getBotStatFile(botName);
             // 如果bot存在
-            if (botInfoFile.exists()) {
-                log.info("delete bot json file [file={}]", botInfoFile.getAbsolutePath());
-                botInfoFile.delete();
+            if (botStatFile.exists()) {
+                log.info("delete bot json file [file={}]", botStatFile.getAbsolutePath());
+                botStatFile.delete();
             }
         });
     }
 
     @Override
-    public BotMeta getByName(String botName) {
-        File botInfoFile = getBotInfoFile(botName);
+    public BotStat getByName(String botName) {
+        File botStatFile = getBotStatFile(botName);
         // 如果bot存在
-        if (botInfoFile.exists()) {
+        if (botStatFile.exists()) {
             try {
-                return JSON.jackson.read(Files.readString(botInfoFile.toPath()),
-                        SimpleGridBot.SimpleBotMeta.class);
+                return JSON.jackson.read(Files.readString(botStatFile.toPath()),
+                        BotStat.class);
             } catch (IOException e) {
-                log.info("get bot json file error [file={}, error={}]", botInfoFile.getAbsolutePath(), e);
+                log.info("get bot json file error [file={}, error={}]", botStatFile.getAbsolutePath(), e);
             }
         }
         return null;
     }
 
     @Override
-    public List<BotMeta> getList() {
-        List<BotMeta> list = new ArrayList<>();
+    public List<BotStat> list() {
+        List<BotStat> list = new ArrayList<>();
         File dir = new File(BASE_PATH);
         try {
             Files.list(dir.toPath())
@@ -93,7 +92,7 @@ public class StoreServiceJsonFileImpl implements StoreService {
                     .forEach(path -> {
                         try {
                             // todo botMeta 使用哪个类实例化？
-                            list.add(JSON.jackson.read(Files.readString(path), SimpleGridBot.SimpleBotMeta.class));
+                            list.add(JSON.jackson.read(Files.readString(path), BotStat.class));
                         } catch (IOException e) {
                             log.info("list bot json file error [file={}, error={}]", path, e);
                         }
@@ -104,15 +103,15 @@ public class StoreServiceJsonFileImpl implements StoreService {
         return list;
     }
 
-    private void createDirIfNotExist(File botInfoFile) throws IOException {
-        if (!botInfoFile.getParentFile().exists()) {
-            if (!botInfoFile.getParentFile().mkdirs()) {
+    private void createDirIfNotExist(File botStatFile) throws IOException {
+        if (!botStatFile.getParentFile().exists()) {
+            if (!botStatFile.getParentFile().mkdirs()) {
                 throw new IOException("file dir create fail");
             }
         }
     }
 
-    private File getBotInfoFile(String botName) {
+    private File getBotStatFile(String botName) {
         return new File(BASE_PATH + botName + BOT_INFO);
     }
 }

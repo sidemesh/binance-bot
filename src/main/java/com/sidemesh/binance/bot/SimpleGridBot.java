@@ -2,18 +2,14 @@ package com.sidemesh.binance.bot;
 
 import com.sidemesh.binance.bot.api.BinanceAPI;
 import com.sidemesh.binance.bot.api.BinanceAPIException;
-import com.sidemesh.binance.bot.grid.*;
-import com.sidemesh.binance.bot.json.JSONJacksonImpl;
+import com.sidemesh.binance.bot.grid.Builder;
+import com.sidemesh.binance.bot.grid.LinkedGrids;
 import com.sidemesh.binance.bot.store.StoreService;
 import com.sidemesh.binance.bot.store.StoreServiceJsonFileImpl;
 import com.sidemesh.binance.bot.util.TradeUtil;
 import com.sidemesh.binance.bot.websocket.event.BookTickerMessage;
 import com.sidemesh.binance.bot.worker.BotWorker;
 import com.sidemesh.binance.bot.worker.ConditionBotWorker;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
@@ -79,37 +75,33 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
         // 添加监听器
         rts.addListener(symbol, this);
         // 持久化
-        storeService.saveBot(this);
+        storeService.save(this);
     }
 
 
-    public SimpleGridBot(String name,
-                         Symbol symbol,
-                         Account account,
+    public SimpleGridBot(BotStat botStat,
                          BinanceAPI binanceAPI,
-                         GridsMeta gridsMeta,
-                         InvestInfo investInfo,
-                         DealGridInfo dealGridInfo,
+                         Account account,
                          RealtimeStream rts) {
-        super(name, symbol);
-        check(symbol, "symbol");
+        super(botStat.getName(), botStat.getSymbol());
+        check(botStat, "botStat");
         check(account, "account");
 
         this.account = account;
         this.binanceAPI = binanceAPI;
-        this.investInfo = investInfo;
+        this.investInfo = new InvestInfo(botStat.getIncomeTotal(), botStat.getSurplusInvest(), botStat.getPositQuantity());
         this.grids = Builder.newBuilder()
-                .setGrids(gridsMeta.getGrids())
-                .setLow(gridsMeta.getLow())
-                .setHigh(gridsMeta.getHigh())
+                .setGrids(botStat.getGrids())
+                .setLow(botStat.getLow())
+                .setHigh(botStat.getHigh())
                 .setAccount(account)
                 .setSymbol(symbol)
-                .setInvest(gridsMeta.getInvest())
+                .setInvest(botStat.getInvest())
                 .buildLinkedGrids();
-        grids.resetIndex(gridsMeta.getOrder());
+        grids.resetIndex(botStat.getOrder());
         this.grids.print();
         this.worker = new ConditionBotWorker(name + "-worker");
-        this.dealGridInfo = dealGridInfo;
+        this.dealGridInfo = new DealGridInfo(botStat.getDealGridList());
         // 添加监听器
         rts.addListener(symbol, this);
     }
@@ -121,7 +113,7 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
     @Override
     public void run() {
         status = BotStatusEnum.RUNNING;
-        storeService.updateBotIfExist(this);
+        storeService.updateIfExist(this);
     }
 
     private boolean isRunning() {
@@ -132,7 +124,12 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
     public void stop() {
         // 停止的时候是否卖出全部持仓？
         status = BotStatusEnum.STOP;
-        storeService.updateBotIfExist(this);
+        storeService.updateIfExist(this);
+    }
+
+    @Override
+    public BotStatusEnum getBotStatus() {
+        return status;
     }
 
     @Override
@@ -225,7 +222,7 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
             investInfo.sellSome(sellAmount, executedQty, income);
             ir.updateIndex();
             dealGridInfo.onSell(packed);
-            storeService.updateBotIfExist(this);
+            storeService.updateIfExist(this);
             log.info("bot {} {} 卖出成功! 交易数量 {}  {}", name, symbol, executedQty, investInfo.getInfo());
         } else {
             log.info("bot {} {} 卖出失败! 订单状态 {} ", name, symbol, order.getResponse().getStatus());
@@ -253,7 +250,7 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
             investInfo.buySome(tq.amount, executedQty);
             dealGridInfo.onBuy(ir.newIndex, price, tq.quantity);
             ir.updateIndex();
-            storeService.updateBotIfExist(this);
+            storeService.updateIfExist(this);
             log.info("bot {} {} 买入成功! 交易数量 {}  {}", name, symbol, executedQty, investInfo.getInfo());
         } else {
             log.info("bot {} {} 买入失败! 订单状态 {}", name, symbol, order.getResponse().getStatus());
@@ -284,49 +281,24 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
         this.isTriedUseBestPriceTrade = false;
     }
 
+
     @Override
-    public BotMeta botMeta() {
-        GridsMeta gridsMeta = new GridsMeta();
-        gridsMeta.setInvest(grids.info.invest);
-        gridsMeta.setLow(grids.info.low);
-        gridsMeta.setHigh(grids.info.high);
-        gridsMeta.setGrids(grids.info.grids);
-        gridsMeta.setOrder(grids.getIndex().order);
-        return new SimpleBotMeta(name, symbol, status, gridsMeta, investInfo, dealGridInfo);
+    public BotStat getBotStat() {
+        return BotStat.builder()
+                .name(name)
+                .symbol(symbol)
+                .status(status)
+                .low(grids.info.low)
+                .high(grids.info.high)
+                .grids(grids.info.grids)
+                .order(grids.getIndex().order)
+                .invest(grids.info.invest)
+                .surplusInvest(investInfo.getInvest())
+                .positQuantity(investInfo.getPositQuantity())
+                .incomeTotal(investInfo.getIncomeTotal())
+                .dealGridList(dealGridInfo.getDealGridList())
+                .build();
     }
 
-    /**
-     * bot 元数据
-     */
-    @EqualsAndHashCode(callSuper = true)
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Data
-    public static class SimpleBotMeta extends JSONJacksonImpl implements BotMeta {
-        String name;
-        Symbol symbol;
-        BotStatusEnum status;
-        GridsMeta gridsMeta;
-        InvestInfo investInfo;
-        DealGridInfo dealGridInfo;
 
-        @Override
-        public String getName() {
-            return this.name;
-        }
-
-        @Override
-        public Bot createBotFrom(BinanceAPI binanceAPI, RealtimeStream realtimeStream) {
-            SimpleGridBot bot = new SimpleGridBot(name,
-                    symbol,
-                    Account.fromEnv(),
-                    binanceAPI,
-                    gridsMeta,
-                    investInfo,
-                    dealGridInfo,
-                    realtimeStream);
-            bot.stop();
-            return bot;
-        }
-    }
 }

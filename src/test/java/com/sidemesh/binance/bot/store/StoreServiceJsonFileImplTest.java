@@ -1,11 +1,11 @@
 package com.sidemesh.binance.bot.store;
 
 import com.sidemesh.binance.bot.Account;
-import com.sidemesh.binance.bot.BotMeta;
 import com.sidemesh.binance.bot.SimpleGridBot;
 import com.sidemesh.binance.bot.Symbol;
 import com.sidemesh.binance.bot.backtest.FakeBinanceAPI;
 import com.sidemesh.binance.bot.backtest.RealtimeStreamBackTestDataImpl;
+import com.sidemesh.binance.bot.BotStat;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -20,7 +20,7 @@ class StoreServiceJsonFileImplTest {
     void canCreateJsonFileWhenSaveBot() throws InterruptedException {
         String botName = "test-01";
         // 删除文件
-        storeService.deleteBot(botName);
+        storeService.delete(botName);
 
         var realtime = new RealtimeStreamBackTestDataImpl(Symbol.REN_USDT, "2020-05");
         new SimpleGridBot(
@@ -36,7 +36,7 @@ class StoreServiceJsonFileImplTest {
         );
         // 等待文件 异步创建完成
         TimeUnit.SECONDS.sleep(1);
-        List<BotMeta> list = storeService.getList();
+        List<BotStat> list = storeService.list();
         boolean b = list.stream().anyMatch(v -> botName.equals(v.getName()));
         Assertions.assertTrue(b);
     }

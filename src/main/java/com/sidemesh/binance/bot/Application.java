@@ -4,12 +4,17 @@ import com.sidemesh.binance.bot.api.BinanceAPIv3;
 import com.sidemesh.binance.bot.dto.CreateBotRequest;
 import com.sidemesh.binance.bot.proxy.ClashProxy;
 import com.sidemesh.binance.bot.proxy.ProxyInfo;
+import com.sidemesh.binance.bot.store.StoreService;
+import com.sidemesh.binance.bot.store.StoreServiceJsonFileImpl;
 import com.sidemesh.binance.bot.websocket.RealtimeStreamWebSocketImpl;
 import io.javalin.Javalin;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 import java.time.Duration;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class Application {
@@ -25,6 +30,16 @@ public class Application {
 
         // bot hub
         final var botHub = new BotHub();
+
+        // load file to botHub
+        StoreService storeService = new StoreServiceJsonFileImpl();
+        storeService.list().stream()
+                .map(stat -> {
+                    var apiClient = new BinanceAPIv3(proxy != null ? proxy.toProxy() : null,
+                            Duration.ofSeconds(2), Duration.ofSeconds(2));
+                    return new SimpleGridBot(stat, apiClient, Account.fromEnv(), rts);
+                })
+                .forEach(botHub::add);
 
         Javalin app = Javalin.create(cfg -> {
             cfg.showJavalinBanner = true;
@@ -52,7 +67,6 @@ public class Application {
                         req.getHighPrice(),
                         req.getGrids(),
                         rts);
-                bot.run();
                 botHub.add(bot);
             } catch (IllegalArgumentException e) {
                 ctx.status(400);
@@ -62,6 +76,78 @@ public class Application {
 
             ctx.result("created!");
         });
+
+        // 机器人列表
+        app.get("/api/v1/bots", ctx -> {
+            List<BotStat> botStats = botHub.all().stream()
+                    .map(Bot::getBotStat)
+                    .collect(Collectors.toList());
+            ctx.json(botStats);
+        });
+
+        // 启动机器人
+        app.put("/api/v1/bots/start/{name}", ctx -> {
+            String botName = ctx.pathParam("name");
+            Optional<Bot> bot = botHub.get(botName);
+            if (bot.isEmpty()) {
+                ctx.status(404);
+            } else {
+                bot.get().run();
+                ctx.result("start!");
+            }
+        });
+
+        // 停止机器人
+        app.put("/api/v1/bots/stop/{name}", ctx -> {
+            String botName = ctx.pathParam("name");
+            Optional<Bot> bot = botHub.get(botName);
+            if (bot.isEmpty()) {
+                ctx.status(404);
+            } else {
+                bot.get().stop();
+                ctx.result("stop!");
+            }
+        });
+
+        // 删除机器人
+        app.delete("/api/v1/bots/{name}", ctx -> {
+            String botName = ctx.pathParam("name");
+            botHub.remove(botName);
+            ctx.result("remove!");
+        });
+
+        // 销毁机器人
+        app.delete("/api/v1/bots/destroy/{name}", ctx -> {
+            String botName = ctx.pathParam("name");
+            botHub.remove(botName);
+            // 删除文件
+            storeService.delete(botName);
+            ctx.result("destroy!");
+        });
+
+        // 加载机器人
+        app.put("/api/v1/botfiles/load/{name}", ctx -> {
+            String botName = ctx.pathParam("name");
+            BotStat botStat = storeService.getByName(botName);
+            var apiClient = new BinanceAPIv3(proxy != null ? proxy.toProxy() : null,
+                    Duration.ofSeconds(2), Duration.ofSeconds(2));
+            SimpleGridBot bot = new SimpleGridBot(botStat, apiClient, Account.fromEnv(), rts);
+            botHub.add(bot);
+            ctx.result("load!");
+        });
+
+        // 所有已配置机器人
+        app.get("/api/v1/botfiles/", ctx -> {
+            List<BotStat> list = storeService.list();
+            for (BotStat botStat : list) {
+                BotStatusEnum botStatusEnum = botHub.get(botStat.name)
+                        .map(Bot::getBotStatus)
+                        .orElse(null);
+                botStat.setStatus(botStatusEnum);
+            }
+            ctx.json(list);
+        });
+
     }
 
     private static Bot createBot(Symbol symbol,

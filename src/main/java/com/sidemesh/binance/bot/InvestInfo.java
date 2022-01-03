@@ -1,6 +1,7 @@
 package com.sidemesh.binance.bot;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
@@ -11,11 +12,27 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class InvestInfo {
     // 收益总金额
+    @Getter
     private BigDecimal incomeTotal = BigDecimal.ZERO;
     // 投资金额
     private BigDecimal invest;
     // 持仓数量
     private BigDecimal positQuantity;
+
+    public InvestInfo(BigDecimal incomeTotal, BigDecimal surplusInvest, BigDecimal positQuantity) {
+        if (incomeTotal == null) {
+            throw new IllegalArgumentException("incomeTotal must not be null");
+        }
+        if (surplusInvest == null) {
+            throw new IllegalArgumentException("surplusInvest must not be null");
+        }
+        if (positQuantity == null) {
+            throw new IllegalArgumentException("positQuantity must not be null");
+        }
+        this.incomeTotal = incomeTotal;
+        this.invest = surplusInvest;
+        this.positQuantity = positQuantity;
+    }
 
     /**
      * @param invest        投资总额
