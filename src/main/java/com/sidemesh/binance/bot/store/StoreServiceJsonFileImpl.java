@@ -16,8 +16,8 @@ import java.util.concurrent.Executors;
 
 @Slf4j
 public class StoreServiceJsonFileImpl implements StoreService {
-    private static final String BASE_PATH = System.getProperty("user.dir") + "/.binance-bot/botdata/";
-    private static final String BOT_STAT_SUFFIX = "-stat.json";
+    public static final String BASE_PATH = System.getProperty("user.dir") + "/.binance-bot/botdata/";
+    public static final String BOT_STAT_SUFFIX = "-stat.json";
 
     private static final ExecutorService pool = Executors.newSingleThreadExecutor();
 

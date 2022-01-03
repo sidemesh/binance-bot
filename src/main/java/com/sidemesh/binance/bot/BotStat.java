@@ -13,27 +13,27 @@ import java.util.List;
 @AllArgsConstructor
 public class BotStat extends JSON.ToJson {
     // 名称
-    String name;
+    public String name;
     // 币对
-    Symbol symbol;
+    public Symbol symbol;
     // 状态
-    transient BotStatusEnum status;
+    public BotStatusEnum status;
     // 网格低位
-    private BigDecimal low;
+    public BigDecimal low;
     // 网格高位
-    private BigDecimal high;
+    public BigDecimal high;
     // 网格数量
-    private int grids;
+    public int grids;
     // 当前网格
-    private int order;
+    public int order;
     // 投资金额
-    private BigDecimal invest;
+    public BigDecimal invest;
     // 剩余投资金额
-    private BigDecimal surplusInvest;
+    public BigDecimal surplusInvest;
     // 持仓数量
-    private BigDecimal positQuantity;
+    public BigDecimal positQuantity;
     // 收益总金额
-    private BigDecimal incomeTotal;
+    public BigDecimal incomeTotal;
     // 交易数据
-    List<DealGridInfo.DealGrid> dealGridList;
+    public List<DealGridInfo.DealGrid> dealGridList;
 }
