@@ -166,6 +166,7 @@ public class LinkedGrids {
             if (node.order == order) {
                 index = node;
                 isReset = true;
+                isInit = true;
                 break;
             }
             node = node.next;
