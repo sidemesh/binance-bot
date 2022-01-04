@@ -13,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -86,68 +85,36 @@ public class Application {
         });
 
         // 启动机器人
-        app.put("/api/v1/bots/start/{name}", ctx -> {
+        app.put("/api/v1/bots/{name}/start", ctx -> {
             String botName = ctx.pathParam("name");
-            Optional<Bot> bot = botHub.get(botName);
-            if (bot.isEmpty()) {
-                ctx.status(404);
-            } else {
-                bot.get().run();
-                ctx.result("start!");
-            }
+            botHub.get(botName)
+                    .ifPresentOrElse(bot -> {
+                        bot.run();
+                        ctx.result("start!");
+                    }, () -> ctx.status(404));
         });
 
         // 停止机器人
-        app.put("/api/v1/bots/stop/{name}", ctx -> {
+        app.put("/api/v1/bots/{name}/stop", ctx -> {
             String botName = ctx.pathParam("name");
-            Optional<Bot> bot = botHub.get(botName);
-            if (bot.isEmpty()) {
-                ctx.status(404);
-            } else {
-                bot.get().stop();
-                ctx.result("stop!");
-            }
+            botHub.get(botName)
+                    .ifPresentOrElse(bot -> {
+                        bot.stop();
+                        ctx.result("stop!");
+                    }, () -> ctx.status(404));
         });
 
         // 删除机器人
         app.delete("/api/v1/bots/{name}", ctx -> {
             String botName = ctx.pathParam("name");
-            botHub.remove(botName);
-            ctx.result("remove!");
+            botHub.get(botName)
+                    .ifPresentOrElse(bot -> {
+                        botHub.remove(botName);
+                        // 删除文件
+                        storeService.delete(botName);
+                        ctx.result("remove!");
+                    }, () -> ctx.status(404));
         });
-
-        // 销毁机器人
-        app.delete("/api/v1/bots/destroy/{name}", ctx -> {
-            String botName = ctx.pathParam("name");
-            botHub.remove(botName);
-            // 删除文件
-            storeService.delete(botName);
-            ctx.result("destroy!");
-        });
-
-        // 加载机器人
-        app.put("/api/v1/botfiles/load/{name}", ctx -> {
-            String botName = ctx.pathParam("name");
-            BotStat botStat = storeService.getByName(botName);
-            var apiClient = new BinanceAPIv3(proxy != null ? proxy.toProxy() : null,
-                    Duration.ofSeconds(2), Duration.ofSeconds(2));
-            SimpleGridBot bot = new SimpleGridBot(botStat, apiClient, Account.fromEnv(), rts);
-            botHub.add(bot);
-            ctx.result("load!");
-        });
-
-        // 所有已配置机器人
-        app.get("/api/v1/botfiles/", ctx -> {
-            List<BotStat> list = storeService.list();
-            for (BotStat botStat : list) {
-                BotStatusEnum botStatusEnum = botHub.get(botStat.name)
-                        .map(Bot::getBotStatus)
-                        .orElse(null);
-                botStat.setStatus(botStatusEnum);
-            }
-            ctx.json(list);
-        });
-
     }
 
     private static Bot createBot(Symbol symbol,

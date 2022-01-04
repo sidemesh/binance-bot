@@ -34,9 +34,9 @@ public class ApplicationIntegrateTest {
 
     @AfterAll
     static void after() {
-        String body = HttpRequest.delete(BASE_URL + "/api/v1/bots/destroy/" + BOT_NAME)
+        String body = HttpRequest.delete(BASE_URL + "/api/v1/bots/" + BOT_NAME)
                 .body();
-        assertEquals("destroy!", body);
+        assertEquals("remove!", body);
     }
 
     @Test
@@ -46,43 +46,27 @@ public class ApplicationIntegrateTest {
         assertNotNull(body);
     }
 
-
     @Test
     public void canStartStopBot() {
         // 开启机器人
-        String body = HttpRequest.put(BASE_URL + "/api/v1/bots/start/" + BOT_NAME).body();
+        String body = HttpRequest.put(BASE_URL + "/api/v1/bots/" + BOT_NAME + "/start/").body();
         assertEquals("start!", body);
         BotStat botStat = getBot();
         assertNotNull(botStat);
         assertEquals(BotStatusEnum.RUNNING, botStat.status);
 
         // 暂停机器人
-        body = HttpRequest.put(BASE_URL + "/api/v1/bots/stop/" + BOT_NAME).body();
+        body = HttpRequest.put(BASE_URL + "/api/v1/bots/" + BOT_NAME + "/stop/").body();
         assertEquals("stop!", body);
         botStat = getBot();
         assertNotNull(botStat);
         assertEquals(BotStatusEnum.STOP, botStat.status);
 
-        // 从botHub中移出
+        // 删除机器人
         HttpRequest.delete(BASE_URL + "/api/v1/bots/" + BOT_NAME).body();
         botStat = getBot();
         assertNull(botStat);
-
-        // 从配置文件中加载到 botHub
-        HttpRequest.put(BASE_URL + "/api/v1/botfiles/load/" + BOT_NAME).body();
-        botStat = getBot();
-        assertNotNull(botStat);
-        assertEquals(BotStatusEnum.STOP, botStat.status);
     }
-
-
-    @Test
-    public void canGetAllBotFiles() {
-        String body = HttpRequest.get(BASE_URL + "/api/v1/botfiles/")
-                .body();
-        assertNotNull(body);
-    }
-
 
     private BotStat getBot() {
         String body = HttpRequest.get(BASE_URL + "/api/v1/bots")

@@ -1,11 +1,9 @@
 package com.sidemesh.binance.bot;
 
-import com.sidemesh.binance.bot.api.BinanceAPI;
-import com.sidemesh.binance.bot.store.StoreService;
-import com.sidemesh.binance.bot.store.StoreServiceJsonFileImpl;
-
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 public class BotHub {
 
@@ -28,6 +26,7 @@ public class BotHub {
     }
 
     public Bot remove(String name) {
+        get(name).ifPresent(Bot::stop);
         return botMap.remove(name);
     }
 
