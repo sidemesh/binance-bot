@@ -173,8 +173,8 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
         Order order = binanceAPI.order(account, req);
         if (order.isDeal()) {
             // OrderRequest request = order.getRequest();
-            var resp = order.getResponse();
-            BigDecimal executedQty = resp.getExecutedQty();
+            final var resp = order.getResponse();
+            final var executedQty = resp.getExecutedQty();
             BigDecimal sellAmount = executedQty.multiply(resp.getPrice());
             BigDecimal income = sellAmount.subtract(packed.totalPrice());
             investInfo.sellSome(sellAmount, executedQty, income);
@@ -203,11 +203,14 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
         Order order = binanceAPI.order(account, req);
         if (order.isDeal()) {
             // OrderRequest request = order.getRequest();
-            BigDecimal executedQty = order.getResponse().getExecutedQty();
+            final var resp = order.getResponse();
+            final var executedQty = resp.getExecutedQty();
+            final var origQty = resp.getOrigQty();
             investInfo.buySome(tq.amount, executedQty);
-            dealGridInfo.onBuy(ir.newIndex, price, tq.quantity);
+            // 应当使用 executedQty 买入时会以当前币种扣除手续费，例如交易 43.25 ETH 手续费为 0.1 实际到账 43.15 ETH
+            dealGridInfo.onBuy(ir.newIndex, price, executedQty);
             ir.updateIndex();
-            log.info("bot {} {} 买入成功! 交易数量 {}  {}", name, symbol, executedQty, investInfo.getInfo());
+            log.info("bot {} {} 买入成功! 原始数量 {} 到账数量 {}  {}", name, symbol, origQty, executedQty, investInfo.getInfo());
         } else {
             log.info("bot {} {} 买入失败! 订单状态 {}", name, symbol, order.getResponse().getStatus());
             // 尝试使用最优价格进行交易
