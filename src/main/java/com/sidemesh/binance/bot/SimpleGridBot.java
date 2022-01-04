@@ -37,6 +37,10 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
     private boolean isTriedUseBestPriceTrade;
     // ---------------------- 最优价格相关逻辑
 
+    // --------- 缓存相关
+    private PreIndexResult preIndexResult;
+    // --------- 缓存相关
+
     public SimpleGridBot(String name,
                          Symbol symbol,
                          Account account,
@@ -124,7 +128,12 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
         grids.try2Init(price);
 
         try {
-            doTrade(price, grids.findIndex(price));
+            if (this.preIndexResult != null && this.preIndexResult.isSkipGridsLookup(price)) {
+                // 如果当前价格一致
+                doTrade(price, this.preIndexResult.indexResult);
+            } else {
+                doTrade(price, grids.findIndex(price));
+            }
         } catch (BinanceAPIException e) {
             if (e.isLimited) {
                 log.info("api call limited! update price = {}", price);
@@ -180,12 +189,15 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
             investInfo.sellSome(sellAmount, executedQty, income);
             ir.updateIndex();
             dealGridInfo.onSell(packed);
+            this.preIndexResult = null;
             log.info("bot {} {} 卖出成功! 交易数量 {}  {}", name, symbol, executedQty, investInfo.getInfo());
+            return;
         } else {
             log.info("bot {} {} 卖出失败! 订单状态 {} ", name, symbol, order.getResponse().getStatus());
             // 尝试使用最优价格进行交易
             this.tryUseOrderBookBestPriceTrade(latestBookTicker.bestSellPrice);
         }
+        this.preIndexResult = new PreIndexResult(ir, price);
     }
 
     private void buy(BigDecimal price, LinkedGrids.IndexResult ir) throws BinanceAPIException {
@@ -207,12 +219,15 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
             investInfo.buySome(tq.amount, executedQty);
             dealGridInfo.onBuy(ir.newIndex, price, tq.quantity);
             ir.updateIndex();
+            this.preIndexResult = null;
             log.info("bot {} {} 买入成功! 交易数量 {}  {}", name, symbol, executedQty, investInfo.getInfo());
+            return;
         } else {
             log.info("bot {} {} 买入失败! 订单状态 {}", name, symbol, order.getResponse().getStatus());
             // 尝试使用最优价格进行交易
             this.tryUseOrderBookBestPriceTrade(latestBookTicker.bestBuyPrice);
         }
+        this.preIndexResult = new PreIndexResult(ir, price);
     }
 
     /*
@@ -235,6 +250,22 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
 
     private void resetStates() {
         this.isTriedUseBestPriceTrade = false;
+    }
+
+    private static class PreIndexResult {
+
+        public final LinkedGrids.IndexResult indexResult;
+        public final BigDecimal price;
+
+        public PreIndexResult(LinkedGrids.IndexResult indexResult, BigDecimal bigDecimal) {
+            this.indexResult = indexResult;
+            this.price = bigDecimal;
+        }
+
+        public boolean isSkipGridsLookup(BigDecimal price) {
+            if (indexResult.isUpdatedIndex()) return false;
+            return price.compareTo(this.price) == 0;
+        }
     }
 
 }

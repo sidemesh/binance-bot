@@ -166,6 +166,8 @@ public class LinkedGrids {
         // 状态
         public final IndexResultStatus status;
 
+        private boolean isUpdatedIndex;
+
         private IndexResult(@NotNull Node index,
                             @NotNull Node newIndex,
                             Consumer<Node> fn) {
@@ -180,6 +182,7 @@ public class LinkedGrids {
             } else {
                 this.status = IndexResultStatus.RISE;
             }
+            this.isUpdatedIndex = false;
         }
 
         public void updateIndex() {
@@ -188,6 +191,11 @@ public class LinkedGrids {
                 return;
             }
             updateIndexFn.accept(newIndex);
+            isUpdatedIndex = true;
+        }
+
+        public boolean isUpdatedIndex() {
+            return isUpdatedIndex;
         }
 
         // 是否为下跌
