@@ -150,7 +150,7 @@ public class LinkedGridsTest {
     private LinkedGrids newLinkedGrids() {
         return Builder
                 .newBuilder()
-                .setGrids(10).setInvest(new BigDecimal("110"))
+                .setGrids(10).setInvest(new BigDecimal("100"))
                 .setLow(new BigDecimal("4.4"))
                 .setHigh(new BigDecimal("5.4"))
                 .setSymbol(Symbol.BICO_USDT)
