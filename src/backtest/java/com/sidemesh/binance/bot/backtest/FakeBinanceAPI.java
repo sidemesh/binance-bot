@@ -7,6 +7,8 @@ import com.sidemesh.binance.bot.OrderResponse;
 import com.sidemesh.binance.bot.api.BinanceAPI;
 import com.sidemesh.binance.bot.api.BinanceAPIException;
 
+import java.util.Collections;
+
 public class FakeBinanceAPI implements BinanceAPI {
 
     @Override
@@ -22,6 +24,7 @@ public class FakeBinanceAPI implements BinanceAPI {
                 var res = new OrderResponse();
                 res.setPrice(request.price);
                 res.setExecutedQty(request.quantity);
+                res.setFills(Collections.emptyList());
                 return res;
             }
 
