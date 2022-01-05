@@ -35,5 +35,13 @@ public class BotStat extends JSON.ToJson {
     // 收益总金额
     public BigDecimal incomeTotal;
     // 交易数据
-    public List<DealGridInfo.DealGrid> dealGridList;
+    public List<BuyGrid> buyGrids;
+
+    public static class BuyGrid {
+        public int order;
+        public BigDecimal price;
+        public BigDecimal quantity;
+
+    }
+
 }

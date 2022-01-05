@@ -13,6 +13,7 @@ import com.sidemesh.binance.bot.worker.ConditionBotWorker;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListener {
@@ -107,7 +108,9 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
         grids.resetIndex(botStat.getOrder());
         this.grids.print();
         this.worker = new ConditionBotWorker(name + "-worker");
-        this.dealGridInfo = new DealGridInfo(botStat.getDealGridList());
+        this.dealGridInfo = new DealGridInfo(botStat.buyGrids.stream()
+                .map(v -> new DealGridInfo.DealGrid(grids.indexOf(v.order), v.price, v.quantity))
+                .collect(Collectors.toList()));
         // 添加监听器
         rts.addListener(symbol, this);
     }
@@ -300,7 +303,14 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
                 .surplusInvest(investInfo.getInvest())
                 .positQuantity(investInfo.getPositQuantity())
                 .incomeTotal(investInfo.getIncomeTotal())
-                .dealGridList(dealGridInfo.getDealGridList())
+                .buyGrids(dealGridInfo.getDealGridList().stream().map(v -> {
+                            BotStat.BuyGrid buyGrid = new BotStat.BuyGrid();
+                            buyGrid.order = v.grid.order();
+                            buyGrid.price = v.price;
+                            buyGrid.quantity = v.quantity;
+                            return buyGrid;
+                        }).collect(Collectors.toList())
+                )
                 .build();
     }
 
