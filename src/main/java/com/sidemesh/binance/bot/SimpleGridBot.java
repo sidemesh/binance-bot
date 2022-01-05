@@ -260,7 +260,9 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
             dealGridInfo.onBuy(ir.newIndex, price, receiveQty);
             ir.updateIndex();
             storeService.update(this);
-            log.info("bot {} {} 买入成功! 原始数量 {} 到账数量 {}  {}", name, symbol, origQty, receiveQty, investInfo.getInfo());
+            log.info("bot {} {} 买入成功! 下单数量 {} 手续费 {} 到账数量 {} {}", name, symbol,
+                    origQty, resp.serviceCharge(), receiveQty,
+                    investInfo.getInfo());
         } else {
             log.info("bot {} {} 买入失败! 订单状态 {}", name, symbol, order.getResponse().getStatus());
             // 尝试使用最优价格进行交易
