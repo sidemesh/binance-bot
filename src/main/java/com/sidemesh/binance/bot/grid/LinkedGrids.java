@@ -155,6 +155,43 @@ public class LinkedGrids {
         init(price);
     }
 
+    /**
+     * 重置index 到指定order
+     * @param order
+     */
+    public void resetIndex(int order) {
+        Node node = head;
+        boolean isReset = false;
+        while (node != null) {
+            if (node.order == order) {
+                index = node;
+                isReset = true;
+                isInit = true;
+                break;
+            }
+            node = node.next;
+        }
+        if (!isReset) {
+            throw new IllegalStateException("reset index fail");
+        }
+    }
+
+    /**
+     * 根据Order 获取Node
+     * @param order
+     * @return
+     */
+    public Node indexOf(int order) {
+        Node node = head;
+        while (node != null) {
+            if (node.order == order) {
+                return node;
+            }
+            node = node.next;
+        }
+        return null;
+    }
+
     @Slf4j
     public static class IndexResult {
         // 回调函数

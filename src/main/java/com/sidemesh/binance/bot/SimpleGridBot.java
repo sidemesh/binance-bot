@@ -2,7 +2,10 @@ package com.sidemesh.binance.bot;
 
 import com.sidemesh.binance.bot.api.BinanceAPI;
 import com.sidemesh.binance.bot.api.BinanceAPIException;
-import com.sidemesh.binance.bot.grid.*;
+import com.sidemesh.binance.bot.grid.Builder;
+import com.sidemesh.binance.bot.grid.LinkedGrids;
+import com.sidemesh.binance.bot.store.StoreService;
+import com.sidemesh.binance.bot.store.StoreServiceJsonFileImpl;
 import com.sidemesh.binance.bot.util.TradeUtil;
 import com.sidemesh.binance.bot.websocket.event.BookTickerMessage;
 import com.sidemesh.binance.bot.worker.BotWorker;
@@ -10,6 +13,7 @@ import com.sidemesh.binance.bot.worker.ConditionBotWorker;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListener {
@@ -29,6 +33,8 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
     private final InvestInfo investInfo;
     // 格子交易记录
     private final DealGridInfo dealGridInfo;
+    // 持久化服务
+    private final StoreService storeService = new StoreServiceJsonFileImpl();
 
     // -------------------- 最优价格相关逻辑
     // 最优买卖价格
@@ -69,6 +75,44 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
         this.dealGridInfo = new DealGridInfo();
         // 添加监听器
         rts.addListener(symbol, this);
+        // 持久化
+        storeService.save(this);
+    }
+
+    /**
+     * 通过持久化的数据 创建bot
+     * @param botStat 数据
+     * @param binanceAPI
+     * @param account
+     * @param rts
+     */
+    public SimpleGridBot(BotStat botStat,
+                         BinanceAPI binanceAPI,
+                         Account account,
+                         RealtimeStream rts) {
+        super(botStat.getName(), botStat.getSymbol());
+        check(botStat, "botStat");
+        check(account, "account");
+
+        this.account = account;
+        this.binanceAPI = binanceAPI;
+        this.investInfo = new InvestInfo(botStat.getIncomeTotal(), botStat.getSurplusInvest(), botStat.getPositQuantity());
+        this.grids = Builder.newBuilder()
+                .setGrids(botStat.getGrids())
+                .setLow(botStat.getLow())
+                .setHigh(botStat.getHigh())
+                .setAccount(account)
+                .setSymbol(symbol)
+                .setInvest(botStat.getInvest())
+                .buildLinkedGrids();
+        grids.resetIndex(botStat.getOrder());
+        this.grids.print();
+        this.worker = new ConditionBotWorker(name + "-worker");
+        this.dealGridInfo = new DealGridInfo(botStat.buyGrids.stream()
+                .map(v -> new DealGridInfo.DealGrid(grids.indexOf(v.order), v.price, v.quantity))
+                .collect(Collectors.toList()));
+        // 添加监听器
+        rts.addListener(symbol, this);
     }
 
     private void check(Object o, String field) {
@@ -88,6 +132,11 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
     public void stop() {
         // 停止的时候是否卖出全部持仓？
         status = BotStatusEnum.STOP;
+    }
+
+    @Override
+    public BotStatusEnum getBotStatus() {
+        return status;
     }
 
     @Override
@@ -180,6 +229,7 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
             investInfo.sellSome(sellAmount, executedQty, income);
             ir.updateIndex();
             dealGridInfo.onSell(packed);
+            storeService.update(this);
             log.info("bot {} {} 卖出成功! 交易数量 {}  {}", name, symbol, executedQty, investInfo.getInfo());
         } else {
             log.info("bot {} {} 卖出失败! 订单状态 {} ", name, symbol, order.getResponse().getStatus());
@@ -210,6 +260,7 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
             // 应当使用 executedQty 买入时会以当前币种扣除手续费，例如交易 43.25 ETH 手续费为 0.1 实际到账 43.15 ETH
             dealGridInfo.onBuy(ir.newIndex, price, executedQty);
             ir.updateIndex();
+            storeService.update(this);
             log.info("bot {} {} 买入成功! 原始数量 {} 到账数量 {}  {}", name, symbol, origQty, executedQty, investInfo.getInfo());
         } else {
             log.info("bot {} {} 买入失败! 订单状态 {}", name, symbol, order.getResponse().getStatus());
@@ -239,5 +290,32 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
     private void resetStates() {
         this.isTriedUseBestPriceTrade = false;
     }
+
+
+    @Override
+    public BotStat getBotStat() {
+        return BotStat.builder()
+                .name(name)
+                .symbol(symbol)
+                .status(status)
+                .low(grids.info.low)
+                .high(grids.info.high)
+                .grids(grids.info.grids)
+                .order(grids.getIndex().order)
+                .invest(grids.info.invest)
+                .surplusInvest(investInfo.getInvest())
+                .positQuantity(investInfo.getPositQuantity())
+                .incomeTotal(investInfo.getIncomeTotal())
+                .buyGrids(dealGridInfo.getDealGridList().stream().map(v -> {
+                            BotStat.BuyGrid buyGrid = new BotStat.BuyGrid();
+                            buyGrid.order = v.grid.order();
+                            buyGrid.price = v.price;
+                            buyGrid.quantity = v.quantity;
+                            return buyGrid;
+                        }).collect(Collectors.toList())
+                )
+                .build();
+    }
+
 
 }

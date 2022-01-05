@@ -2,7 +2,6 @@ package com.sidemesh.binance.bot;
 
 import com.google.common.collect.Lists;
 import com.sidemesh.binance.bot.grid.OrderedGird;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.math.BigDecimal;
@@ -12,7 +11,16 @@ import java.util.stream.Collectors;
 
 public class DealGridInfo {
 
-    private final List<DealGrid> dealGridList = Lists.newLinkedList();
+    @Getter
+    private final List<DealGrid> dealGridList;
+
+    public DealGridInfo() {
+        dealGridList = Lists.newLinkedList();
+    }
+
+    public DealGridInfo(List<DealGrid> dealGridList) {
+        this.dealGridList = dealGridList;
+    }
 
     /**
      * 当买入网格
@@ -70,12 +78,20 @@ public class DealGridInfo {
 
     }
 
-    @AllArgsConstructor
     @Getter
     public static class DealGrid {
         public final OrderedGird grid;
         public final BigDecimal price;
         public final BigDecimal quantity;
+
+        public DealGrid(OrderedGird grid, BigDecimal price, BigDecimal quantity) {
+            if (grid == null) throw new IllegalArgumentException("missing grid");
+            if (price == null) throw new IllegalArgumentException("missing price");
+            if (quantity == null) throw new IllegalArgumentException("missing quantity");
+            this.grid = grid;
+            this.price = price;
+            this.quantity = quantity;
+        }
 
         public BigDecimal totalPrice() {
             return price.multiply(quantity);

@@ -4,12 +4,16 @@ import com.sidemesh.binance.bot.api.BinanceAPIv3;
 import com.sidemesh.binance.bot.dto.CreateBotRequest;
 import com.sidemesh.binance.bot.proxy.ClashProxy;
 import com.sidemesh.binance.bot.proxy.ProxyInfo;
+import com.sidemesh.binance.bot.store.StoreService;
+import com.sidemesh.binance.bot.store.StoreServiceJsonFileImpl;
 import com.sidemesh.binance.bot.websocket.RealtimeStreamWebSocketImpl;
 import io.javalin.Javalin;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 import java.time.Duration;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class Application {
@@ -25,6 +29,16 @@ public class Application {
 
         // bot hub
         final var botHub = new BotHub();
+
+        // load file to botHub
+        StoreService storeService = new StoreServiceJsonFileImpl();
+        storeService.list().stream()
+                .map(stat -> {
+                    var apiClient = new BinanceAPIv3(proxy != null ? proxy.toProxy() : null,
+                            Duration.ofSeconds(2), Duration.ofSeconds(2));
+                    return new SimpleGridBot(stat, apiClient, Account.fromEnv(), rts);
+                })
+                .forEach(botHub::add);
 
         Javalin app = Javalin.create(cfg -> {
             cfg.showJavalinBanner = true;
@@ -52,7 +66,6 @@ public class Application {
                         req.getHighPrice(),
                         req.getGrids(),
                         rts);
-                bot.run();
                 botHub.add(bot);
             } catch (IllegalArgumentException e) {
                 ctx.status(400);
@@ -61,6 +74,46 @@ public class Application {
             }
 
             ctx.result("created!");
+        });
+
+        // 机器人列表
+        app.get("/api/v1/bots", ctx -> {
+            List<BotStat> botStats = botHub.all().stream()
+                    .map(Bot::getBotStat)
+                    .collect(Collectors.toList());
+            ctx.json(botStats);
+        });
+
+        // 启动机器人
+        app.put("/api/v1/bots/{name}/start", ctx -> {
+            String botName = ctx.pathParam("name");
+            botHub.get(botName)
+                    .ifPresentOrElse(bot -> {
+                        bot.run();
+                        ctx.result("start!");
+                    }, () -> ctx.status(404));
+        });
+
+        // 停止机器人
+        app.put("/api/v1/bots/{name}/stop", ctx -> {
+            String botName = ctx.pathParam("name");
+            botHub.get(botName)
+                    .ifPresentOrElse(bot -> {
+                        bot.stop();
+                        ctx.result("stop!");
+                    }, () -> ctx.status(404));
+        });
+
+        // 删除机器人
+        app.delete("/api/v1/bots/{name}", ctx -> {
+            String botName = ctx.pathParam("name");
+            botHub.get(botName)
+                    .ifPresentOrElse(bot -> {
+                        botHub.remove(botName);
+                        // 删除文件
+                        storeService.delete(botName);
+                        ctx.result("remove!");
+                    }, () -> ctx.status(404));
         });
     }
 

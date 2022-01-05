@@ -1,30 +1,33 @@
 package com.sidemesh.binance.bot;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 public class BotHub {
 
-    private static final Set<Bot> bots = new HashSet<>();
+    private static final Map<String, Bot> botMap = new HashMap<>();
 
     public BotHub add(Bot bot) {
-        bots.add(bot);
+        if (get(bot.name()).isPresent()) {
+            throw new IllegalArgumentException("bot exist botName=" + bot.name());
+        }
+        botMap.put(bot.name(), bot);
         return this;
     }
 
     public Collection<Bot> all() {
-        return bots;
+        return botMap.values();
     }
 
     public Optional<Bot> get(String name) {
-        for (var b : bots) {
-            if (b.name().equals(name)) {
-                return Optional.of(b);
-            }
-        }
-        return Optional.empty();
+        return Optional.ofNullable(botMap.get(name));
+    }
+
+    public Bot remove(String name) {
+        get(name).ifPresent(Bot::stop);
+        return botMap.remove(name);
     }
 
 }

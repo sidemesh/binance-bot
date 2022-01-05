@@ -23,4 +23,15 @@ public interface Bot {
      */
     void stop();
 
+    /**
+     * 机器人状态
+     * @return
+     */
+    BotStatusEnum getBotStatus();
+
+    /**
+     * 机器人数据
+     * @return
+     */
+    BotStat getBotStat();
 }
