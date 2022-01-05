@@ -48,7 +48,10 @@ public class OrderResponse {
     }
 
     @Data
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Fill {
+        // 交易 ID
+        private long tradeId;
         // 交易的价格
         private BigDecimal price;
         // 交易的数量
