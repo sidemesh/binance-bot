@@ -160,7 +160,7 @@ public class SimpleGridBot extends BaseBot implements RealtimeStreamListener {
     @Override
     public void update(RealtimeStreamData data) {
         if (isRunning()) {
-            System.out.println(data);
+            // System.out.println(data);
             if (!worker.submit(() -> onPriceUpdate(data))) {
                 log.info("{} bot worker busy, abandon event {} price {}", name, data.id(), data.price());
             }

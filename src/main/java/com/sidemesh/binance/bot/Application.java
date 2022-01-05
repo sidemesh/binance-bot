@@ -47,7 +47,7 @@ public class Application {
         app.put("/api/v1/bots", ctx -> {
             var req = ctx.bodyValidator(CreateBotRequest.class).get();
             try {
-                var bot =createBot(
+                var bot= createBot(
                         binanceApi,
                         req.getSymbol(),
                         req.getName(),
