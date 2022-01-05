@@ -1,5 +1,6 @@
 package com.sidemesh.binance.bot;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sidemesh.binance.bot.json.JSON;
 import lombok.*;
 
@@ -11,6 +12,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class BotStat extends JSON.ToJson {
     // 名称
     public String name;
@@ -37,11 +39,11 @@ public class BotStat extends JSON.ToJson {
     // 交易数据
     public List<BuyGrid> buyGrids;
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class BuyGrid {
         public int order;
         public BigDecimal price;
         public BigDecimal quantity;
-
     }
 
 }

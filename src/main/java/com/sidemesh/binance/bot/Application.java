@@ -8,6 +8,7 @@ import com.sidemesh.binance.bot.store.StoreService;
 import com.sidemesh.binance.bot.store.StoreServiceJsonFileImpl;
 import com.sidemesh.binance.bot.websocket.RealtimeStreamWebSocketImpl;
 import io.javalin.Javalin;
+import io.sentry.Sentry;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
@@ -17,6 +18,13 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class Application {
+
+    static {
+        Sentry.init(options -> {
+            options.setDsn("https://aafb5a8660a545f9913858d20a59c4bd@o1098944.ingest.sentry.io/6123318");
+            options.setTracesSampleRate(1.0);
+        });
+    }
 
     public static void main(String[] args) {
         log.info("binance-bot v0.0.1");
@@ -85,7 +93,7 @@ public class Application {
         });
 
         // 启动机器人
-        app.put("/api/v1/bots/{name}/start", ctx -> {
+        app.post("/api/v1/bots/{name}/start", ctx -> {
             String botName = ctx.pathParam("name");
             botHub.get(botName)
                     .ifPresentOrElse(bot -> {
@@ -95,7 +103,7 @@ public class Application {
         });
 
         // 停止机器人
-        app.put("/api/v1/bots/{name}/stop", ctx -> {
+        app.post("/api/v1/bots/{name}/stop", ctx -> {
             String botName = ctx.pathParam("name");
             botHub.get(botName)
                     .ifPresentOrElse(bot -> {
