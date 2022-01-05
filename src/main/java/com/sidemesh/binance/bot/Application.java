@@ -44,7 +44,7 @@ public class Application {
 
         // 启动 API 服务
         Javalin app = Javalin.create(cfg -> cfg.showJavalinBanner = true).start(8080);
-        // 创建机器人
+        // 创建并启动机器人
         app.put("/api/v1/bots", ctx -> {
             var req = ctx.bodyValidator(CreateBotRequest.class).get();
             try {
@@ -59,6 +59,7 @@ public class Application {
                         rts
                 );
                 botHub.add(bot);
+                bot.start();
                 ctx.result("created!");
             } catch (IllegalArgumentException e) {
                 ctx.status(400);
