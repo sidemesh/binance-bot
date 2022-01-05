@@ -86,6 +86,9 @@ public class SimpleGridBot extends BaseBot implements RealtimeStreamListener {
                          Account account,
                          RealtimeStream rts) {
         super(botStat.getName(), botStat.getSymbol());
+
+        log.info("recover bot [{}] from bot stat", botStat.name);
+
         check(botStat, "botStat");
         check(account, "account");
 
