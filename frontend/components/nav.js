@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import {
   Button,
   Drawer,
@@ -11,35 +11,14 @@ import {
   Select,
 } from "antd";
 import axios from "axios";
+import { createBot } from "../api";
 
 const { Option } = Select;
 
 // https://api.binance.com/api/v3/klines?symbol=BICOUSDT&interval=1h
 const CreateBootDrawer = (props) => {
   const [symbols, setSymbols] = useState([]);
-
-  const chartRef = useRef();
-
-  const onSymbolChange = async (symbol) => {
-    if (symbol) {
-      const { data } = await axios.get(
-        `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=1h`
-      );
-
-      const converted = data.map((it) => {
-        return {
-          close: it[4],
-          high: it[2],
-          low: it[3],
-          open: it[1],
-          timestamp: it[0],
-          volume: it[5],
-        };
-      });
-
-      console.log(converted);
-    }
-  };
+  const [isSubmitLoading, setIsSubmitLoading] = useState(false);
 
   useEffect(async () => {
     const res = await axios.get(
@@ -52,6 +31,16 @@ const CreateBootDrawer = (props) => {
     setSymbols(symbols);
   }, []);
 
+  const onFinish = async (values) => {
+    try {
+      setIsSubmitLoading(true);
+      const resp = await createBot(values);
+      console.log(resp);
+    } finally {
+      setIsSubmitLoading(false);
+    }
+  };
+
   return (
     <Drawer
       title="创建机器人🤖"
@@ -61,13 +50,15 @@ const CreateBootDrawer = (props) => {
       extra={
         <Space>
           <Button onClick={props.onClose}>取消</Button>
-          <Button onClick={props.onClose} type="primary">
-            创建
-          </Button>
         </Space>
       }
     >
-      <Form layout="vertical">
+      <Form
+        autoComplete="off"
+        name="create-bot"
+        onFinish={onFinish}
+        layout="vertical"
+      >
         <Row>
           <Col span={24}>
             <Form.Item
@@ -91,7 +82,6 @@ const CreateBootDrawer = (props) => {
                 style={{ width: "100%" }}
                 placeholder="选择交易对"
                 optionFilterProp="children"
-                onChange={onSymbolChange}
               >
                 {symbols.map((item) => {
                   return (
@@ -144,8 +134,20 @@ const CreateBootDrawer = (props) => {
             </Form.Item>
           </Col>
         </Row>
+        <Row>
+          <Col>
+            <Form.Item>
+              <Button
+                type="primary"
+                htmlType="submit"
+                loading={isSubmitLoading}
+              >
+                创建
+              </Button>
+            </Form.Item>
+          </Col>
+        </Row>
       </Form>
-      <div className="mt-4" id="chart-root" ref={chartRef}></div>
     </Drawer>
   );
 };

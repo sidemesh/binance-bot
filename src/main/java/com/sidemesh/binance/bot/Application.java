@@ -24,7 +24,6 @@ public class Application {
         final var account = Account.fromEnv();
         // bot hub
         final var botHub = new BotHub();
-
         // 启动实时流
         rts.start();
         // 从文件中加载 bot
@@ -32,10 +31,14 @@ public class Application {
         storeService.list().stream()
                 .map(stat -> new SimpleGridBot(stat, binanceApi, account, rts))
                 .forEach(botHub::add);
-
         // 启动 API 服务
-        Javalin app = Javalin.create(cfg -> cfg.showJavalinBanner = true).start(8080);
-        // 创建并启动机器人
+        Javalin app = Javalin.create(cfg -> {
+            cfg.showJavalinBanner = true;
+            cfg.enableCorsForAllOrigins();
+            // cfg.enableCorsForOrigin("http://localhost:3000", "https://binance-bot.sidemesh.com");
+        }).start(8080);
+
+        // 创建机器人
         app.put("/api/v1/bots", ctx -> {
             var req = ctx.bodyValidator(CreateBotRequest.class).get();
             try {
