@@ -254,14 +254,13 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
         if (order.isDeal()) {
             // OrderRequest request = order.getRequest();
             final var resp = order.getResponse();
-            final var executedQty = resp.getExecutedQty();
             final var origQty = resp.getOrigQty();
-            investInfo.buySome(tq.amount, executedQty);
-            // 应当使用 executedQty 买入时会以当前币种扣除手续费，例如交易 43.25 ETH 手续费为 0.1 实际到账 43.15 ETH
-            dealGridInfo.onBuy(ir.newIndex, price, executedQty);
+            final var receiveQty = resp.receivedQty();
+            investInfo.buySome(tq.amount, receiveQty);
+            dealGridInfo.onBuy(ir.newIndex, price, receiveQty);
             ir.updateIndex();
             storeService.update(this);
-            log.info("bot {} {} 买入成功! 原始数量 {} 到账数量 {}  {}", name, symbol, origQty, executedQty, investInfo.getInfo());
+            log.info("bot {} {} 买入成功! 原始数量 {} 到账数量 {}  {}", name, symbol, origQty, receiveQty, investInfo.getInfo());
         } else {
             log.info("bot {} {} 买入失败! 订单状态 {}", name, symbol, order.getResponse().getStatus());
             // 尝试使用最优价格进行交易

@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Objects;
 
 @Data
 @NoArgsConstructor
@@ -27,9 +29,36 @@ public class OrderResponse {
     private OrderRequest.TimeInForce timeInForce;
     private OrderRequest.Type type;
     private OrderRequest.Side side;
+    private List<Fill> fills;
 
     public boolean isSuccess() {
         return Status.FILLED == this.status;
+    }
+
+    // 最终获得
+    public BigDecimal receivedQty() {
+        // 手续费的币种
+        // 1. 如果存在 bnb 使用 bnb
+        // 2. 使用当前币种
+        final var totalServiceCharge = fills.stream()
+                        .filter(it -> !it.commissionAsset.equals("BNB"))
+                        .map(it -> it.commission)
+                        .reduce(BigDecimal.ZERO, BigDecimal::add);
+        return executedQty.subtract(totalServiceCharge);
+    }
+
+    @Data
+    public static class Fill {
+        // 交易的价格
+        private BigDecimal price;
+        // 交易的数量
+        private BigDecimal qty;
+        // 手续费金额
+        private BigDecimal commission;
+        // 手续费的币种
+        // 1. 如果存在 bnb 使用 bnb
+        // 2. 使用当前币种
+        private String commissionAsset;
     }
 
     public enum Status {
@@ -73,6 +102,7 @@ public class OrderResponse {
             }
             throw new IllegalArgumentException("input: [" + input + "] can't deserialization");
         }
+
     }
 
 }
