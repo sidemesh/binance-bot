@@ -93,7 +93,7 @@ public class Application {
         });
 
         // 启动机器人
-        app.put("/api/v1/bots/{name}/start", ctx -> {
+        app.post("/api/v1/bots/{name}/start", ctx -> {
             String botName = ctx.pathParam("name");
             botHub.get(botName)
                     .ifPresentOrElse(bot -> {
@@ -103,7 +103,7 @@ public class Application {
         });
 
         // 停止机器人
-        app.put("/api/v1/bots/{name}/stop", ctx -> {
+        app.post("/api/v1/bots/{name}/stop", ctx -> {
             String botName = ctx.pathParam("name");
             botHub.get(botName)
                     .ifPresentOrElse(bot -> {

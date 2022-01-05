@@ -1,5 +1,6 @@
 package com.sidemesh.binance.bot;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sidemesh.binance.bot.json.JSON;
 import lombok.*;
 
@@ -11,6 +12,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class BotStat extends JSON.ToJson {
     // 名称
     public String name;

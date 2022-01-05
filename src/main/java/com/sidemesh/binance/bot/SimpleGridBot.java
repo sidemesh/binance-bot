@@ -82,9 +82,6 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
     /**
      * 通过持久化的数据 创建bot
      * @param botStat 数据
-     * @param binanceAPI
-     * @param account
-     * @param rts
      */
     public SimpleGridBot(BotStat botStat,
                          BinanceAPI binanceAPI,
@@ -108,9 +105,13 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
         grids.resetIndex(botStat.getOrder());
         this.grids.print();
         this.worker = new ConditionBotWorker(name + "-worker");
-        this.dealGridInfo = new DealGridInfo(botStat.buyGrids.stream()
-                .map(v -> new DealGridInfo.DealGrid(grids.indexOf(v.order), v.price, v.quantity))
-                .collect(Collectors.toList()));
+        if (botStat.buyGrids != null) {
+            this.dealGridInfo = new DealGridInfo(botStat.buyGrids.stream()
+                    .map(v -> new DealGridInfo.DealGrid(grids.indexOf(v.order), v.price, v.quantity))
+                    .collect(Collectors.toList()));
+        } else {
+            this.dealGridInfo = new DealGridInfo();
+        }
         // 添加监听器
         rts.addListener(symbol, this);
     }
