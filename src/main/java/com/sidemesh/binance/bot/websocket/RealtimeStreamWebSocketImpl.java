@@ -1,25 +1,23 @@
 package com.sidemesh.binance.bot.websocket;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import com.sidemesh.binance.bot.ApplicationOptions;
 import com.sidemesh.binance.bot.RealtimeStream;
 import com.sidemesh.binance.bot.RealtimeStreamListener;
 import com.sidemesh.binance.bot.Symbol;
 import com.sidemesh.binance.bot.websocket.event.BookTickerMessage;
-import com.sidemesh.binance.bot.proxy.ProxyInfo;
 import com.sidemesh.binance.bot.websocket.event.TradeMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
+import java.net.Proxy;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+@Slf4j
 public class RealtimeStreamWebSocketImpl implements RealtimeStream {
-
-    private static final Logger log = LoggerFactory.getLogger(RealtimeStreamWebSocketImpl.class);
-
     // 代理信息
-    private final ProxyInfo proxyInfo;
+    private final Proxy proxy;
     // 监听者
     private final Map<Symbol, List<RealtimeStreamListener>> symbolListenersMap = new HashMap<>();
     // close flag
@@ -27,16 +25,12 @@ public class RealtimeStreamWebSocketImpl implements RealtimeStream {
     // 当前 ws 链接
     private BinanceWebSocketClient bwsc;
 
-    public RealtimeStreamWebSocketImpl(ProxyInfo proxyInfo) {
-        this.proxyInfo = proxyInfo;
-    }
-
     public RealtimeStreamWebSocketImpl() {
-        this(null);
+        this.proxy = ApplicationOptions.INSTANCE.getProxy();
     }
 
     @Override
-    public void run() {
+    public void start() {
         connect();
     }
 
@@ -56,7 +50,7 @@ public class RealtimeStreamWebSocketImpl implements RealtimeStream {
         final var pool =
                 Executors.newFixedThreadPool(2, new ThreadFactoryBuilder().setNameFormat("rts-ws-pool-%d").build());
         return bwsc = new BinanceWebSocketClient(
-                proxyInfo,
+                proxy,
                 // on connect
                 (client) -> client.subscribe(symbolListenersMap.keySet()),
                 // on message
@@ -139,4 +133,17 @@ public class RealtimeStreamWebSocketImpl implements RealtimeStream {
         }
     }
 
+    @Override
+    public void unListen(Symbol symbol, RealtimeStreamListener listener) {
+        final var listeners = symbolListenersMap.get(symbol);
+        if (listeners != null) {
+            synchronized (this) {
+                if (listeners.remove(listener)) {
+                    // 不存在监听者则移除订阅
+                    if (listeners.isEmpty()) bwsc.unsubscribe(symbol);
+                    symbolListenersMap.put(symbol, listeners);
+                }
+            }
+        }
+    }
 }

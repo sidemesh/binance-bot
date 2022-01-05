@@ -2,8 +2,9 @@ package com.sidemesh.binance.bot.websocket;
 
 import com.google.common.collect.Sets;
 import com.sidemesh.binance.bot.Symbol;
-import com.sidemesh.binance.bot.proxy.ProxyInfo;
+import com.sidemesh.binance.bot.json.JSON;
 import com.sidemesh.binance.bot.websocket.message.SubscribeMessage;
+import com.sidemesh.binance.bot.websocket.message.UnsubscribeMessage;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -12,6 +13,7 @@ import okhttp3.WebSocket;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.net.Proxy;
 import java.time.Duration;
 import java.util.Set;
 import java.util.UUID;
@@ -37,12 +39,11 @@ class BinanceWebSocketClient extends okhttp3.WebSocketListener {
     private final Consumer<String> onClose;
     private final Consumer<Throwable> onError;
 
-    public BinanceWebSocketClient(ProxyInfo proxyInfo,
+    public BinanceWebSocketClient(Proxy proxy,
                                   Consumer<BinanceWebSocketClient> onConnected,
                                   Consumer<String> onMessage,
                                   Consumer<String> onClose,
-                                  Consumer<Throwable> onError
-    ) {
+                                  Consumer<Throwable> onError) {
         // 随机一个UUID作为当前客户端唯一标识
         this.id = UUID.randomUUID().toString();
         // 原子自增的消息ID
@@ -60,7 +61,7 @@ class BinanceWebSocketClient extends okhttp3.WebSocketListener {
                         .connectTimeout(Duration.ofSeconds(10))
                         .pingInterval(Duration.ofSeconds(1))
                         // 可选的代理
-                        .proxy(null != proxyInfo ? proxyInfo.toProxy() : null);
+                        .proxy(proxy);
 
         var request = new Request.Builder()
                 .url(BINANCE_WSS + "/" + id)
@@ -78,11 +79,27 @@ class BinanceWebSocketClient extends okhttp3.WebSocketListener {
     public void subscribe(Set<Symbol> symbols) {
         if (!symbols.isEmpty()) {
             log.info("subscribe symbols {}", symbols);
-            var msg = new SubscribeMessage(symbols, messageId.addAndGet(1L));
-            ws.send(msg.toJson());
+            send(new SubscribeMessage(symbols, messageId.addAndGet(1L)));
         } else {
             log.info("skip subscribe empty symbols {}", symbols);
         }
+    }
+
+    public void unsubscribe(Symbol symbol) {
+        unsubscribe(Sets.immutableEnumSet(symbol));
+    }
+
+    public void unsubscribe(Set<Symbol> symbols) {
+        if (!symbols.isEmpty()) {
+            log.info("unsubscribe symbols {}", symbols);
+            send(new UnsubscribeMessage(symbols, messageId.addAndGet(1L)));
+        } else {
+            log.info("skip unsubscribe empty symbols {}", symbols);
+        }
+    }
+
+    private void send(JSON.ToJson message) {
+        ws.send(message.toJson());
     }
 
     /**

@@ -10,9 +10,7 @@ public class BotHub {
     private static final Map<String, Bot> botMap = new HashMap<>();
 
     public BotHub add(Bot bot) {
-        if (get(bot.name()).isPresent()) {
-            throw new IllegalArgumentException("bot exist botName=" + bot.name());
-        }
+        if (get(bot.name()).isPresent()) throw new IllegalArgumentException("bot exist botName=" + bot.name());
         botMap.put(bot.name(), bot);
         return this;
     }

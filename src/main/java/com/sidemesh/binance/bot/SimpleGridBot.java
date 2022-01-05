@@ -17,12 +17,14 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListener {
-    // 网格
-    private final LinkedGrids grids;
+    // 实时数据流
+    private final RealtimeStream rts;
     // 币安 API 接口
     private final BinanceAPI binanceAPI;
     // 交易所账号
     private final Account account;
+    // 网格
+    private final LinkedGrids grids;
     // bot 运行状态 flag
     private volatile BotStatusEnum status = BotStatusEnum.STOP;
     // bot执行线程
@@ -57,6 +59,7 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
         check(symbol, "symbol");
         check(account, "account");
 
+        this.rts = rts;
         this.account = account;
         this.binanceAPI = binanceAPI;
         this.investInfo = new InvestInfo(invest, BigDecimal.ZERO);
@@ -73,8 +76,6 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
         // 目测性能好一些，需要 benchmark
         // this.worker = new BlockingQueueBotWorker(name + "-worker");
         this.dealGridInfo = new DealGridInfo();
-        // 添加监听器
-        rts.addListener(symbol, this);
         // 持久化
         storeService.save(this);
     }
@@ -91,6 +92,7 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
         check(botStat, "botStat");
         check(account, "account");
 
+        this.rts = rts;
         this.account = account;
         this.binanceAPI = binanceAPI;
         this.investInfo = new InvestInfo(botStat.getIncomeTotal(), botStat.getSurplusInvest(), botStat.getPositQuantity());
@@ -112,8 +114,6 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
         } else {
             this.dealGridInfo = new DealGridInfo();
         }
-        // 添加监听器
-        rts.addListener(symbol, this);
     }
 
     private void check(Object o, String field) {
@@ -121,8 +121,17 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
     }
 
     @Override
-    public void run() {
-        status = BotStatusEnum.RUNNING;
+    public void start() {
+        if (isRunning()) {
+            log.warn("bot already running!");
+        } else {
+            // 启动 worker
+            worker.start();
+            // 添加监听器
+            rts.addListener(symbol, this);
+            // 设置 bot 状态
+            status = BotStatusEnum.RUNNING;
+        }
     }
 
     private boolean isRunning() {
@@ -131,7 +140,8 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
 
     @Override
     public void stop() {
-        // 停止的时候是否卖出全部持仓？
+        rts.unListen(symbol, this);
+        worker.stop();
         status = BotStatusEnum.STOP;
     }
 
