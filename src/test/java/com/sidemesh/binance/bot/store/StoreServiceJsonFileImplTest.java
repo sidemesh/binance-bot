@@ -16,13 +16,17 @@ class StoreServiceJsonFileImplTest {
 
     final RealtimeStream rtl = new RealtimeStream() {
         @Override
-        public void run() {
+        public void start() {
         }
         @Override
         public void stop() {
         }
         @Override
         public void addListener(Symbol symbol, RealtimeStreamListener listener) {
+        }
+        @Override
+        public void unListen(Symbol symbol, RealtimeStreamListener listener) {
+
         }
     };
         @Test
@@ -42,7 +46,7 @@ class StoreServiceJsonFileImplTest {
                 rtl
         );
         // 等待文件 异步创建完成
-        TimeUnit.SECONDS.sleep(1);
+        TimeUnit.MILLISECONDS.sleep(500);
         List<BotStat> list = storeService.list();
         boolean b = list.stream().anyMatch(v -> botName.equals(v.getName()));
         Assertions.assertTrue(b);
