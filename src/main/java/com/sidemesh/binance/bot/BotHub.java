@@ -24,7 +24,11 @@ public class BotHub {
     }
 
     public Bot remove(String name) {
-        get(name).ifPresent(Bot::stop);
+        get(name).ifPresent(bot -> {
+            if (bot.isRunning()) {
+                bot.stop();
+            }
+        });
         return botMap.remove(name);
     }
 

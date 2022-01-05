@@ -10,7 +10,6 @@ import io.sentry.Sentry;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -69,10 +68,10 @@ public class Application {
 
         // 机器人列表
         app.get("/api/v1/bots", ctx -> {
-            List<BotStat> botStats = botHub.all().stream()
-                    .map(Bot::getBotStat)
+            var stats = botHub.all().stream()
+                    .map(Bot::stat)
                     .collect(Collectors.toList());
-            ctx.json(botStats);
+            ctx.json(stats);
         });
 
         // 启动机器人

@@ -48,7 +48,7 @@ public class RealtimeStreamBackTestDataImpl implements RealtimeStream {
     }
 
     @Override
-    public void unListen(Symbol symbol, RealtimeStreamListener listener) {
+    public void removeListener(Symbol symbol, RealtimeStreamListener listener) {
         // ignore
     }
 

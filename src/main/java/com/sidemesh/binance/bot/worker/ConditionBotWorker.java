@@ -39,18 +39,27 @@ public class ConditionBotWorker extends BaseWorker {
             try {
                 consumerLock.lock();
                 consumerLockCondition.await();
+                // 优雅停机
+                if (isStop) return;
                 final var t = task;
                 task = null;
-                if (t != null) {
-                    t.run();
-                }
+                if (t != null) t.run();
             } catch (Exception e) {
                 e.printStackTrace();
-                // ignore
             } finally {
                 consumerLock.unlock();
             }
         }
     }
 
+    // 优雅停止
+    @Override
+    void beforeDestroyThread() {
+        try {
+            consumerLock.lock();
+            consumerLockCondition.signalAll();
+        } finally {
+            consumerLock.unlock();
+        }
+    }
 }

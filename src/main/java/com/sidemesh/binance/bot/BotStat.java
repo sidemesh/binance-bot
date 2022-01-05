@@ -19,7 +19,7 @@ public class BotStat extends JSON.ToJson {
     // 币对
     public Symbol symbol;
     // 状态
-    public BotStatusEnum status;
+    public BotStatus status;
     // 网格低位
     public BigDecimal low;
     // 网格高位

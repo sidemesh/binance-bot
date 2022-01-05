@@ -21,14 +21,23 @@ public class StoreServiceJsonFileImpl implements StoreService {
 
     private static final ExecutorService pool = Executors.newSingleThreadExecutor();
 
+    public StoreServiceJsonFileImpl() {
+        // if base_path not exist.
+        var f = new File(BASE_PATH);
+        if (!f.exists()) {
+            if (f.mkdirs()) {
+                log.info("created {} dirs.", BASE_PATH);
+            }
+        }
+    }
+
     @Override
     public void save(Bot bot) {
         pool.submit(() -> {
-            BotStat botStat = bot.getBotStat();
+            BotStat botStat = bot.stat();
             File botStatFile = getBotStatFile(botStat.getName());
-            if (botStatFile.exists()) {
-                throw new IllegalStateException("botFile had already created!");
-            }
+            if (botStatFile.exists()) throw new IllegalStateException("botFile had already created!");
+
             try {
                 createDirIfNotExist(botStatFile);
                 botStat.setStatus(null); // 不持久化状态
@@ -42,7 +51,7 @@ public class StoreServiceJsonFileImpl implements StoreService {
     @Override
     public void update(Bot bot) {
         pool.submit(() -> {
-            BotStat botStat = bot.getBotStat();
+            BotStat botStat = bot.stat();
             File botStatFile = getBotStatFile(botStat.getName());
             // 如果bot存在
             if (botStatFile.exists()) {

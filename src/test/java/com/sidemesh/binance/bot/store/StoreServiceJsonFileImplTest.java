@@ -25,7 +25,7 @@ class StoreServiceJsonFileImplTest {
         public void addListener(Symbol symbol, RealtimeStreamListener listener) {
         }
         @Override
-        public void unListen(Symbol symbol, RealtimeStreamListener listener) {
+        public void removeListener(Symbol symbol, RealtimeStreamListener listener) {
 
         }
     };

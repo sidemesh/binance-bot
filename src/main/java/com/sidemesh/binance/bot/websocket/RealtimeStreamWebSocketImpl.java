@@ -134,12 +134,12 @@ public class RealtimeStreamWebSocketImpl implements RealtimeStream {
     }
 
     @Override
-    public void unListen(Symbol symbol, RealtimeStreamListener listener) {
+    public void removeListener(Symbol symbol, RealtimeStreamListener listener) {
         final var listeners = symbolListenersMap.get(symbol);
-        if (listeners != null) {
+        if (listeners != null && !listeners.isEmpty()) {
             synchronized (this) {
                 if (listeners.remove(listener)) {
-                    // 不存在监听者则移除订阅
+                    // listeners 为空移除订阅
                     if (listeners.isEmpty()) bwsc.unsubscribe(symbol);
                     symbolListenersMap.put(symbol, listeners);
                 }

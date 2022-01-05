@@ -26,10 +26,15 @@ public interface Bot {
     /**
      * 机器人状态
      */
-    BotStatusEnum getBotStatus();
+    BotStatus status();
+
+    /**
+     * 是否在运行
+     */
+    boolean isRunning();
 
     /**
      * 机器人数据
      */
-    BotStat getBotStat();
+    BotStat stat();
 }

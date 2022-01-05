@@ -177,9 +177,7 @@ public class LinkedGrids {
     }
 
     /**
-     * 根据Order 获取Node
-     * @param order
-     * @return
+     * 根据 Order 获取Node
      */
     public Node indexOf(int order) {
         Node node = head;
