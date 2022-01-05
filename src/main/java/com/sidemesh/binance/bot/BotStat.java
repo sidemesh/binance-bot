@@ -39,11 +39,11 @@ public class BotStat extends JSON.ToJson {
     // 交易数据
     public List<BuyGrid> buyGrids;
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class BuyGrid {
         public int order;
         public BigDecimal price;
         public BigDecimal quantity;
-
     }
 
 }
