@@ -1,10 +1,7 @@
 package com.sidemesh.binance.bot.api;
 
-import com.sidemesh.binance.bot.Order;
+import com.sidemesh.binance.bot.*;
 import com.sidemesh.binance.bot.json.JSON;
-import com.sidemesh.binance.bot.Account;
-import com.sidemesh.binance.bot.OrderRequest;
-import com.sidemesh.binance.bot.OrderResponse;
 import com.sidemesh.binance.bot.order.OrderImpl;
 import com.sidemesh.binance.bot.security.HMACSHA256;
 import com.sidemesh.binance.bot.util.FastApiSelector;
@@ -29,20 +26,31 @@ public class BinanceAPIv3 implements BinanceAPI {
     protected final OkHttpClient cli;
     protected final FastApiSelector fastApiSelector;
     protected volatile String baseApi;
-
     // 请求限流器
     private final RequestLimiter limiter = new RequestLimiter(5);
 
     public BinanceAPIv3(Proxy proxy, Duration timeout, Duration callTimeOut) {
-        final var httpCli =  new OkHttpClient.Builder().connectTimeout(timeout).proxy(proxy).callTimeout(callTimeOut).build();
+        final var httpCli =
+                new OkHttpClient.Builder().connectTimeout(timeout).proxy(proxy).callTimeout(callTimeOut).build();
         final var fas = new FastApiSelector(httpCli, BINANCE_APIS);
 
         this.cli = httpCli;
         this.fastApiSelector = fas;
-        // 立刻获取一个最优地址
         this.baseApi = BINANCE_APIS[0];
-        // this.baseApi = fas.once();
-        // this.fastApiSelector.onUpdate(this::setBaseApi).loop(10, 10);
+    }
+
+    // 单例
+    private static volatile BinanceAPIv3 INSTANCE;
+    public static BinanceAPIv3 getInstance() {
+        if (INSTANCE == null) {
+            synchronized (BinanceAPIv3.class) {
+                if (INSTANCE == null) {
+                    final var timeout = Duration.ofSeconds(2);
+                    INSTANCE = new BinanceAPIv3(ApplicationOptions.INSTANCE.getProxy(), timeout, timeout);
+                }
+            }
+        }
+        return INSTANCE;
     }
 
     /**

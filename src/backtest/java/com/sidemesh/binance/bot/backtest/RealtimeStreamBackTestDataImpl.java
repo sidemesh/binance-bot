@@ -22,7 +22,7 @@ public class RealtimeStreamBackTestDataImpl implements RealtimeStream {
     }
 
     @Override
-    public void run() {
+    public void start() {
         thread = new Thread(() -> {
             try {
                 dataLoader.load(t -> {
@@ -45,6 +45,11 @@ public class RealtimeStreamBackTestDataImpl implements RealtimeStream {
     @Override
     public void addListener(Symbol symbol, RealtimeStreamListener listener) {
         listeners.add(listener);
+    }
+
+    @Override
+    public void removeListener(Symbol symbol, RealtimeStreamListener listener) {
+        // ignore
     }
 
     private void busySleep(long nanos)

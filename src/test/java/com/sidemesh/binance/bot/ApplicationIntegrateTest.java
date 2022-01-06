@@ -53,14 +53,14 @@ public class ApplicationIntegrateTest {
         assertEquals("start!", body);
         BotStat botStat = getBot();
         assertNotNull(botStat);
-        assertEquals(BotStatusEnum.RUNNING, botStat.status);
+        assertEquals(BotStatus.RUNNING, botStat.status);
 
         // 暂停机器人
         body = HttpRequest.put(BASE_URL + "/api/v1/bots/" + BOT_NAME + "/stop/").body();
         assertEquals("stop!", body);
         botStat = getBot();
         assertNotNull(botStat);
-        assertEquals(BotStatusEnum.STOP, botStat.status);
+        assertEquals(BotStatus.STOP, botStat.status);
 
         // 删除机器人
         HttpRequest.delete(BASE_URL + "/api/v1/bots/" + BOT_NAME).body();

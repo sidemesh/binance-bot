@@ -1,5 +1,5 @@
 package com.sidemesh.binance.bot;
 
-public enum BotStatusEnum {
+public enum BotStatus {
     STOP(),RUNNING();
 }

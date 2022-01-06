@@ -5,17 +5,15 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.concurrent.LinkedBlockingQueue;
 
 @Slf4j
-public class BlockingQueueBotWorker implements Runnable, BotWorker {
+public class BlockingQueueBotWorker extends BaseWorker {
 
-    // 当 worker 被销毁后应该丢弃
-    private volatile boolean isDestroy = false;
     // 线程间可见
     private volatile boolean isProcessing = false;
     // 并发队列
     private final LinkedBlockingQueue<Runnable> tasks = new LinkedBlockingQueue<>();
 
     public BlockingQueueBotWorker(String name) {
-        new Thread(this, name).start();
+        super(name);
     }
 
     public boolean submit(Runnable runnable) {
@@ -29,7 +27,7 @@ public class BlockingQueueBotWorker implements Runnable, BotWorker {
 
     @Override
     public void run() {
-        while (!isDestroy) {
+        while (!isStop) {
             try {
                 var task = tasks.take();
                 isProcessing = true;
@@ -40,10 +38,6 @@ public class BlockingQueueBotWorker implements Runnable, BotWorker {
                 isProcessing = false;
             }
         }
-    }
-
-    public void destroy() {
-        isDestroy = true;
     }
 
 }

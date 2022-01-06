@@ -1,25 +1,24 @@
 package com.sidemesh.binance.bot.websocket;
 
+import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import com.sidemesh.binance.bot.ApplicationOptions;
 import com.sidemesh.binance.bot.RealtimeStream;
 import com.sidemesh.binance.bot.RealtimeStreamListener;
 import com.sidemesh.binance.bot.Symbol;
 import com.sidemesh.binance.bot.websocket.event.BookTickerMessage;
-import com.sidemesh.binance.bot.proxy.ProxyInfo;
 import com.sidemesh.binance.bot.websocket.event.TradeMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
+import java.net.Proxy;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+@Slf4j
 public class RealtimeStreamWebSocketImpl implements RealtimeStream {
-
-    private static final Logger log = LoggerFactory.getLogger(RealtimeStreamWebSocketImpl.class);
-
     // 代理信息
-    private final ProxyInfo proxyInfo;
+    private final Proxy proxy;
     // 监听者
     private final Map<Symbol, List<RealtimeStreamListener>> symbolListenersMap = new HashMap<>();
     // close flag
@@ -27,16 +26,12 @@ public class RealtimeStreamWebSocketImpl implements RealtimeStream {
     // 当前 ws 链接
     private BinanceWebSocketClient bwsc;
 
-    public RealtimeStreamWebSocketImpl(ProxyInfo proxyInfo) {
-        this.proxyInfo = proxyInfo;
-    }
-
     public RealtimeStreamWebSocketImpl() {
-        this(null);
+        this.proxy = ApplicationOptions.INSTANCE.getProxy();
     }
 
     @Override
-    public void run() {
+    public void start() {
         connect();
     }
 
@@ -56,7 +51,7 @@ public class RealtimeStreamWebSocketImpl implements RealtimeStream {
         final var pool =
                 Executors.newFixedThreadPool(2, new ThreadFactoryBuilder().setNameFormat("rts-ws-pool-%d").build());
         return bwsc = new BinanceWebSocketClient(
-                proxyInfo,
+                proxy,
                 // on connect
                 (client) -> client.subscribe(symbolListenersMap.keySet()),
                 // on message
@@ -118,17 +113,24 @@ public class RealtimeStreamWebSocketImpl implements RealtimeStream {
     }
 
     @Override
-    public synchronized void addListener(Symbol symbol, RealtimeStreamListener listener) {
-        log.info("add a {} listener", symbol);
+    public synchronized void addListener(final Symbol symbol, final RealtimeStreamListener listener) {
+        log.info("add {} listener {}", symbol, listener);
         // 如果不存在 KEY 则需要订阅
         final var isNeedSubscribe = !symbolListenersMap.containsKey(symbol);
 
-        final var list = symbolListenersMap.computeIfAbsent(symbol, (k) -> {
-            // 新增监听
-            return new ArrayList<>();
-        });
-        list.add(listener);
-        symbolListenersMap.put(symbol, list);
+        // 如果不存在创建 listeners
+        final var listeners =
+                symbolListenersMap.computeIfAbsent(symbol, (k) -> Lists.newLinkedList());
+
+        // 检查是否重复添加
+        if (listeners.contains(listener)) {
+            log.warn("already add listener {}", listener);
+            return;
+        }
+
+        // 添加到集合并回写到 MAP
+        listeners.add(listener);
+        symbolListenersMap.put(symbol, listeners);
 
         // 订阅 symbol
         if (bwsc != null) {
@@ -139,4 +141,22 @@ public class RealtimeStreamWebSocketImpl implements RealtimeStream {
         }
     }
 
+    @Override
+    public void removeListener(final Symbol symbol, final RealtimeStreamListener listener) {
+        final var listeners = symbolListenersMap.get(symbol);
+        if (listeners != null && !listeners.isEmpty()) {
+            synchronized (this) {
+                if (listeners.remove(listener)) {
+                    if (listeners.isEmpty()) {
+                        // listeners 为空移除订阅
+                        bwsc.unsubscribe(symbol);
+                        // 并从 MAP 中移除，否则重新添加订阅 isNeedSubscribe 将不生效。
+                        symbolListenersMap.remove(symbol);
+                    } else {
+                        symbolListenersMap.put(symbol, listeners);
+                    }
+                }
+            }
+        }
+    }
 }

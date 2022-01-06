@@ -9,22 +9,23 @@ import com.sidemesh.binance.bot.store.StoreServiceJsonFileImpl;
 import com.sidemesh.binance.bot.util.TradeUtil;
 import com.sidemesh.binance.bot.websocket.event.BookTickerMessage;
 import com.sidemesh.binance.bot.worker.BotWorker;
-import com.sidemesh.binance.bot.worker.ConditionBotWorker;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListener {
-    // 网格
-    private final LinkedGrids grids;
+public class SimpleGridBot extends BaseBot implements RealtimeStreamListener {
+    // 实时数据流
+    private final RealtimeStream rts;
     // 币安 API 接口
     private final BinanceAPI binanceAPI;
     // 交易所账号
     private final Account account;
+    // 网格
+    private final LinkedGrids grids;
     // bot 运行状态 flag
-    private volatile BotStatusEnum status = BotStatusEnum.STOP;
+    private volatile BotStatus status = BotStatus.STOP;
     // bot执行线程
     private final BotWorker worker;
     // 当前价格 / 当前市场成交价格
@@ -57,6 +58,7 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
         check(symbol, "symbol");
         check(account, "account");
 
+        this.rts = rts;
         this.account = account;
         this.binanceAPI = binanceAPI;
         this.investInfo = new InvestInfo(invest, BigDecimal.ZERO);
@@ -69,12 +71,8 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
                 .setInvest(invest)
                 .buildLinkedGrids();
         this.grids.print();
-        this.worker = new ConditionBotWorker(name + "-worker");
-        // 目测性能好一些，需要 benchmark
-        // this.worker = new BlockingQueueBotWorker(name + "-worker");
+        this.worker = createConditionBotWorker();
         this.dealGridInfo = new DealGridInfo();
-        // 添加监听器
-        rts.addListener(symbol, this);
         // 持久化
         storeService.save(this);
     }
@@ -88,9 +86,13 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
                          Account account,
                          RealtimeStream rts) {
         super(botStat.getName(), botStat.getSymbol());
+
+        log.info("recover bot [{}] from bot stat", botStat.name);
+
         check(botStat, "botStat");
         check(account, "account");
 
+        this.rts = rts;
         this.account = account;
         this.binanceAPI = binanceAPI;
         this.investInfo = new InvestInfo(botStat.getIncomeTotal(), botStat.getSurplusInvest(), botStat.getPositQuantity());
@@ -104,16 +106,16 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
                 .buildLinkedGrids();
         grids.resetIndex(botStat.getOrder());
         this.grids.print();
-        this.worker = new ConditionBotWorker(name + "-worker");
         if (botStat.buyGrids != null) {
-            this.dealGridInfo = new DealGridInfo(botStat.buyGrids.stream()
-                    .map(v -> new DealGridInfo.DealGrid(grids.indexOf(v.order), v.price, v.quantity))
-                    .collect(Collectors.toList()));
+            this.dealGridInfo = new DealGridInfo(
+                    botStat.buyGrids.stream()
+                            .map(v -> new DealGridInfo.DealGrid(grids.indexOf(v.order), v.price, v.quantity))
+                            .collect(Collectors.toList())
+            );
         } else {
             this.dealGridInfo = new DealGridInfo();
         }
-        // 添加监听器
-        rts.addListener(symbol, this);
+        this.worker = createConditionBotWorker();
     }
 
     private void check(Object o, String field) {
@@ -121,28 +123,47 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
     }
 
     @Override
-    public void run() {
-        status = BotStatusEnum.RUNNING;
+    public void start() {
+        if (isRunning()) {
+            log.warn("bot already start!");
+            return;
+        }
+
+        log.warn("start bot {}", name);
+        // 启动 worker
+        worker.start();
+        // 添加监听器
+        rts.addListener(symbol, this);
+        // 设置 bot 状态
+        status = BotStatus.RUNNING;
     }
 
-    private boolean isRunning() {
-        return status == BotStatusEnum.RUNNING;
+    public boolean isRunning() {
+        return status == BotStatus.RUNNING;
     }
 
     @Override
     public void stop() {
-        // 停止的时候是否卖出全部持仓？
-        status = BotStatusEnum.STOP;
+        if (!isRunning()) {
+            log.warn("bot {} already stopped!", name);
+            return;
+        }
+
+        log.info("stop bot {}", name);
+        rts.removeListener(symbol, this);
+        worker.stop();
+        status = BotStatus.STOP;
     }
 
     @Override
-    public BotStatusEnum getBotStatus() {
+    public BotStatus status() {
         return status;
     }
 
     @Override
     public void update(RealtimeStreamData data) {
         if (isRunning()) {
+            // System.out.println(data);
             if (!worker.submit(() -> onPriceUpdate(data))) {
                 log.info("{} bot worker busy, abandon event {} price {}", name, data.id(), data.price());
             }
@@ -181,7 +202,7 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
             } else if (e.isInsufficientBalance()) {
                 log.info("api call balance insufficient!");
             } else {
-                log.error("api call error: " + e.getMessage(), e);
+                log.error("binance api error" , e);
             }
         }
     }
@@ -295,7 +316,7 @@ public class SimpleGridBot extends BaseBot implements Bot, RealtimeStreamListene
 
 
     @Override
-    public BotStat getBotStat() {
+    public BotStat stat() {
         return BotStat.builder()
                 .name(name)
                 .symbol(symbol)

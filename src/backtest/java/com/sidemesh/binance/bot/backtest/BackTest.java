@@ -47,8 +47,8 @@ public class BackTest {
                     return Collections.singletonList(bot);
                 });
 
-        bots.forEach(Bot::run);
-        realtime.run();
+        bots.forEach(Bot::start);
+        realtime.start();
     }
 
 }

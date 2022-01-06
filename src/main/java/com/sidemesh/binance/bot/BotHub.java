@@ -10,9 +10,7 @@ public class BotHub {
     private static final Map<String, Bot> botMap = new HashMap<>();
 
     public BotHub add(Bot bot) {
-        if (get(bot.name()).isPresent()) {
-            throw new IllegalArgumentException("bot exist botName=" + bot.name());
-        }
+        if (get(bot.name()).isPresent()) throw new IllegalArgumentException("bot exist botName=" + bot.name());
         botMap.put(bot.name(), bot);
         return this;
     }
@@ -26,7 +24,11 @@ public class BotHub {
     }
 
     public Bot remove(String name) {
-        get(name).ifPresent(Bot::stop);
+        get(name).ifPresent(bot -> {
+            if (bot.isRunning()) {
+                bot.stop();
+            }
+        });
         return botMap.remove(name);
     }
 

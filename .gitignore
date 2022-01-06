@@ -23,5 +23,10 @@
 hs_err_pid*
 
 .idea/
+*.iml
+
 .binance-bot/
+arthas-output/
 target/
+
+dependency-reduced-pom.xml

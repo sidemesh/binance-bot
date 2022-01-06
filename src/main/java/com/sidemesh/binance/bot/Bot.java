@@ -16,7 +16,7 @@ public interface Bot {
     /**
      * 启动机器人
      */
-    void run();
+    void start();
 
     /**
      * 停止机器人
@@ -25,13 +25,16 @@ public interface Bot {
 
     /**
      * 机器人状态
-     * @return
      */
-    BotStatusEnum getBotStatus();
+    BotStatus status();
+
+    /**
+     * 是否在运行
+     */
+    boolean isRunning();
 
     /**
      * 机器人数据
-     * @return
      */
-    BotStat getBotStat();
+    BotStat stat();
 }

@@ -33,7 +33,7 @@ public class BotWorkerTest {
 
         countDownLatch.await(10, TimeUnit.SECONDS);
 
-        w.destroy();
+        w.stop();
     }
 
 }
