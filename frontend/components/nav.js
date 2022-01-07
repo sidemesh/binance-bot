@@ -9,14 +9,18 @@ import {
   Input,
   InputNumber,
   Select,
+  Tooltip,
 } from "antd";
 import axios from "axios";
-import { createBot } from "../api";
+import useBot from "../hooks/bot";
+import { ReloadOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
 
 // https://api.binance.com/api/v3/klines?symbol=BICOUSDT&interval=1h
 const CreateBootDrawer = (props) => {
+  const { create } = useBot();
+
   const [symbols, setSymbols] = useState([]);
   const [isSubmitLoading, setIsSubmitLoading] = useState(false);
 
@@ -25,17 +29,21 @@ const CreateBootDrawer = (props) => {
       "https://www.binance.com/bapi/asset/v1/public/asset-service/product/get-exchange-info"
     );
     const data = res.data.data;
-    const symbols = data.map((item) => {
-      return item.baseAsset + item.quoteAsset;
-    });
+    const symbols = data.map((item) => `${item.baseAsset}_${item.quoteAsset}`);
     setSymbols(symbols);
   }, []);
 
   const onFinish = async (values) => {
+    // 注意反序列化不允许存在 _
+    values.symbol = values.symbol.replace("_", "");
     try {
       setIsSubmitLoading(true);
-      const resp = await createBot(values);
-      console.log(resp);
+      const res = await create(values);
+      if (res.status != 200) {
+        alert(res.data);
+      } else {
+        props.onClose();
+      }
     } finally {
       setIsSubmitLoading(false);
     }
@@ -97,7 +105,7 @@ const CreateBootDrawer = (props) => {
         <Row gutter="16">
           <Col span={12}>
             <Form.Item
-              name="lowPrice"
+              name="low"
               label="区间下限"
               rules={[{ required: true, message: "请输入区间下限" }]}
             >
@@ -106,7 +114,7 @@ const CreateBootDrawer = (props) => {
           </Col>
           <Col span={12}>
             <Form.Item
-              name="highPrice"
+              name="high"
               label="区间上限"
               rules={[{ required: true, message: "请输入区间上限" }]}
             >
@@ -154,6 +162,7 @@ const CreateBootDrawer = (props) => {
 
 const Nav = () => {
   const [isShowCreateBotDrawer, setIsShowCreateBotDrawer] = useState(false);
+  const { load } = useBot();
 
   const showCreateBotDrawer = () => {
     setIsShowCreateBotDrawer(true);
@@ -164,12 +173,24 @@ const Nav = () => {
   };
 
   return (
-    <div className="w-full flex justify-between">
-      <h1 className="font-medium text-2xl">Binance-bot🤖</h1>
+    <div className="w-full flex justify-between items-center">
+      <div className="flex items-center">
+        <h1 className="font-medium text-2xl d-block m-0 mr-2">Binance-bot🤖</h1>
+        <Tooltip title="刷新">
+          <Button
+            icon={<ReloadOutlined />}
+            onClick={() => load()}
+            shape="circle"
+          ></Button>
+        </Tooltip>
+      </div>
 
-      <Button type="primary" onClick={showCreateBotDrawer}>
-        创建机器人
-      </Button>
+      <div className="flex">
+        <Button type="primary" onClick={showCreateBotDrawer}>
+          创建机器人
+        </Button>
+      </div>
+
       <CreateBootDrawer
         onClose={onCreateBotDrawerClose}
         visible={isShowCreateBotDrawer}

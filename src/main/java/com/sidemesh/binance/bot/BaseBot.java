@@ -24,7 +24,7 @@ abstract class BaseBot implements Bot {
     }
 
     protected BotWorker createConditionBotWorker() {
-        final var workerName = String.format("%s-%s-worker", symbol.STR, name);
+        final var workerName = String.format("%s-%s-worker", symbol.lowerCaseName(), name);
         return new ConditionBotWorker(workerName);
     }
 

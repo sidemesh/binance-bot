@@ -46,9 +46,9 @@ public class Application {
                         binanceApi,
                         req.getSymbol(),
                         req.getName(),
-                        req.getAmountUSDT(),
-                        req.getLowPrice(),
-                        req.getHighPrice(),
+                        req.getInvest(),
+                        req.getLow(),
+                        req.getHigh(),
                         req.getGrids(),
                         rts
                 );

@@ -13,4 +13,16 @@ const getBots = async () => {
   return await instance.get("/bots");
 };
 
-export { createBot, getBots };
+const deleteBot = async (id) => {
+  return await instance.delete("/bots/" + id);
+};
+
+const startBot = async (id) => {
+  return await instance.post("/bots/" + id + "/start");
+};
+
+const stopBot = async (id) => {
+  return await instance.post("/bots/" + id + "/stop");
+};
+
+export { createBot, getBots, deleteBot, startBot, stopBot};

@@ -14,7 +14,7 @@ public class Account {
      * 当前账号手续费
      * 0.1%
      * 0.1 / 100 = 0.0001
-     * https://www.binance.com/zh-CN/fee/futureFee
+     * https://www.binance.com/zh-CN/fee/trading
      */
     public final BigDecimal serviceChargeRate = new BigDecimal("0.0001");
     // 单笔最小交易金额

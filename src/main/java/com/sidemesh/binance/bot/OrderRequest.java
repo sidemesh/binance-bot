@@ -52,7 +52,7 @@ public class OrderRequest extends JSON.ToJson {
 
     public String toUrlParams() {
         return "newClientOrderId=" + this.newClientOrderId + "&"+
-                "symbol=" + this.symbol.toUpperCaseStr() + "&" +
+                "symbol=" + this.symbol.upperCaseName() + "&" +
                 "side=" + this.side.side + "&" +
                 // 需要避免科学记数法，注意此处不移除末尾小数 0
                 "price=" + this.price.toPlainString() + "&" +
