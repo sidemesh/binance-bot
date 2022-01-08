@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Objects;
 
@@ -37,7 +38,13 @@ public class OrderResponse {
 
     // 最终获得
     public BigDecimal receivedQty() {
-        return executedQty.subtract(this.serviceCharge());
+        // example
+        // executedQty = 3.94
+        // serverCharge = 0.0087
+        // = 3.9313 // error!
+        // got = 3.93
+        return executedQty.subtract(this.serviceCharge())
+                .setScale(symbol.quantityPrecision.scale(), RoundingMode.DOWN);
     }
 
     public BigDecimal serviceCharge() {
