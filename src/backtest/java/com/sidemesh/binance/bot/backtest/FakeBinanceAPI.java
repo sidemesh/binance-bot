@@ -22,6 +22,7 @@ public class FakeBinanceAPI implements BinanceAPI {
             @Override
             public OrderResponse getResponse() {
                 var res = new OrderResponse();
+                res.setSymbol(getRequest().symbol);
                 res.setPrice(request.price);
                 res.setExecutedQty(request.quantity);
                 res.setFills(Collections.emptyList());
