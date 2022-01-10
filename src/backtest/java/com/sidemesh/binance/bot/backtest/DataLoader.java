@@ -23,7 +23,7 @@ public class DataLoader {
     public DataLoader(Symbol symbol, String month) {
         this.symbol = symbol;
         this.month = month;
-        this.filePath = BASE_PATH + "/" + String.format("%s-trades-%s.csv", symbol.toUpperCaseStr(), month);
+        this.filePath = BASE_PATH + "/" + String.format("%s-trades-%s.csv", symbol.upperCaseName(), month);
     }
 
     public boolean isDownloaded() {

@@ -27,13 +27,13 @@ type Symbol struct {
 func (s Symbol) ToJavaEnum() string {
 	// TODO
 	if s.BaseAsset == "1INCH" {
-		return fmt.Sprintf("%s_%s(\"%s%s\", \"%s\", \"%s\"),",
+		return fmt.Sprintf("%s_%s(\"%s\",\"%s\", \"%s\", \"%s\"),",
 			"$1INCH", s.QuoteAsset,
 			s.BaseAsset, s.QuoteAsset,
 			s.MinTickSize,
 			s.MinTradeAmount)
 	}
-	return fmt.Sprintf("%s_%s(\"%s%s\", \"%s\", \"%s\"),",
+	return fmt.Sprintf("%s_%s(\"%s\",\"%s\", \"%s\", \"%s\"),",
 		s.BaseAsset, s.QuoteAsset,
 		s.BaseAsset, s.QuoteAsset,
 		s.MinTickSize,

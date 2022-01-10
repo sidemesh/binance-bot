@@ -1,6 +1,7 @@
 package com.sidemesh.binance.bot;
 
 import com.sidemesh.binance.bot.util.StringEnum;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 import java.math.BigDecimal;
 
@@ -10,2820 +11,2848 @@ public enum Symbol implements StringEnum<Symbol> {
     // generate code from binance api
     // generate code from binance api
     
-    ETH_BTC("ETHBTC", "0.000001", "0.0001"),
+    ETH_BTC("ETH","BTC", "0.000001", "0.0001"),
     
-    LTC_BTC("LTCBTC", "0.000001", "0.001"),
+    LTC_BTC("LTC","BTC", "0.000001", "0.001"),
     
-    BNB_BTC("BNBBTC", "0.000001", "0.001"),
+    BNB_BTC("BNB","BTC", "0.000001", "0.001"),
     
-    NEO_BTC("NEOBTC", "0.000001", "0.01"),
+    NEO_BTC("NEO","BTC", "0.000001", "0.01"),
     
-    QTUM_ETH("QTUMETH", "0.000001", "0.1"),
+    QTUM_ETH("QTUM","ETH", "0.000001", "0.1"),
     
-    EOS_ETH("EOSETH", "0.000001", "0.1"),
+    EOS_ETH("EOS","ETH", "0.000001", "0.1"),
     
-    SNT_ETH("SNTETH", "0.00000001", "1"),
+    SNT_ETH("SNT","ETH", "0.00000001", "1"),
     
-    BNT_ETH("BNTETH", "0.000001", "0.1"),
+    BNT_ETH("BNT","ETH", "0.000001", "0.1"),
     
-    GAS_BTC("GASBTC", "0.0000001", "0.1"),
+    GAS_BTC("GAS","BTC", "0.0000001", "0.1"),
     
-    BNB_ETH("BNBETH", "0.0001", "0.001"),
+    BNB_ETH("BNB","ETH", "0.0001", "0.001"),
     
-    BTC_USDT("BTCUSDT", "0.01", "0.00001"),
+    BTC_USDT("BTC","USDT", "0.01", "0.00001"),
     
-    ETH_USDT("ETHUSDT", "0.01", "0.0001"),
+    ETH_USDT("ETH","USDT", "0.01", "0.0001"),
     
-    WTC_BTC("WTCBTC", "0.00000001", "1"),
+    WTC_BTC("WTC","BTC", "0.00000001", "1"),
     
-    LRC_BTC("LRCBTC", "0.00000001", "1"),
+    LRC_BTC("LRC","BTC", "0.00000001", "1"),
     
-    LRC_ETH("LRCETH", "0.00000001", "1"),
+    LRC_ETH("LRC","ETH", "0.00000001", "1"),
     
-    QTUM_BTC("QTUMBTC", "0.0000001", "0.1"),
+    QTUM_BTC("QTUM","BTC", "0.0000001", "0.1"),
     
-    YOYO_BTC("YOYOBTC", "0.00000001", "1"),
+    YOYO_BTC("YOYO","BTC", "0.00000001", "1"),
     
-    OMG_BTC("OMGBTC", "0.0000001", "0.1"),
+    OMG_BTC("OMG","BTC", "0.0000001", "0.1"),
     
-    OMG_ETH("OMGETH", "0.000001", "0.1"),
+    OMG_ETH("OMG","ETH", "0.000001", "0.1"),
     
-    ZRX_BTC("ZRXBTC", "0.00000001", "1"),
+    ZRX_BTC("ZRX","BTC", "0.00000001", "1"),
     
-    ZRX_ETH("ZRXETH", "0.0000001", "1"),
+    ZRX_ETH("ZRX","ETH", "0.0000001", "1"),
     
-    KNC_BTC("KNCBTC", "0.00000001", "0.1"),
+    KNC_BTC("KNC","BTC", "0.00000001", "0.1"),
     
-    KNC_ETH("KNCETH", "0.0000001", "0.1"),
+    KNC_ETH("KNC","ETH", "0.0000001", "0.1"),
     
-    FUN_ETH("FUNETH", "0.00000001", "1"),
+    FUN_ETH("FUN","ETH", "0.00000001", "1"),
     
-    SNM_BTC("SNMBTC", "0.00000001", "1"),
+    SNM_BTC("SNM","BTC", "0.00000001", "1"),
     
-    NEO_ETH("NEOETH", "0.00001", "0.01"),
+    NEO_ETH("NEO","ETH", "0.00001", "0.01"),
     
-    IOTA_BTC("IOTABTC", "0.00000001", "1"),
+    IOTA_BTC("IOTA","BTC", "0.00000001", "1"),
     
-    IOTA_ETH("IOTAETH", "0.0000001", "1"),
+    IOTA_ETH("IOTA","ETH", "0.0000001", "1"),
     
-    LINK_BTC("LINKBTC", "0.0000001", "0.01"),
+    LINK_BTC("LINK","BTC", "0.0000001", "0.01"),
     
-    LINK_ETH("LINKETH", "0.000001", "0.01"),
+    LINK_ETH("LINK","ETH", "0.000001", "0.01"),
     
-    XVG_BTC("XVGBTC", "0.00000001", "1"),
+    XVG_BTC("XVG","BTC", "0.00000001", "1"),
     
-    XVG_ETH("XVGETH", "0.00000001", "1"),
+    XVG_ETH("XVG","ETH", "0.00000001", "1"),
     
-    MDA_BTC("MDABTC", "0.00000001", "1"),
+    MDA_BTC("MDA","BTC", "0.00000001", "1"),
     
-    MTL_BTC("MTLBTC", "0.00000001", "0.1"),
+    MTL_BTC("MTL","BTC", "0.00000001", "0.1"),
     
-    MTL_ETH("MTLETH", "0.0000001", "0.1"),
+    MTL_ETH("MTL","ETH", "0.0000001", "0.1"),
     
-    EOS_BTC("EOSBTC", "0.0000001", "0.1"),
+    EOS_BTC("EOS","BTC", "0.0000001", "0.1"),
     
-    SNT_BTC("SNTBTC", "0.00000001", "1"),
+    SNT_BTC("SNT","BTC", "0.00000001", "1"),
     
-    ETC_ETH("ETCETH", "0.00001", "0.01"),
+    ETC_ETH("ETC","ETH", "0.00001", "0.01"),
     
-    ETC_BTC("ETCBTC", "0.000001", "0.01"),
+    ETC_BTC("ETC","BTC", "0.000001", "0.01"),
     
-    MTH_BTC("MTHBTC", "0.00000001", "1"),
+    MTH_BTC("MTH","BTC", "0.00000001", "1"),
     
-    DNT_BTC("DNTBTC", "0.00000001", "1"),
+    DNT_BTC("DNT","BTC", "0.00000001", "1"),
     
-    ZEC_BTC("ZECBTC", "0.000001", "0.001"),
+    ZEC_BTC("ZEC","BTC", "0.000001", "0.001"),
     
-    ZEC_ETH("ZECETH", "0.00001", "0.001"),
+    ZEC_ETH("ZEC","ETH", "0.00001", "0.001"),
     
-    BNT_BTC("BNTBTC", "0.00000001", "0.1"),
+    BNT_BTC("BNT","BTC", "0.00000001", "0.1"),
     
-    AST_BTC("ASTBTC", "0.00000001", "1"),
+    AST_BTC("AST","BTC", "0.00000001", "1"),
     
-    DASH_BTC("DASHBTC", "0.000001", "0.001"),
+    DASH_BTC("DASH","BTC", "0.000001", "0.001"),
     
-    DASH_ETH("DASHETH", "0.00001", "0.001"),
+    DASH_ETH("DASH","ETH", "0.00001", "0.001"),
     
-    OAX_BTC("OAXBTC", "0.00000001", "1"),
+    OAX_BTC("OAX","BTC", "0.00000001", "1"),
     
-    BTG_BTC("BTGBTC", "0.000001", "0.01"),
+    BTG_BTC("BTG","BTC", "0.000001", "0.01"),
     
-    REQ_BTC("REQBTC", "0.00000001", "1"),
+    REQ_BTC("REQ","BTC", "0.00000001", "1"),
     
-    VIB_BTC("VIBBTC", "0.00000001", "1"),
+    VIB_BTC("VIB","BTC", "0.00000001", "1"),
     
-    VIB_ETH("VIBETH", "0.00000001", "1"),
+    VIB_ETH("VIB","ETH", "0.00000001", "1"),
     
-    TRX_BTC("TRXBTC", "0.00000001", "1"),
+    TRX_BTC("TRX","BTC", "0.00000001", "1"),
     
-    TRX_ETH("TRXETH", "0.00000001", "1"),
+    TRX_ETH("TRX","ETH", "0.00000001", "1"),
     
-    POWR_BTC("POWRBTC", "0.00000001", "1"),
+    POWR_BTC("POWR","BTC", "0.00000001", "1"),
     
-    POWR_ETH("POWRETH", "0.0000001", "1"),
+    POWR_ETH("POWR","ETH", "0.0000001", "1"),
     
-    ARK_BTC("ARKBTC", "0.00000001", "0.1"),
+    ARK_BTC("ARK","BTC", "0.00000001", "0.1"),
     
-    XRP_BTC("XRPBTC", "0.00000001", "1"),
+    XRP_BTC("XRP","BTC", "0.00000001", "1"),
     
-    XRP_ETH("XRPETH", "0.0000001", "1"),
+    XRP_ETH("XRP","ETH", "0.0000001", "1"),
     
-    ENJ_BTC("ENJBTC", "0.00000001", "0.1"),
+    ENJ_BTC("ENJ","BTC", "0.00000001", "0.1"),
     
-    ENJ_ETH("ENJETH", "0.0000001", "0.1"),
+    ENJ_ETH("ENJ","ETH", "0.0000001", "0.1"),
     
-    STORJ_BTC("STORJBTC", "0.00000001", "1"),
+    STORJ_BTC("STORJ","BTC", "0.00000001", "1"),
     
-    BNB_USDT("BNBUSDT", "0.1", "0.001"),
+    BNB_USDT("BNB","USDT", "0.1", "0.001"),
     
-    KMD_BTC("KMDBTC", "0.00000001", "1"),
+    KMD_BTC("KMD","BTC", "0.00000001", "1"),
     
-    KMD_ETH("KMDETH", "0.0000001", "1"),
+    KMD_ETH("KMD","ETH", "0.0000001", "1"),
     
-    NULS_BTC("NULSBTC", "0.00000001", "1"),
+    NULS_BTC("NULS","BTC", "0.00000001", "1"),
     
-    XMR_BTC("XMRBTC", "0.000001", "0.001"),
+    XMR_BTC("XMR","BTC", "0.000001", "0.001"),
     
-    XMR_ETH("XMRETH", "0.00001", "0.001"),
+    XMR_ETH("XMR","ETH", "0.00001", "0.001"),
     
-    AMB_BTC("AMBBTC", "0.00000001", "1"),
+    AMB_BTC("AMB","BTC", "0.00000001", "1"),
     
-    BAT_BTC("BATBTC", "0.00000001", "1"),
+    BAT_BTC("BAT","BTC", "0.00000001", "1"),
     
-    BAT_ETH("BATETH", "0.0000001", "1"),
+    BAT_ETH("BAT","ETH", "0.0000001", "1"),
     
-    GXS_BTC("GXSBTC", "0.00000001", "1"),
+    GXS_BTC("GXS","BTC", "0.00000001", "1"),
     
-    GXS_ETH("GXSETH", "0.0000001", "1"),
+    GXS_ETH("GXS","ETH", "0.0000001", "1"),
     
-    NEO_USDT("NEOUSDT", "0.01", "0.01"),
+    NEO_USDT("NEO","USDT", "0.01", "0.01"),
     
-    NEO_BNB("NEOBNB", "0.0001", "0.01"),
+    NEO_BNB("NEO","BNB", "0.0001", "0.01"),
     
-    QSP_BTC("QSPBTC", "0.00000001", "1"),
+    QSP_BTC("QSP","BTC", "0.00000001", "1"),
     
-    QSP_ETH("QSPETH", "0.00000001", "1"),
+    QSP_ETH("QSP","ETH", "0.00000001", "1"),
     
-    BTS_BTC("BTSBTC", "0.00000001", "1"),
+    BTS_BTC("BTS","BTC", "0.00000001", "1"),
     
-    LSK_BTC("LSKBTC", "0.00000001", "0.1"),
+    LSK_BTC("LSK","BTC", "0.00000001", "0.1"),
     
-    LSK_ETH("LSKETH", "0.000001", "0.1"),
+    LSK_ETH("LSK","ETH", "0.000001", "0.1"),
     
-    MANA_BTC("MANABTC", "0.00000001", "1"),
+    MANA_BTC("MANA","BTC", "0.00000001", "1"),
     
-    MANA_ETH("MANAETH", "0.0000001", "1"),
+    MANA_ETH("MANA","ETH", "0.0000001", "1"),
     
-    BCD_BTC("BCDBTC", "0.00000001", "0.1"),
+    BCD_BTC("BCD","BTC", "0.00000001", "0.1"),
     
-    IOTA_BNB("IOTABNB", "0.000001", "1"),
+    IOTA_BNB("IOTA","BNB", "0.000001", "1"),
     
-    ADX_BTC("ADXBTC", "0.00000001", "1"),
+    ADX_BTC("ADX","BTC", "0.00000001", "1"),
     
-    ADX_ETH("ADXETH", "0.0000001", "1"),
+    ADX_ETH("ADX","ETH", "0.0000001", "1"),
     
-    ADA_BTC("ADABTC", "0.00000001", "0.1"),
+    ADA_BTC("ADA","BTC", "0.00000001", "0.1"),
     
-    ADA_ETH("ADAETH", "0.0000001", "0.1"),
+    ADA_ETH("ADA","ETH", "0.0000001", "0.1"),
     
-    XLM_BTC("XLMBTC", "0.00000001", "1"),
+    XLM_BTC("XLM","BTC", "0.00000001", "1"),
     
-    XLM_ETH("XLMETH", "0.0000001", "1"),
+    XLM_ETH("XLM","ETH", "0.0000001", "1"),
     
-    XLM_BNB("XLMBNB", "0.0000001", "1"),
+    XLM_BNB("XLM","BNB", "0.0000001", "1"),
     
-    CND_BTC("CNDBTC", "0.00000001", "1"),
+    CND_BTC("CND","BTC", "0.00000001", "1"),
     
-    WABI_BTC("WABIBTC", "0.00000001", "1"),
+    WABI_BTC("WABI","BTC", "0.00000001", "1"),
     
-    WABI_BNB("WABIBNB", "0.0000001", "1"),
+    WABI_BNB("WABI","BNB", "0.0000001", "1"),
     
-    LTC_ETH("LTCETH", "0.00001", "0.001"),
+    LTC_ETH("LTC","ETH", "0.00001", "0.001"),
     
-    LTC_USDT("LTCUSDT", "0.1", "0.001"),
+    LTC_USDT("LTC","USDT", "0.1", "0.001"),
     
-    LTC_BNB("LTCBNB", "0.0001", "0.001"),
+    LTC_BNB("LTC","BNB", "0.0001", "0.001"),
     
-    WAVES_BTC("WAVESBTC", "0.0000001", "0.01"),
+    WAVES_BTC("WAVES","BTC", "0.0000001", "0.01"),
     
-    WAVES_ETH("WAVESETH", "0.000001", "0.01"),
+    WAVES_ETH("WAVES","ETH", "0.000001", "0.01"),
     
-    WAVES_BNB("WAVESBNB", "0.00001", "0.01"),
+    WAVES_BNB("WAVES","BNB", "0.00001", "0.01"),
     
-    GTO_BTC("GTOBTC", "0.00000001", "1"),
+    GTO_BTC("GTO","BTC", "0.00000001", "1"),
     
-    ICX_BTC("ICXBTC", "0.00000001", "1"),
+    ICX_BTC("ICX","BTC", "0.00000001", "1"),
     
-    ICX_ETH("ICXETH", "0.0000001", "1"),
+    ICX_ETH("ICX","ETH", "0.0000001", "1"),
     
-    ELF_BTC("ELFBTC", "0.00000001", "1"),
+    ELF_BTC("ELF","BTC", "0.00000001", "1"),
     
-    ELF_ETH("ELFETH", "0.0000001", "1"),
+    ELF_ETH("ELF","ETH", "0.0000001", "1"),
     
-    AION_BTC("AIONBTC", "0.00000001", "1"),
+    AION_BTC("AION","BTC", "0.00000001", "1"),
     
-    AION_ETH("AIONETH", "0.00000001", "1"),
+    AION_ETH("AION","ETH", "0.00000001", "1"),
     
-    NEBL_BTC("NEBLBTC", "0.00000001", "0.1"),
+    NEBL_BTC("NEBL","BTC", "0.00000001", "0.1"),
     
-    NEBL_ETH("NEBLETH", "0.0000001", "1"),
+    NEBL_ETH("NEBL","ETH", "0.0000001", "1"),
     
-    BRD_BTC("BRDBTC", "0.00000001", "1"),
+    BRD_BTC("BRD","BTC", "0.00000001", "1"),
     
-    BRD_ETH("BRDETH", "0.00000001", "1"),
+    BRD_ETH("BRD","ETH", "0.00000001", "1"),
     
-    NAV_BTC("NAVBTC", "0.00000001", "1"),
+    NAV_BTC("NAV","BTC", "0.00000001", "1"),
     
-    RLC_BTC("RLCBTC", "0.00000001", "0.1"),
+    RLC_BTC("RLC","BTC", "0.00000001", "0.1"),
     
-    RLC_ETH("RLCETH", "0.000001", "0.1"),
+    RLC_ETH("RLC","ETH", "0.000001", "0.1"),
     
-    PIVX_BTC("PIVXBTC", "0.00000001", "1"),
+    PIVX_BTC("PIVX","BTC", "0.00000001", "1"),
     
-    PIVX_ETH("PIVXETH", "0.0000001", "1"),
+    PIVX_ETH("PIVX","ETH", "0.0000001", "1"),
     
-    IOST_BTC("IOSTBTC", "0.00000001", "1"),
+    IOST_BTC("IOST","BTC", "0.00000001", "1"),
     
-    IOST_ETH("IOSTETH", "0.00000001", "1"),
+    IOST_ETH("IOST","ETH", "0.00000001", "1"),
     
-    STEEM_BTC("STEEMBTC", "0.00000001", "1"),
+    STEEM_BTC("STEEM","BTC", "0.00000001", "1"),
     
-    STEEM_ETH("STEEMETH", "0.0000001", "1"),
+    STEEM_ETH("STEEM","ETH", "0.0000001", "1"),
     
-    NANO_BTC("NANOBTC", "0.0000001", "0.1"),
+    NANO_BTC("NANO","BTC", "0.0000001", "0.1"),
     
-    NANO_ETH("NANOETH", "0.000001", "0.1"),
+    NANO_ETH("NANO","ETH", "0.000001", "0.1"),
     
-    BLZ_BTC("BLZBTC", "0.00000001", "1"),
+    BLZ_BTC("BLZ","BTC", "0.00000001", "1"),
     
-    BLZ_ETH("BLZETH", "0.00000001", "1"),
+    BLZ_ETH("BLZ","ETH", "0.00000001", "1"),
     
-    NCASH_ETH("NCASHETH", "0.00000001", "1"),
+    NCASH_ETH("NCASH","ETH", "0.00000001", "1"),
     
-    ZIL_BTC("ZILBTC", "0.00000001", "1"),
+    ZIL_BTC("ZIL","BTC", "0.00000001", "1"),
     
-    ZIL_ETH("ZILETH", "0.00000001", "1"),
+    ZIL_ETH("ZIL","ETH", "0.00000001", "1"),
     
-    ZIL_BNB("ZILBNB", "0.0000001", "1"),
+    ZIL_BNB("ZIL","BNB", "0.0000001", "1"),
     
-    ONT_BTC("ONTBTC", "0.00000001", "1"),
+    ONT_BTC("ONT","BTC", "0.00000001", "1"),
     
-    ONT_ETH("ONTETH", "0.0000001", "1"),
+    ONT_ETH("ONT","ETH", "0.0000001", "1"),
     
-    QTUM_USDT("QTUMUSDT", "0.001", "0.1"),
+    QTUM_USDT("QTUM","USDT", "0.001", "0.1"),
     
-    XEM_BTC("XEMBTC", "0.00000001", "1"),
+    XEM_BTC("XEM","BTC", "0.00000001", "1"),
     
-    XEM_ETH("XEMETH", "0.00000001", "1"),
+    XEM_ETH("XEM","ETH", "0.00000001", "1"),
     
-    WAN_BTC("WANBTC", "0.00000001", "1"),
+    WAN_BTC("WAN","BTC", "0.00000001", "1"),
     
-    WAN_ETH("WANETH", "0.0000001", "1"),
+    WAN_ETH("WAN","ETH", "0.0000001", "1"),
     
-    QLC_BTC("QLCBTC", "0.00000001", "1"),
+    QLC_BTC("QLC","BTC", "0.00000001", "1"),
     
-    QLC_ETH("QLCETH", "0.00000001", "1"),
+    QLC_ETH("QLC","ETH", "0.00000001", "1"),
     
-    SYS_BTC("SYSBTC", "0.00000001", "1"),
+    SYS_BTC("SYS","BTC", "0.00000001", "1"),
     
-    GRS_BTC("GRSBTC", "0.00000001", "1"),
+    GRS_BTC("GRS","BTC", "0.00000001", "1"),
     
-    ADA_USDT("ADAUSDT", "0.001", "0.1"),
+    ADA_USDT("ADA","USDT", "0.001", "0.1"),
     
-    ADA_BNB("ADABNB", "0.000001", "0.1"),
+    ADA_BNB("ADA","BNB", "0.000001", "0.1"),
     
-    LOOM_BTC("LOOMBTC", "0.00000001", "1"),
+    LOOM_BTC("LOOM","BTC", "0.00000001", "1"),
     
-    LOOM_ETH("LOOMETH", "0.00000001", "1"),
+    LOOM_ETH("LOOM","ETH", "0.00000001", "1"),
     
-    XRP_USDT("XRPUSDT", "0.0001", "1"),
+    XRP_USDT("XRP","USDT", "0.0001", "1"),
     
-    REP_BTC("REPBTC", "0.0000001", "0.01"),
+    REP_BTC("REP","BTC", "0.0000001", "0.01"),
     
-    REP_ETH("REPETH", "0.000001", "0.01"),
+    REP_ETH("REP","ETH", "0.000001", "0.01"),
     
-    BTC_TUSD("BTCTUSD", "0.01", "0.00001"),
+    BTC_TUSD("BTC","TUSD", "0.01", "0.00001"),
     
-    ETH_TUSD("ETHTUSD", "0.01", "0.0001"),
+    ETH_TUSD("ETH","TUSD", "0.01", "0.0001"),
     
-    ZEN_BTC("ZENBTC", "0.000001", "0.01"),
+    ZEN_BTC("ZEN","BTC", "0.000001", "0.01"),
     
-    ZEN_ETH("ZENETH", "0.00001", "0.01"),
+    ZEN_ETH("ZEN","ETH", "0.00001", "0.01"),
     
-    ZEN_BNB("ZENBNB", "0.0001", "0.01"),
+    ZEN_BNB("ZEN","BNB", "0.0001", "0.01"),
     
-    EOS_USDT("EOSUSDT", "0.001", "0.1"),
+    EOS_USDT("EOS","USDT", "0.001", "0.1"),
     
-    EOS_BNB("EOSBNB", "0.00001", "0.1"),
+    EOS_BNB("EOS","BNB", "0.00001", "0.1"),
     
-    CVC_BTC("CVCBTC", "0.00000001", "1"),
+    CVC_BTC("CVC","BTC", "0.00000001", "1"),
     
-    CVC_ETH("CVCETH", "0.0000001", "1"),
+    CVC_ETH("CVC","ETH", "0.0000001", "1"),
     
-    THETA_BTC("THETABTC", "0.0000001", "0.1"),
+    THETA_BTC("THETA","BTC", "0.0000001", "0.1"),
     
-    THETA_ETH("THETAETH", "0.000001", "0.1"),
+    THETA_ETH("THETA","ETH", "0.000001", "0.1"),
     
-    THETA_BNB("THETABNB", "0.00001", "0.1"),
+    THETA_BNB("THETA","BNB", "0.00001", "0.1"),
     
-    XRP_BNB("XRPBNB", "0.000001", "1"),
+    XRP_BNB("XRP","BNB", "0.000001", "1"),
     
-    TUSD_USDT("TUSDUSDT", "0.0001", "1"),
+    TUSD_USDT("TUSD","USDT", "0.0001", "1"),
     
-    IOTA_USDT("IOTAUSDT", "0.0001", "1"),
+    IOTA_USDT("IOTA","USDT", "0.0001", "1"),
     
-    XLM_USDT("XLMUSDT", "0.0001", "1"),
+    XLM_USDT("XLM","USDT", "0.0001", "1"),
     
-    IOTX_BTC("IOTXBTC", "0.00000001", "1"),
+    IOTX_BTC("IOTX","BTC", "0.00000001", "1"),
     
-    IOTX_ETH("IOTXETH", "0.00000001", "1"),
+    IOTX_ETH("IOTX","ETH", "0.00000001", "1"),
     
-    QKC_BTC("QKCBTC", "0.00000001", "1"),
+    QKC_BTC("QKC","BTC", "0.00000001", "1"),
     
-    QKC_ETH("QKCETH", "0.00000001", "1"),
+    QKC_ETH("QKC","ETH", "0.00000001", "1"),
     
-    NXS_BTC("NXSBTC", "0.00000001", "1"),
+    NXS_BTC("NXS","BTC", "0.00000001", "1"),
     
-    ENJ_BNB("ENJBNB", "0.000001", "0.1"),
+    ENJ_BNB("ENJ","BNB", "0.000001", "0.1"),
     
-    DATA_BTC("DATABTC", "0.00000001", "1"),
+    DATA_BTC("DATA","BTC", "0.00000001", "1"),
     
-    DATA_ETH("DATAETH", "0.00000001", "1"),
+    DATA_ETH("DATA","ETH", "0.00000001", "1"),
     
-    ONT_USDT("ONTUSDT", "0.0001", "1"),
+    ONT_USDT("ONT","USDT", "0.0001", "1"),
     
-    TRX_BNB("TRXBNB", "0.0000001", "1"),
+    TRX_BNB("TRX","BNB", "0.0000001", "1"),
     
-    TRX_USDT("TRXUSDT", "0.00001", "0.1"),
+    TRX_USDT("TRX","USDT", "0.00001", "0.1"),
     
-    ETC_USDT("ETCUSDT", "0.01", "0.01"),
+    ETC_USDT("ETC","USDT", "0.01", "0.01"),
     
-    ETC_BNB("ETCBNB", "0.0001", "0.01"),
+    ETC_BNB("ETC","BNB", "0.0001", "0.01"),
     
-    ICX_USDT("ICXUSDT", "0.001", "0.1"),
+    ICX_USDT("ICX","USDT", "0.001", "0.1"),
     
-    SC_BTC("SCBTC", "0.00000001", "1"),
+    SC_BTC("SC","BTC", "0.00000001", "1"),
     
-    SC_ETH("SCETH", "0.00000001", "1"),
+    SC_ETH("SC","ETH", "0.00000001", "1"),
     
-    SC_BNB("SCBNB", "0.00000001", "1"),
+    SC_BNB("SC","BNB", "0.00000001", "1"),
     
-    KEY_ETH("KEYETH", "0.00000001", "1"),
+    KEY_ETH("KEY","ETH", "0.00000001", "1"),
     
-    NAS_BTC("NASBTC", "0.0000001", "1"),
+    NAS_BTC("NAS","BTC", "0.0000001", "1"),
     
-    NAS_ETH("NASETH", "0.0000001", "1"),
+    NAS_ETH("NAS","ETH", "0.0000001", "1"),
     
-    MFT_ETH("MFTETH", "0.00000001", "1"),
+    MFT_ETH("MFT","ETH", "0.00000001", "1"),
     
-    MFT_BNB("MFTBNB", "0.00000001", "1"),
+    MFT_BNB("MFT","BNB", "0.00000001", "1"),
     
-    DENT_ETH("DENTETH", "0.00000001", "1"),
+    DENT_ETH("DENT","ETH", "0.00000001", "1"),
     
-    ARDR_BTC("ARDRBTC", "0.00000001", "1"),
+    ARDR_BTC("ARDR","BTC", "0.00000001", "1"),
     
-    NULS_USDT("NULSUSDT", "0.0001", "1"),
+    NULS_USDT("NULS","USDT", "0.0001", "1"),
     
-    HOT_ETH("HOTETH", "0.00000001", "1"),
+    HOT_ETH("HOT","ETH", "0.00000001", "1"),
     
-    VET_BTC("VETBTC", "0.00000001", "1"),
+    VET_BTC("VET","BTC", "0.00000001", "1"),
     
-    VET_ETH("VETETH", "0.00000001", "1"),
+    VET_ETH("VET","ETH", "0.00000001", "1"),
     
-    VET_USDT("VETUSDT", "0.00001", "0.1"),
+    VET_USDT("VET","USDT", "0.00001", "0.1"),
     
-    VET_BNB("VETBNB", "0.0000001", "1"),
+    VET_BNB("VET","BNB", "0.0000001", "1"),
     
-    DOCK_BTC("DOCKBTC", "0.00000001", "1"),
+    DOCK_BTC("DOCK","BTC", "0.00000001", "1"),
     
-    POLY_BTC("POLYBTC", "0.00000001", "1"),
+    POLY_BTC("POLY","BTC", "0.00000001", "1"),
     
-    GO_BTC("GOBTC", "0.00000001", "1"),
+    GO_BTC("GO","BTC", "0.00000001", "1"),
     
-    RVN_BTC("RVNBTC", "0.00000001", "1"),
+    RVN_BTC("RVN","BTC", "0.00000001", "1"),
     
-    RVN_BNB("RVNBNB", "0.0000001", "1"),
+    RVN_BNB("RVN","BNB", "0.0000001", "1"),
     
-    DCR_BTC("DCRBTC", "0.000001", "0.001"),
+    DCR_BTC("DCR","BTC", "0.000001", "0.001"),
     
-    MITH_BTC("MITHBTC", "0.00000001", "1"),
+    MITH_BTC("MITH","BTC", "0.00000001", "1"),
     
-    MITH_BNB("MITHBNB", "0.0000001", "1"),
+    MITH_BNB("MITH","BNB", "0.0000001", "1"),
     
-    REN_BTC("RENBTC", "0.00000001", "1"),
+    REN_BTC("REN","BTC", "0.00000001", "1"),
     
-    BNB_TUSD("BNBTUSD", "0.1", "0.001"),
+    BNB_TUSD("BNB","TUSD", "0.1", "0.001"),
     
-    XRP_TUSD("XRPTUSD", "0.0001", "1"),
+    XRP_TUSD("XRP","TUSD", "0.0001", "1"),
     
-    BNB_USDC("BNBUSDC", "0.1", "0.001"),
+    BNB_USDC("BNB","USDC", "0.1", "0.001"),
     
-    BTC_USDC("BTCUSDC", "0.01", "0.00001"),
+    BTC_USDC("BTC","USDC", "0.01", "0.00001"),
     
-    ETH_USDC("ETHUSDC", "0.01", "0.0001"),
+    ETH_USDC("ETH","USDC", "0.01", "0.0001"),
     
-    XRP_USDC("XRPUSDC", "0.0001", "1"),
+    XRP_USDC("XRP","USDC", "0.0001", "1"),
     
-    EOS_USDC("EOSUSDC", "0.001", "0.1"),
+    EOS_USDC("EOS","USDC", "0.001", "0.1"),
     
-    USDC_USDT("USDCUSDT", "0.0001", "1"),
+    USDC_USDT("USDC","USDT", "0.0001", "1"),
     
-    ADA_TUSD("ADATUSD", "0.001", "0.1"),
+    ADA_TUSD("ADA","TUSD", "0.001", "0.1"),
     
-    TRX_TUSD("TRXTUSD", "0.00001", "0.1"),
+    TRX_TUSD("TRX","TUSD", "0.00001", "0.1"),
     
-    TRX_XRP("TRXXRP", "0.00001", "0.1"),
+    TRX_XRP("TRX","XRP", "0.00001", "0.1"),
     
-    LINK_USDT("LINKUSDT", "0.01", "0.01"),
+    LINK_USDT("LINK","USDT", "0.01", "0.01"),
     
-    LINK_USDC("LINKUSDC", "0.01", "0.01"),
+    LINK_USDC("LINK","USDC", "0.01", "0.01"),
     
-    WAVES_USDT("WAVESUSDT", "0.01", "0.01"),
+    WAVES_USDT("WAVES","USDT", "0.01", "0.01"),
     
-    LTC_USDC("LTCUSDC", "0.1", "0.001"),
+    LTC_USDC("LTC","USDC", "0.1", "0.001"),
     
-    TRX_USDC("TRXUSDC", "0.00001", "0.1"),
+    TRX_USDC("TRX","USDC", "0.00001", "0.1"),
     
-    BTT_BNB("BTTBNB", "0.00000001", "1"),
+    BTT_BNB("BTT","BNB", "0.00000001", "1"),
     
-    BTT_USDT("BTTUSDT", "0.000001", "1"),
+    BTT_USDT("BTT","USDT", "0.000001", "1"),
     
-    BTT_TUSD("BTTTUSD", "0.000001", "1"),
+    BTT_TUSD("BTT","TUSD", "0.000001", "1"),
     
-    BTT_USDC("BTTUSDC", "0.000001", "1"),
+    BTT_USDC("BTT","USDC", "0.000001", "1"),
     
-    ONG_BTC("ONGBTC", "0.00000001", "1"),
+    ONG_BTC("ONG","BTC", "0.00000001", "1"),
     
-    ONG_USDT("ONGUSDT", "0.0001", "1"),
+    ONG_USDT("ONG","USDT", "0.0001", "1"),
     
-    HOT_BNB("HOTBNB", "0.00000001", "1"),
+    HOT_BNB("HOT","BNB", "0.00000001", "1"),
     
-    HOT_USDT("HOTUSDT", "0.000001", "1"),
+    HOT_USDT("HOT","USDT", "0.000001", "1"),
     
-    ZIL_USDT("ZILUSDT", "0.00001", "0.1"),
+    ZIL_USDT("ZIL","USDT", "0.00001", "0.1"),
     
-    ZRX_USDT("ZRXUSDT", "0.0001", "1"),
+    ZRX_USDT("ZRX","USDT", "0.0001", "1"),
     
-    FET_BNB("FETBNB", "0.000001", "1"),
+    FET_BNB("FET","BNB", "0.000001", "1"),
     
-    FET_BTC("FETBTC", "0.00000001", "1"),
+    FET_BTC("FET","BTC", "0.00000001", "1"),
     
-    FET_USDT("FETUSDT", "0.0001", "1"),
+    FET_USDT("FET","USDT", "0.0001", "1"),
     
-    BAT_USDT("BATUSDT", "0.0001", "1"),
+    BAT_USDT("BAT","USDT", "0.0001", "1"),
     
-    XMR_BNB("XMRBNB", "0.0001", "0.001"),
+    XMR_BNB("XMR","BNB", "0.0001", "0.001"),
     
-    XMR_USDT("XMRUSDT", "0.1", "0.001"),
+    XMR_USDT("XMR","USDT", "0.1", "0.001"),
     
-    ZEC_BNB("ZECBNB", "0.0001", "0.001"),
+    ZEC_BNB("ZEC","BNB", "0.0001", "0.001"),
     
-    ZEC_USDT("ZECUSDT", "0.1", "0.001"),
+    ZEC_USDT("ZEC","USDT", "0.1", "0.001"),
     
-    ZEC_USDC("ZECUSDC", "0.1", "0.001"),
+    ZEC_USDC("ZEC","USDC", "0.1", "0.001"),
     
-    IOST_BNB("IOSTBNB", "0.00000001", "1"),
+    IOST_BNB("IOST","BNB", "0.00000001", "1"),
     
-    IOST_USDT("IOSTUSDT", "0.00001", "1"),
+    IOST_USDT("IOST","USDT", "0.00001", "1"),
     
-    CELR_BNB("CELRBNB", "0.00000001", "1"),
+    CELR_BNB("CELR","BNB", "0.00000001", "1"),
     
-    CELR_BTC("CELRBTC", "0.00000001", "1"),
+    CELR_BTC("CELR","BTC", "0.00000001", "1"),
     
-    CELR_USDT("CELRUSDT", "0.00001", "0.1"),
+    CELR_USDT("CELR","USDT", "0.00001", "0.1"),
     
-    ADA_USDC("ADAUSDC", "0.001", "0.1"),
+    ADA_USDC("ADA","USDC", "0.001", "0.1"),
     
-    DASH_BNB("DASHBNB", "0.0001", "0.001"),
+    DASH_BNB("DASH","BNB", "0.0001", "0.001"),
     
-    DASH_USDT("DASHUSDT", "0.1", "0.001"),
+    DASH_USDT("DASH","USDT", "0.1", "0.001"),
     
-    NANO_USDT("NANOUSDT", "0.001", "0.1"),
+    NANO_USDT("NANO","USDT", "0.001", "0.1"),
     
-    OMG_USDT("OMGUSDT", "0.001", "0.1"),
+    OMG_USDT("OMG","USDT", "0.001", "0.1"),
     
-    THETA_USDT("THETAUSDT", "0.001", "0.1"),
+    THETA_USDT("THETA","USDT", "0.001", "0.1"),
     
-    ENJ_USDT("ENJUSDT", "0.001", "0.1"),
+    ENJ_USDT("ENJ","USDT", "0.001", "0.1"),
     
-    MITH_USDT("MITHUSDT", "0.00001", "0.1"),
+    MITH_USDT("MITH","USDT", "0.00001", "0.1"),
     
-    MATIC_BNB("MATICBNB", "0.000001", "0.1"),
+    MATIC_BNB("MATIC","BNB", "0.000001", "0.1"),
     
-    MATIC_BTC("MATICBTC", "0.00000001", "0.1"),
+    MATIC_BTC("MATIC","BTC", "0.00000001", "0.1"),
     
-    MATIC_USDT("MATICUSDT", "0.001", "0.1"),
+    MATIC_USDT("MATIC","USDT", "0.001", "0.1"),
     
-    ATOM_BNB("ATOMBNB", "0.00001", "0.01"),
+    ATOM_BNB("ATOM","BNB", "0.00001", "0.01"),
     
-    ATOM_BTC("ATOMBTC", "0.0000001", "0.01"),
+    ATOM_BTC("ATOM","BTC", "0.0000001", "0.01"),
     
-    ATOM_USDT("ATOMUSDT", "0.01", "0.01"),
+    ATOM_USDT("ATOM","USDT", "0.01", "0.01"),
     
-    ATOM_USDC("ATOMUSDC", "0.01", "0.01"),
+    ATOM_USDC("ATOM","USDC", "0.01", "0.01"),
     
-    PHB_BTC("PHBBTC", "0.00000001", "0.1"),
+    PHB_BTC("PHB","BTC", "0.00000001", "0.1"),
     
-    PHB_TUSD("PHBTUSD", "0.001", "0.1"),
+    PHB_TUSD("PHB","TUSD", "0.001", "0.1"),
     
-    TFUEL_BTC("TFUELBTC", "0.00000001", "1"),
+    TFUEL_BTC("TFUEL","BTC", "0.00000001", "1"),
     
-    TFUEL_USDT("TFUELUSDT", "0.0001", "1"),
+    TFUEL_USDT("TFUEL","USDT", "0.0001", "1"),
     
-    ONE_BNB("ONEBNB", "0.0000001", "1"),
+    ONE_BNB("ONE","BNB", "0.0000001", "1"),
     
-    ONE_BTC("ONEBTC", "0.00000001", "1"),
+    ONE_BTC("ONE","BTC", "0.00000001", "1"),
     
-    ONE_USDT("ONEUSDT", "0.00001", "0.1"),
+    ONE_USDT("ONE","USDT", "0.00001", "0.1"),
     
-    FTM_BNB("FTMBNB", "0.0000001", "1"),
+    FTM_BNB("FTM","BNB", "0.0000001", "1"),
     
-    FTM_BTC("FTMBTC", "0.00000001", "1"),
+    FTM_BTC("FTM","BTC", "0.00000001", "1"),
     
-    FTM_USDT("FTMUSDT", "0.0001", "1"),
+    FTM_USDT("FTM","USDT", "0.0001", "1"),
     
-    ALGO_BNB("ALGOBNB", "0.000001", "1"),
+    ALGO_BNB("ALGO","BNB", "0.000001", "1"),
     
-    ALGO_BTC("ALGOBTC", "0.00000001", "1"),
+    ALGO_BTC("ALGO","BTC", "0.00000001", "1"),
     
-    ALGO_USDT("ALGOUSDT", "0.0001", "1"),
+    ALGO_USDT("ALGO","USDT", "0.0001", "1"),
     
-    GTO_USDT("GTOUSDT", "0.00001", "0.1"),
+    GTO_USDT("GTO","USDT", "0.00001", "0.1"),
     
-    DOGE_BTC("DOGEBTC", "0.00000001", "1"),
+    DOGE_BTC("DOGE","BTC", "0.00000001", "1"),
     
-    DOGE_USDT("DOGEUSDT", "0.0001", "1"),
+    DOGE_USDT("DOGE","USDT", "0.0001", "1"),
     
-    DUSK_BTC("DUSKBTC", "0.00000001", "1"),
+    DUSK_BTC("DUSK","BTC", "0.00000001", "1"),
     
-    DUSK_USDT("DUSKUSDT", "0.0001", "1"),
+    DUSK_USDT("DUSK","USDT", "0.0001", "1"),
     
-    ANKR_BNB("ANKRBNB", "0.0000001", "1"),
+    ANKR_BNB("ANKR","BNB", "0.0000001", "1"),
     
-    ANKR_BTC("ANKRBTC", "0.00000001", "1"),
+    ANKR_BTC("ANKR","BTC", "0.00000001", "1"),
     
-    ANKR_USDT("ANKRUSDT", "0.00001", "0.1"),
+    ANKR_USDT("ANKR","USDT", "0.00001", "0.1"),
     
-    WIN_BNB("WINBNB", "0.00000001", "1"),
+    WIN_BNB("WIN","BNB", "0.00000001", "1"),
     
-    WIN_USDT("WINUSDT", "0.0000001", "1"),
+    WIN_USDT("WIN","USDT", "0.0000001", "1"),
     
-    WIN_USDC("WINUSDC", "0.0000001", "1"),
+    WIN_USDC("WIN","USDC", "0.0000001", "1"),
     
-    COS_BNB("COSBNB", "0.00000001", "1"),
+    COS_BNB("COS","BNB", "0.00000001", "1"),
     
-    COS_BTC("COSBTC", "0.00000001", "1"),
+    COS_BTC("COS","BTC", "0.00000001", "1"),
     
-    COS_USDT("COSUSDT", "0.00001", "0.1"),
+    COS_USDT("COS","USDT", "0.00001", "0.1"),
     
-    COCOS_BNB("COCOSBNB", "0.000001", "1"),
+    COCOS_BNB("COCOS","BNB", "0.000001", "1"),
     
-    COCOS_USDT("COCOSUSDT", "0.0001", "1"),
+    COCOS_USDT("COCOS","USDT", "0.0001", "1"),
     
-    MTL_USDT("MTLUSDT", "0.001", "0.1"),
+    MTL_USDT("MTL","USDT", "0.001", "0.1"),
     
-    TOMO_BTC("TOMOBTC", "0.00000001", "0.1"),
+    TOMO_BTC("TOMO","BTC", "0.00000001", "0.1"),
     
-    TOMO_USDT("TOMOUSDT", "0.001", "0.1"),
+    TOMO_USDT("TOMO","USDT", "0.001", "0.1"),
     
-    PERL_BNB("PERLBNB", "0.0000001", "1"),
+    PERL_BNB("PERL","BNB", "0.0000001", "1"),
     
-    PERL_BTC("PERLBTC", "0.00000001", "1"),
+    PERL_BTC("PERL","BTC", "0.00000001", "1"),
     
-    PERL_USDT("PERLUSDT", "0.00001", "0.1"),
+    PERL_USDT("PERL","USDT", "0.00001", "0.1"),
     
-    DENT_USDT("DENTUSDT", "0.000001", "1"),
+    DENT_USDT("DENT","USDT", "0.000001", "1"),
     
-    MFT_USDT("MFTUSDT", "0.000001", "1"),
+    MFT_USDT("MFT","USDT", "0.000001", "1"),
     
-    KEY_USDT("KEYUSDT", "0.000001", "1"),
+    KEY_USDT("KEY","USDT", "0.000001", "1"),
     
-    DOCK_USDT("DOCKUSDT", "0.00001", "1"),
+    DOCK_USDT("DOCK","USDT", "0.00001", "1"),
     
-    WAN_USDT("WANUSDT", "0.0001", "1"),
+    WAN_USDT("WAN","USDT", "0.0001", "1"),
     
-    FUN_USDT("FUNUSDT", "0.00001", "1"),
+    FUN_USDT("FUN","USDT", "0.00001", "1"),
     
-    CVC_USDT("CVCUSDT", "0.0001", "1"),
+    CVC_USDT("CVC","USDT", "0.0001", "1"),
     
-    BTT_TRX("BTTTRX", "0.00001", "0.1"),
+    BTT_TRX("BTT","TRX", "0.00001", "0.1"),
     
-    WIN_TRX("WINTRX", "0.000001", "0.1"),
+    WIN_TRX("WIN","TRX", "0.000001", "0.1"),
     
-    CHZ_BNB("CHZBNB", "0.0000001", "1"),
+    CHZ_BNB("CHZ","BNB", "0.0000001", "1"),
     
-    CHZ_BTC("CHZBTC", "0.00000001", "1"),
+    CHZ_BTC("CHZ","BTC", "0.00000001", "1"),
     
-    CHZ_USDT("CHZUSDT", "0.0001", "1"),
+    CHZ_USDT("CHZ","USDT", "0.0001", "1"),
     
-    BAND_BTC("BANDBTC", "0.0000001", "0.1"),
+    BAND_BTC("BAND","BTC", "0.0000001", "0.1"),
     
-    BAND_USDT("BANDUSDT", "0.001", "0.1"),
+    BAND_USDT("BAND","USDT", "0.001", "0.1"),
     
-    BNB_BUSD("BNBBUSD", "0.1", "0.001"),
+    BNB_BUSD("BNB","BUSD", "0.1", "0.001"),
     
-    BTC_BUSD("BTCBUSD", "0.01", "0.00001"),
+    BTC_BUSD("BTC","BUSD", "0.01", "0.00001"),
     
-    BUSD_USDT("BUSDUSDT", "0.0001", "1"),
+    BUSD_USDT("BUSD","USDT", "0.0001", "1"),
     
-    BEAM_BTC("BEAMBTC", "0.00000001", "1"),
+    BEAM_BTC("BEAM","BTC", "0.00000001", "1"),
     
-    BEAM_USDT("BEAMUSDT", "0.0001", "1"),
+    BEAM_USDT("BEAM","USDT", "0.0001", "1"),
     
-    XTZ_BNB("XTZBNB", "0.000001", "0.1"),
+    XTZ_BNB("XTZ","BNB", "0.000001", "0.1"),
     
-    XTZ_BTC("XTZBTC", "0.00000001", "0.1"),
+    XTZ_BTC("XTZ","BTC", "0.00000001", "0.1"),
     
-    XTZ_USDT("XTZUSDT", "0.001", "0.1"),
+    XTZ_USDT("XTZ","USDT", "0.001", "0.1"),
     
-    REN_USDT("RENUSDT", "0.0001", "1"),
+    REN_USDT("REN","USDT", "0.0001", "1"),
     
-    RVN_USDT("RVNUSDT", "0.00001", "0.1"),
+    RVN_USDT("RVN","USDT", "0.00001", "0.1"),
     
-    HBAR_BNB("HBARBNB", "0.0000001", "1"),
+    HBAR_BNB("HBAR","BNB", "0.0000001", "1"),
     
-    HBAR_BTC("HBARBTC", "0.00000001", "1"),
+    HBAR_BTC("HBAR","BTC", "0.00000001", "1"),
     
-    HBAR_USDT("HBARUSDT", "0.0001", "1"),
+    HBAR_USDT("HBAR","USDT", "0.0001", "1"),
     
-    NKN_BTC("NKNBTC", "0.00000001", "1"),
+    NKN_BTC("NKN","BTC", "0.00000001", "1"),
     
-    NKN_USDT("NKNUSDT", "0.0001", "1"),
+    NKN_USDT("NKN","USDT", "0.0001", "1"),
     
-    XRP_BUSD("XRPBUSD", "0.0001", "1"),
+    XRP_BUSD("XRP","BUSD", "0.0001", "1"),
     
-    ETH_BUSD("ETHBUSD", "0.01", "0.0001"),
+    ETH_BUSD("ETH","BUSD", "0.01", "0.0001"),
     
-    LTC_BUSD("LTCBUSD", "0.1", "0.001"),
+    LTC_BUSD("LTC","BUSD", "0.1", "0.001"),
     
-    LINK_BUSD("LINKBUSD", "0.01", "0.01"),
+    LINK_BUSD("LINK","BUSD", "0.01", "0.01"),
     
-    ETC_BUSD("ETCBUSD", "0.01", "0.01"),
+    ETC_BUSD("ETC","BUSD", "0.01", "0.01"),
     
-    STX_BNB("STXBNB", "0.000001", "0.1"),
+    STX_BNB("STX","BNB", "0.000001", "0.1"),
     
-    STX_BTC("STXBTC", "0.00000001", "0.1"),
+    STX_BTC("STX","BTC", "0.00000001", "0.1"),
     
-    STX_USDT("STXUSDT", "0.001", "0.1"),
+    STX_USDT("STX","USDT", "0.001", "0.1"),
     
-    KAVA_BNB("KAVABNB", "0.00001", "0.1"),
+    KAVA_BNB("KAVA","BNB", "0.00001", "0.1"),
     
-    KAVA_BTC("KAVABTC", "0.0000001", "0.1"),
+    KAVA_BTC("KAVA","BTC", "0.0000001", "0.1"),
     
-    KAVA_USDT("KAVAUSDT", "0.001", "0.1"),
+    KAVA_USDT("KAVA","USDT", "0.001", "0.1"),
     
-    BTC_NGN("BTCNGN", "1", "0.00001"),
+    BTC_NGN("BTC","NGN", "1", "0.00001"),
     
-    ARPA_BNB("ARPABNB", "0.0000001", "1"),
+    ARPA_BNB("ARPA","BNB", "0.0000001", "1"),
     
-    ARPA_BTC("ARPABTC", "0.00000001", "1"),
+    ARPA_BTC("ARPA","BTC", "0.00000001", "1"),
     
-    ARPA_USDT("ARPAUSDT", "0.00001", "0.1"),
+    ARPA_USDT("ARPA","USDT", "0.00001", "0.1"),
     
-    TRX_BUSD("TRXBUSD", "0.00001", "0.1"),
+    TRX_BUSD("TRX","BUSD", "0.00001", "0.1"),
     
-    EOS_BUSD("EOSBUSD", "0.001", "0.1"),
+    EOS_BUSD("EOS","BUSD", "0.001", "0.1"),
     
-    IOTX_USDT("IOTXUSDT", "0.00001", "1"),
+    IOTX_USDT("IOTX","USDT", "0.00001", "1"),
     
-    RLC_USDT("RLCUSDT", "0.001", "0.1"),
+    RLC_USDT("RLC","USDT", "0.001", "0.1"),
     
-    XLM_BUSD("XLMBUSD", "0.0001", "1"),
+    XLM_BUSD("XLM","BUSD", "0.0001", "1"),
     
-    ADA_BUSD("ADABUSD", "0.001", "0.1"),
+    ADA_BUSD("ADA","BUSD", "0.001", "0.1"),
     
-    CTXC_BTC("CTXCBTC", "0.00000001", "1"),
+    CTXC_BTC("CTXC","BTC", "0.00000001", "1"),
     
-    CTXC_USDT("CTXCUSDT", "0.0001", "1"),
+    CTXC_USDT("CTXC","USDT", "0.0001", "1"),
     
-    BCH_BNB("BCHBNB", "0.001", "0.001"),
+    BCH_BNB("BCH","BNB", "0.001", "0.001"),
     
-    BCH_BTC("BCHBTC", "0.00001", "0.001"),
+    BCH_BTC("BCH","BTC", "0.00001", "0.001"),
     
-    BCH_USDT("BCHUSDT", "0.1", "0.001"),
+    BCH_USDT("BCH","USDT", "0.1", "0.001"),
     
-    BCH_USDC("BCHUSDC", "0.1", "0.001"),
+    BCH_USDC("BCH","USDC", "0.1", "0.001"),
     
-    BCH_BUSD("BCHBUSD", "0.1", "0.001"),
+    BCH_BUSD("BCH","BUSD", "0.1", "0.001"),
     
-    BTC_RUB("BTCRUB", "1", "0.00001"),
+    BTC_RUB("BTC","RUB", "1", "0.00001"),
     
-    ETH_RUB("ETHRUB", "0.1", "0.0001"),
+    ETH_RUB("ETH","RUB", "0.1", "0.0001"),
     
-    XRP_RUB("XRPRUB", "0.01", "1"),
+    XRP_RUB("XRP","RUB", "0.01", "1"),
     
-    BNB_RUB("BNBRUB", "0.01", "0.001"),
+    BNB_RUB("BNB","RUB", "0.01", "0.001"),
     
-    TROY_BNB("TROYBNB", "0.00000001", "1"),
+    TROY_BNB("TROY","BNB", "0.00000001", "1"),
     
-    TROY_USDT("TROYUSDT", "0.000001", "1"),
+    TROY_USDT("TROY","USDT", "0.000001", "1"),
     
-    BUSD_RUB("BUSDRUB", "0.01", "1"),
+    BUSD_RUB("BUSD","RUB", "0.01", "1"),
     
-    QTUM_BUSD("QTUMBUSD", "0.001", "0.1"),
+    QTUM_BUSD("QTUM","BUSD", "0.001", "0.1"),
     
-    VET_BUSD("VETBUSD", "0.00001", "0.1"),
+    VET_BUSD("VET","BUSD", "0.00001", "0.1"),
     
-    VITE_BTC("VITEBTC", "0.00000001", "1"),
+    VITE_BTC("VITE","BTC", "0.00000001", "1"),
     
-    VITE_USDT("VITEUSDT", "0.00001", "0.1"),
+    VITE_USDT("VITE","USDT", "0.00001", "0.1"),
     
-    FTT_BNB("FTTBNB", "0.0001", "0.01"),
+    FTT_BNB("FTT","BNB", "0.0001", "0.01"),
     
-    FTT_BTC("FTTBTC", "0.0000001", "0.01"),
+    FTT_BTC("FTT","BTC", "0.0000001", "0.01"),
     
-    FTT_USDT("FTTUSDT", "0.01", "0.01"),
+    FTT_USDT("FTT","USDT", "0.01", "0.01"),
     
-    BTC_TRY("BTCTRY", "1", "0.00001"),
+    BTC_TRY("BTC","TRY", "1", "0.00001"),
     
-    BNB_TRY("BNBTRY", "1", "0.001"),
+    BNB_TRY("BNB","TRY", "1", "0.001"),
     
-    BUSD_TRY("BUSDTRY", "0.001", "1"),
+    BUSD_TRY("BUSD","TRY", "0.001", "1"),
     
-    ETH_TRY("ETHTRY", "1", "0.0001"),
+    ETH_TRY("ETH","TRY", "1", "0.0001"),
     
-    XRP_TRY("XRPTRY", "0.001", "1"),
+    XRP_TRY("XRP","TRY", "0.001", "1"),
     
-    USDT_TRY("USDTTRY", "0.001", "1"),
+    USDT_TRY("USDT","TRY", "0.001", "1"),
     
-    USDT_RUB("USDTRUB", "0.01", "1"),
+    USDT_RUB("USDT","RUB", "0.01", "1"),
     
-    BTC_EUR("BTCEUR", "0.01", "0.00001"),
+    BTC_EUR("BTC","EUR", "0.01", "0.00001"),
     
-    ETH_EUR("ETHEUR", "0.01", "0.0001"),
+    ETH_EUR("ETH","EUR", "0.01", "0.0001"),
     
-    BNB_EUR("BNBEUR", "0.1", "0.001"),
+    BNB_EUR("BNB","EUR", "0.1", "0.001"),
     
-    XRP_EUR("XRPEUR", "0.0001", "1"),
+    XRP_EUR("XRP","EUR", "0.0001", "1"),
     
-    EUR_BUSD("EURBUSD", "0.001", "0.1"),
+    EUR_BUSD("EUR","BUSD", "0.001", "0.1"),
     
-    EUR_USDT("EURUSDT", "0.001", "0.1"),
+    EUR_USDT("EUR","USDT", "0.001", "0.1"),
     
-    OGN_BNB("OGNBNB", "0.000001", "1"),
+    OGN_BNB("OGN","BNB", "0.000001", "1"),
     
-    OGN_BTC("OGNBTC", "0.00000001", "1"),
+    OGN_BTC("OGN","BTC", "0.00000001", "1"),
     
-    OGN_USDT("OGNUSDT", "0.0001", "1"),
+    OGN_USDT("OGN","USDT", "0.0001", "1"),
     
-    DREP_BTC("DREPBTC", "0.00000001", "1"),
+    DREP_BTC("DREP","BTC", "0.00000001", "1"),
     
-    DREP_USDT("DREPUSDT", "0.0001", "1"),
+    DREP_USDT("DREP","USDT", "0.0001", "1"),
     
-    TCT_BTC("TCTBTC", "0.00000001", "1"),
+    TCT_BTC("TCT","BTC", "0.00000001", "1"),
     
-    TCT_USDT("TCTUSDT", "0.00001", "1"),
+    TCT_USDT("TCT","USDT", "0.00001", "1"),
     
-    WRX_BNB("WRXBNB", "0.000001", "0.1"),
+    WRX_BNB("WRX","BNB", "0.000001", "0.1"),
     
-    WRX_BTC("WRXBTC", "0.00000001", "0.1"),
+    WRX_BTC("WRX","BTC", "0.00000001", "0.1"),
     
-    WRX_USDT("WRXUSDT", "0.001", "0.1"),
+    WRX_USDT("WRX","USDT", "0.001", "0.1"),
     
-    ICX_BUSD("ICXBUSD", "0.001", "0.1"),
+    ICX_BUSD("ICX","BUSD", "0.001", "0.1"),
     
-    BTS_USDT("BTSUSDT", "0.00001", "0.1"),
+    BTS_USDT("BTS","USDT", "0.00001", "0.1"),
     
-    LSK_USDT("LSKUSDT", "0.001", "0.1"),
+    LSK_USDT("LSK","USDT", "0.001", "0.1"),
     
-    BNT_USDT("BNTUSDT", "0.001", "0.1"),
+    BNT_USDT("BNT","USDT", "0.001", "0.1"),
     
-    BNT_BUSD("BNTBUSD", "0.001", "0.1"),
+    BNT_BUSD("BNT","BUSD", "0.001", "0.1"),
     
-    LTO_BTC("LTOBTC", "0.00000001", "1"),
+    LTO_BTC("LTO","BTC", "0.00000001", "1"),
     
-    LTO_USDT("LTOUSDT", "0.0001", "1"),
+    LTO_USDT("LTO","USDT", "0.0001", "1"),
     
-    ATOM_BUSD("ATOMBUSD", "0.01", "0.01"),
+    ATOM_BUSD("ATOM","BUSD", "0.01", "0.01"),
     
-    DASH_BUSD("DASHBUSD", "0.1", "0.001"),
+    DASH_BUSD("DASH","BUSD", "0.1", "0.001"),
     
-    NEO_BUSD("NEOBUSD", "0.01", "0.01"),
+    NEO_BUSD("NEO","BUSD", "0.01", "0.01"),
     
-    WAVES_BUSD("WAVESBUSD", "0.01", "0.01"),
+    WAVES_BUSD("WAVES","BUSD", "0.01", "0.01"),
     
-    XTZ_BUSD("XTZBUSD", "0.001", "0.1"),
+    XTZ_BUSD("XTZ","BUSD", "0.001", "0.1"),
     
-    BAT_BUSD("BATBUSD", "0.0001", "1"),
+    BAT_BUSD("BAT","BUSD", "0.0001", "1"),
     
-    ENJ_BUSD("ENJBUSD", "0.001", "0.1"),
+    ENJ_BUSD("ENJ","BUSD", "0.001", "0.1"),
     
-    NANO_BUSD("NANOBUSD", "0.001", "0.1"),
+    NANO_BUSD("NANO","BUSD", "0.001", "0.1"),
     
-    ONT_BUSD("ONTBUSD", "0.0001", "1"),
+    ONT_BUSD("ONT","BUSD", "0.0001", "1"),
     
-    RVN_BUSD("RVNBUSD", "0.00001", "0.1"),
+    RVN_BUSD("RVN","BUSD", "0.00001", "0.1"),
     
-    AION_USDT("AIONUSDT", "0.0001", "1"),
+    AION_USDT("AION","USDT", "0.0001", "1"),
     
-    MBL_BNB("MBLBNB", "0.00000001", "1"),
+    MBL_BNB("MBL","BNB", "0.00000001", "1"),
     
-    MBL_USDT("MBLUSDT", "0.000001", "1"),
+    MBL_USDT("MBL","USDT", "0.000001", "1"),
     
-    COTI_BNB("COTIBNB", "0.0000001", "1"),
+    COTI_BNB("COTI","BNB", "0.0000001", "1"),
     
-    COTI_BTC("COTIBTC", "0.00000001", "1"),
+    COTI_BTC("COTI","BTC", "0.00000001", "1"),
     
-    COTI_USDT("COTIUSDT", "0.0001", "1"),
+    COTI_USDT("COTI","USDT", "0.0001", "1"),
     
-    ALGO_BUSD("ALGOBUSD", "0.0001", "1"),
+    ALGO_BUSD("ALGO","BUSD", "0.0001", "1"),
     
-    BTT_BUSD("BTTBUSD", "0.000001", "1"),
+    BTT_BUSD("BTT","BUSD", "0.000001", "1"),
     
-    TOMO_BUSD("TOMOBUSD", "0.001", "0.1"),
+    TOMO_BUSD("TOMO","BUSD", "0.001", "0.1"),
     
-    XMR_BUSD("XMRBUSD", "0.1", "0.001"),
+    XMR_BUSD("XMR","BUSD", "0.1", "0.001"),
     
-    ZEC_BUSD("ZECBUSD", "0.1", "0.001"),
+    ZEC_BUSD("ZEC","BUSD", "0.1", "0.001"),
     
-    STPT_BTC("STPTBTC", "0.00000001", "1"),
+    STPT_BTC("STPT","BTC", "0.00000001", "1"),
     
-    STPT_USDT("STPTUSDT", "0.00001", "0.1"),
+    STPT_USDT("STPT","USDT", "0.00001", "0.1"),
     
-    WTC_USDT("WTCUSDT", "0.0001", "1"),
+    WTC_USDT("WTC","USDT", "0.0001", "1"),
     
-    DATA_BUSD("DATABUSD", "0.00001", "0.1"),
+    DATA_BUSD("DATA","BUSD", "0.00001", "0.1"),
     
-    DATA_USDT("DATAUSDT", "0.00001", "0.1"),
+    DATA_USDT("DATA","USDT", "0.00001", "0.1"),
     
-    SOL_BNB("SOLBNB", "0.0001", "0.01"),
+    SOL_BNB("SOL","BNB", "0.0001", "0.01"),
     
-    SOL_BTC("SOLBTC", "0.0000001", "0.01"),
+    SOL_BTC("SOL","BTC", "0.0000001", "0.01"),
     
-    SOL_USDT("SOLUSDT", "0.01", "0.01"),
+    SOL_USDT("SOL","USDT", "0.01", "0.01"),
     
-    SOL_BUSD("SOLBUSD", "0.01", "0.01"),
+    SOL_BUSD("SOL","BUSD", "0.01", "0.01"),
     
-    BNB_IDRT("BNBIDRT", "1", "0.001"),
+    BNB_IDRT("BNB","IDRT", "1", "0.001"),
     
-    USDT_IDRT("USDTIDRT", "1", "1"),
+    USDT_IDRT("USDT","IDRT", "1", "1"),
     
-    CTSI_BTC("CTSIBTC", "0.00000001", "1"),
+    CTSI_BTC("CTSI","BTC", "0.00000001", "1"),
     
-    CTSI_USDT("CTSIUSDT", "0.0001", "1"),
+    CTSI_USDT("CTSI","USDT", "0.0001", "1"),
     
-    CTSI_BNB("CTSIBNB", "0.000001", "1"),
+    CTSI_BNB("CTSI","BNB", "0.000001", "1"),
     
-    CTSI_BUSD("CTSIBUSD", "0.0001", "1"),
+    CTSI_BUSD("CTSI","BUSD", "0.0001", "1"),
     
-    HIVE_BTC("HIVEBTC", "0.00000001", "1"),
+    HIVE_BTC("HIVE","BTC", "0.00000001", "1"),
     
-    HIVE_USDT("HIVEUSDT", "0.0001", "1"),
+    HIVE_USDT("HIVE","USDT", "0.0001", "1"),
     
-    CHR_BNB("CHRBNB", "0.0000001", "1"),
+    CHR_BNB("CHR","BNB", "0.0000001", "1"),
     
-    CHR_BTC("CHRBTC", "0.00000001", "1"),
+    CHR_BTC("CHR","BTC", "0.00000001", "1"),
     
-    CHR_USDT("CHRUSDT", "0.0001", "1"),
+    CHR_USDT("CHR","USDT", "0.0001", "1"),
     
-    BTCUP_USDT("BTCUPUSDT", "0.001", "0.01"),
+    BTCUP_USDT("BTCUP","USDT", "0.001", "0.01"),
     
-    BTCDOWN_USDT("BTCDOWNUSDT", "0.000001", "0.01"),
+    BTCDOWN_USDT("BTCDOWN","USDT", "0.000001", "0.01"),
     
-    GXS_USDT("GXSUSDT", "0.0001", "1"),
+    GXS_USDT("GXS","USDT", "0.0001", "1"),
     
-    ARDR_USDT("ARDRUSDT", "0.0001", "1"),
+    ARDR_USDT("ARDR","USDT", "0.0001", "1"),
     
-    HBAR_BUSD("HBARBUSD", "0.0001", "1"),
+    HBAR_BUSD("HBAR","BUSD", "0.0001", "1"),
     
-    MATIC_BUSD("MATICBUSD", "0.001", "0.1"),
+    MATIC_BUSD("MATIC","BUSD", "0.001", "0.1"),
     
-    WRX_BUSD("WRXBUSD", "0.001", "0.1"),
+    WRX_BUSD("WRX","BUSD", "0.001", "0.1"),
     
-    ZIL_BUSD("ZILBUSD", "0.00001", "0.1"),
+    ZIL_BUSD("ZIL","BUSD", "0.00001", "0.1"),
     
-    MDT_BTC("MDTBTC", "0.00000001", "1"),
+    MDT_BTC("MDT","BTC", "0.00000001", "1"),
     
-    MDT_USDT("MDTUSDT", "0.00001", "0.1"),
+    MDT_USDT("MDT","USDT", "0.00001", "0.1"),
     
-    STMX_BNB("STMXBNB", "0.00000001", "1"),
+    STMX_BNB("STMX","BNB", "0.00000001", "1"),
     
-    STMX_BTC("STMXBTC", "0.00000001", "1"),
+    STMX_BTC("STMX","BTC", "0.00000001", "1"),
     
-    STMX_ETH("STMXETH", "0.00000001", "1"),
+    STMX_ETH("STMX","ETH", "0.00000001", "1"),
     
-    STMX_USDT("STMXUSDT", "0.00001", "1"),
+    STMX_USDT("STMX","USDT", "0.00001", "1"),
     
-    KNC_BUSD("KNCBUSD", "0.001", "0.1"),
+    KNC_BUSD("KNC","BUSD", "0.001", "0.1"),
     
-    KNC_USDT("KNCUSDT", "0.001", "0.1"),
+    KNC_USDT("KNC","USDT", "0.001", "0.1"),
     
-    REP_USDT("REPUSDT", "0.01", "0.01"),
+    REP_USDT("REP","USDT", "0.01", "0.01"),
     
-    LRC_BUSD("LRCBUSD", "0.0001", "1"),
+    LRC_BUSD("LRC","BUSD", "0.0001", "1"),
     
-    LRC_USDT("LRCUSDT", "0.0001", "1"),
+    LRC_USDT("LRC","USDT", "0.0001", "1"),
     
-    IQ_BNB("IQBNB", "0.00000001", "1"),
+    IQ_BNB("IQ","BNB", "0.00000001", "1"),
     
-    IQ_BUSD("IQBUSD", "0.00001", "1"),
+    IQ_BUSD("IQ","BUSD", "0.00001", "1"),
     
-    PNT_BTC("PNTBTC", "0.00000001", "1"),
+    PNT_BTC("PNT","BTC", "0.00000001", "1"),
     
-    PNT_USDT("PNTUSDT", "0.0001", "1"),
+    PNT_USDT("PNT","USDT", "0.0001", "1"),
     
-    BTC_GBP("BTCGBP", "0.01", "0.00001"),
+    BTC_GBP("BTC","GBP", "0.01", "0.00001"),
     
-    ETH_GBP("ETHGBP", "0.01", "0.0001"),
+    ETH_GBP("ETH","GBP", "0.01", "0.0001"),
     
-    XRP_GBP("XRPGBP", "0.0001", "1"),
+    XRP_GBP("XRP","GBP", "0.0001", "1"),
     
-    BNB_GBP("BNBGBP", "0.1", "0.001"),
+    BNB_GBP("BNB","GBP", "0.1", "0.001"),
     
-    GBP_BUSD("GBPBUSD", "0.001", "0.1"),
+    GBP_BUSD("GBP","BUSD", "0.001", "0.1"),
     
-    DGB_BNB("DGBBNB", "0.0000001", "1"),
+    DGB_BNB("DGB","BNB", "0.0000001", "1"),
     
-    DGB_BTC("DGBBTC", "0.00000001", "1"),
+    DGB_BTC("DGB","BTC", "0.00000001", "1"),
     
-    DGB_BUSD("DGBBUSD", "0.00001", "0.1"),
+    DGB_BUSD("DGB","BUSD", "0.00001", "0.1"),
     
-    BTC_UAH("BTCUAH", "1", "0.00001"),
+    BTC_UAH("BTC","UAH", "1", "0.00001"),
     
-    USDT_UAH("USDTUAH", "0.01", "1"),
+    USDT_UAH("USDT","UAH", "0.01", "1"),
     
-    COMP_BTC("COMPBTC", "0.00001", "0.001"),
+    COMP_BTC("COMP","BTC", "0.00001", "0.001"),
     
-    COMP_BUSD("COMPBUSD", "0.1", "0.001"),
+    COMP_BUSD("COMP","BUSD", "0.1", "0.001"),
     
-    COMP_USDT("COMPUSDT", "0.1", "0.001"),
+    COMP_USDT("COMP","USDT", "0.1", "0.001"),
     
-    BTC_BIDR("BTCBIDR", "1", "0.00001"),
+    BTC_BIDR("BTC","BIDR", "1", "0.00001"),
     
-    ETH_BIDR("ETHBIDR", "1", "0.0001"),
+    ETH_BIDR("ETH","BIDR", "1", "0.0001"),
     
-    BNB_BIDR("BNBBIDR", "1", "0.001"),
+    BNB_BIDR("BNB","BIDR", "1", "0.001"),
     
-    BUSD_BIDR("BUSDBIDR", "1", "0.1"),
+    BUSD_BIDR("BUSD","BIDR", "1", "0.1"),
     
-    USDT_BIDR("USDTBIDR", "1", "0.1"),
+    USDT_BIDR("USDT","BIDR", "1", "0.1"),
     
-    SC_USDT("SCUSDT", "0.00001", "1"),
+    SC_USDT("SC","USDT", "0.00001", "1"),
     
-    ZEN_USDT("ZENUSDT", "0.01", "0.01"),
+    ZEN_USDT("ZEN","USDT", "0.01", "0.01"),
     
-    SXP_BTC("SXPBTC", "0.00000001", "0.1"),
+    SXP_BTC("SXP","BTC", "0.00000001", "0.1"),
     
-    SXP_BNB("SXPBNB", "0.000001", "0.1"),
+    SXP_BNB("SXP","BNB", "0.000001", "0.1"),
     
-    SXP_BUSD("SXPBUSD", "0.001", "0.1"),
+    SXP_BUSD("SXP","BUSD", "0.001", "0.1"),
     
-    SNX_BTC("SNXBTC", "0.0000001", "0.1"),
+    SNX_BTC("SNX","BTC", "0.0000001", "0.1"),
     
-    SNX_BNB("SNXBNB", "0.00001", "0.1"),
+    SNX_BNB("SNX","BNB", "0.00001", "0.1"),
     
-    SNX_BUSD("SNXBUSD", "0.001", "0.1"),
+    SNX_BUSD("SNX","BUSD", "0.001", "0.1"),
     
-    SNX_USDT("SNXUSDT", "0.001", "0.1"),
+    SNX_USDT("SNX","USDT", "0.001", "0.1"),
     
-    ETHUP_USDT("ETHUPUSDT", "0.001", "0.01"),
+    ETHUP_USDT("ETHUP","USDT", "0.001", "0.01"),
     
-    ETHDOWN_USDT("ETHDOWNUSDT", "0.0001", "0.01"),
+    ETHDOWN_USDT("ETHDOWN","USDT", "0.0001", "0.01"),
     
-    ADAUP_USDT("ADAUPUSDT", "0.001", "0.01"),
+    ADAUP_USDT("ADAUP","USDT", "0.001", "0.01"),
     
-    ADADOWN_USDT("ADADOWNUSDT", "0.000001", "0.01"),
+    ADADOWN_USDT("ADADOWN","USDT", "0.000001", "0.01"),
     
-    LINKUP_USDT("LINKUPUSDT", "0.0001", "0.01"),
+    LINKUP_USDT("LINKUP","USDT", "0.0001", "0.01"),
     
-    LINKDOWN_USDT("LINKDOWNUSDT", "0.000001", "0.01"),
+    LINKDOWN_USDT("LINKDOWN","USDT", "0.000001", "0.01"),
     
-    VTHO_BNB("VTHOBNB", "0.00000001", "1"),
+    VTHO_BNB("VTHO","BNB", "0.00000001", "1"),
     
-    VTHO_USDT("VTHOUSDT", "0.000001", "1"),
+    VTHO_USDT("VTHO","USDT", "0.000001", "1"),
     
-    DGB_USDT("DGBUSDT", "0.00001", "0.1"),
+    DGB_USDT("DGB","USDT", "0.00001", "0.1"),
     
-    GBP_USDT("GBPUSDT", "0.001", "0.1"),
+    GBP_USDT("GBP","USDT", "0.001", "0.1"),
     
-    STORJ_BUSD("STORJBUSD", "0.0001", "1"),
+    STORJ_BUSD("STORJ","BUSD", "0.0001", "1"),
     
-    SXP_USDT("SXPUSDT", "0.001", "0.1"),
+    SXP_USDT("SXP","USDT", "0.001", "0.1"),
     
-    IRIS_BTC("IRISBTC", "0.00000001", "1"),
+    IRIS_BTC("IRIS","BTC", "0.00000001", "1"),
     
-    MKR_BTC("MKRBTC", "0.00001", "0.0001"),
+    MKR_BTC("MKR","BTC", "0.00001", "0.0001"),
     
-    MKR_USDT("MKRUSDT", "1", "0.0001"),
+    MKR_USDT("MKR","USDT", "1", "0.0001"),
     
-    MKR_BUSD("MKRBUSD", "1", "0.0001"),
+    MKR_BUSD("MKR","BUSD", "1", "0.0001"),
     
-    RUNE_BNB("RUNEBNB", "0.00001", "0.1"),
+    RUNE_BNB("RUNE","BNB", "0.00001", "0.1"),
     
-    RUNE_BTC("RUNEBTC", "0.0000001", "0.1"),
+    RUNE_BTC("RUNE","BTC", "0.0000001", "0.1"),
     
-    RUNE_BUSD("RUNEBUSD", "0.001", "0.1"),
+    RUNE_BUSD("RUNE","BUSD", "0.001", "0.1"),
     
-    MANA_BUSD("MANABUSD", "0.0001", "1"),
+    MANA_BUSD("MANA","BUSD", "0.0001", "1"),
     
-    DOGE_BUSD("DOGEBUSD", "0.0001", "1"),
+    DOGE_BUSD("DOGE","BUSD", "0.0001", "1"),
     
-    ZRX_BUSD("ZRXBUSD", "0.0001", "1"),
+    ZRX_BUSD("ZRX","BUSD", "0.0001", "1"),
     
-    DCR_USDT("DCRUSDT", "0.1", "0.001"),
+    DCR_USDT("DCR","USDT", "0.1", "0.001"),
     
-    STORJ_USDT("STORJUSDT", "0.0001", "1"),
+    STORJ_USDT("STORJ","USDT", "0.0001", "1"),
     
-    BTC_AUD("BTCAUD", "0.01", "0.00001"),
+    BTC_AUD("BTC","AUD", "0.01", "0.00001"),
     
-    ETH_AUD("ETHAUD", "0.01", "0.0001"),
+    ETH_AUD("ETH","AUD", "0.01", "0.0001"),
     
-    AUD_BUSD("AUDBUSD", "0.0001", "1"),
+    AUD_BUSD("AUD","BUSD", "0.0001", "1"),
     
-    FIO_BNB("FIOBNB", "0.0000001", "1"),
+    FIO_BNB("FIO","BNB", "0.0000001", "1"),
     
-    FIO_BTC("FIOBTC", "0.00000001", "1"),
+    FIO_BTC("FIO","BTC", "0.00000001", "1"),
     
-    FIO_BUSD("FIOBUSD", "0.0001", "1"),
+    FIO_BUSD("FIO","BUSD", "0.0001", "1"),
     
-    BNBUP_USDT("BNBUPUSDT", "0.01", "0.01"),
+    BNBUP_USDT("BNBUP","USDT", "0.01", "0.01"),
     
-    BNBDOWN_USDT("BNBDOWNUSDT", "0.00001", "0.01"),
+    BNBDOWN_USDT("BNBDOWN","USDT", "0.00001", "0.01"),
     
-    XTZUP_USDT("XTZUPUSDT", "0.00001", "0.01"),
+    XTZUP_USDT("XTZUP","USDT", "0.00001", "0.01"),
     
-    XTZDOWN_USDT("XTZDOWNUSDT", "0.001", "0.01"),
+    XTZDOWN_USDT("XTZDOWN","USDT", "0.001", "0.01"),
     
-    AVA_BNB("AVABNB", "0.000001", "0.1"),
+    AVA_BNB("AVA","BNB", "0.000001", "0.1"),
     
-    AVA_BTC("AVABTC", "0.00000001", "0.1"),
+    AVA_BTC("AVA","BTC", "0.00000001", "0.1"),
     
-    AVA_BUSD("AVABUSD", "0.001", "0.1"),
+    AVA_BUSD("AVA","BUSD", "0.001", "0.1"),
     
-    IOTA_BUSD("IOTABUSD", "0.0001", "1"),
+    IOTA_BUSD("IOTA","BUSD", "0.0001", "1"),
     
-    MANA_USDT("MANAUSDT", "0.0001", "1"),
+    MANA_USDT("MANA","USDT", "0.0001", "1"),
     
-    XRP_AUD("XRPAUD", "0.0001", "1"),
+    XRP_AUD("XRP","AUD", "0.0001", "1"),
     
-    BNB_AUD("BNBAUD", "0.1", "0.001"),
+    BNB_AUD("BNB","AUD", "0.1", "0.001"),
     
-    AUD_USDT("AUDUSDT", "0.0001", "1"),
+    AUD_USDT("AUD","USDT", "0.0001", "1"),
     
-    BAL_BTC("BALBTC", "0.0000001", "0.01"),
+    BAL_BTC("BAL","BTC", "0.0000001", "0.01"),
     
-    BAL_BUSD("BALBUSD", "0.01", "0.01"),
+    BAL_BUSD("BAL","BUSD", "0.01", "0.01"),
     
-    YFI_BTC("YFIBTC", "0.0001", "0.00001"),
+    YFI_BTC("YFI","BTC", "0.0001", "0.00001"),
     
-    YFI_BUSD("YFIBUSD", "0.01", "0.00001"),
+    YFI_BUSD("YFI","BUSD", "0.01", "0.00001"),
     
-    YFI_USDT("YFIUSDT", "0.01", "0.00001"),
+    YFI_USDT("YFI","USDT", "0.01", "0.00001"),
     
-    BAL_USDT("BALUSDT", "0.01", "0.01"),
+    BAL_USDT("BAL","USDT", "0.01", "0.01"),
     
-    BLZ_USDT("BLZUSDT", "0.0001", "1"),
+    BLZ_USDT("BLZ","USDT", "0.0001", "1"),
     
-    IRIS_USDT("IRISUSDT", "0.00001", "0.1"),
+    IRIS_USDT("IRIS","USDT", "0.00001", "0.1"),
     
-    KMD_USDT("KMDUSDT", "0.0001", "1"),
+    KMD_USDT("KMD","USDT", "0.0001", "1"),
     
-    BTC_DAI("BTCDAI", "0.01", "0.00001"),
+    BTC_DAI("BTC","DAI", "0.01", "0.00001"),
     
-    ETH_DAI("ETHDAI", "0.01", "0.0001"),
+    ETH_DAI("ETH","DAI", "0.01", "0.0001"),
     
-    BNB_DAI("BNBDAI", "0.1", "0.001"),
+    BNB_DAI("BNB","DAI", "0.1", "0.001"),
     
-    USDT_DAI("USDTDAI", "0.0001", "0.1"),
+    USDT_DAI("USDT","DAI", "0.0001", "0.1"),
     
-    BUSD_DAI("BUSDDAI", "0.0001", "0.1"),
+    BUSD_DAI("BUSD","DAI", "0.0001", "0.1"),
     
-    JST_BTC("JSTBTC", "0.00000001", "1"),
+    JST_BTC("JST","BTC", "0.00000001", "1"),
     
-    JST_BUSD("JSTBUSD", "0.00001", "0.1"),
+    JST_BUSD("JST","BUSD", "0.00001", "0.1"),
     
-    JST_USDT("JSTUSDT", "0.00001", "0.1"),
+    JST_USDT("JST","USDT", "0.00001", "0.1"),
     
-    SRM_BNB("SRMBNB", "0.00001", "0.1"),
+    SRM_BNB("SRM","BNB", "0.00001", "0.1"),
     
-    SRM_BTC("SRMBTC", "0.0000001", "0.1"),
+    SRM_BTC("SRM","BTC", "0.0000001", "0.1"),
     
-    SRM_BUSD("SRMBUSD", "0.001", "0.1"),
+    SRM_BUSD("SRM","BUSD", "0.001", "0.1"),
     
-    SRM_USDT("SRMUSDT", "0.001", "0.1"),
+    SRM_USDT("SRM","USDT", "0.001", "0.1"),
     
-    ANT_BNB("ANTBNB", "0.00001", "0.1"),
+    ANT_BNB("ANT","BNB", "0.00001", "0.1"),
     
-    ANT_BTC("ANTBTC", "0.00000001", "0.1"),
+    ANT_BTC("ANT","BTC", "0.00000001", "0.1"),
     
-    ANT_BUSD("ANTBUSD", "0.001", "0.1"),
+    ANT_BUSD("ANT","BUSD", "0.001", "0.1"),
     
-    ANT_USDT("ANTUSDT", "0.001", "0.1"),
+    ANT_USDT("ANT","USDT", "0.001", "0.1"),
     
-    CRV_BTC("CRVBTC", "0.00000001", "0.1"),
+    CRV_BTC("CRV","BTC", "0.00000001", "0.1"),
     
-    CRV_BUSD("CRVBUSD", "0.001", "0.1"),
+    CRV_BUSD("CRV","BUSD", "0.001", "0.1"),
     
-    CRV_USDT("CRVUSDT", "0.001", "0.1"),
+    CRV_USDT("CRV","USDT", "0.001", "0.1"),
     
-    SAND_BNB("SANDBNB", "0.000001", "1"),
+    SAND_BNB("SAND","BNB", "0.000001", "1"),
     
-    SAND_BTC("SANDBTC", "0.00000001", "1"),
+    SAND_BTC("SAND","BTC", "0.00000001", "1"),
     
-    SAND_USDT("SANDUSDT", "0.0001", "1"),
+    SAND_USDT("SAND","USDT", "0.0001", "1"),
     
-    SAND_BUSD("SANDBUSD", "0.0001", "1"),
+    SAND_BUSD("SAND","BUSD", "0.0001", "1"),
     
-    OCEAN_BNB("OCEANBNB", "0.000001", "1"),
+    OCEAN_BNB("OCEAN","BNB", "0.000001", "1"),
     
-    OCEAN_BTC("OCEANBTC", "0.00000001", "1"),
+    OCEAN_BTC("OCEAN","BTC", "0.00000001", "1"),
     
-    OCEAN_BUSD("OCEANBUSD", "0.0001", "1"),
+    OCEAN_BUSD("OCEAN","BUSD", "0.0001", "1"),
     
-    OCEAN_USDT("OCEANUSDT", "0.0001", "1"),
+    OCEAN_USDT("OCEAN","USDT", "0.0001", "1"),
     
-    NMR_BNB("NMRBNB", "0.0001", "0.01"),
+    NMR_BNB("NMR","BNB", "0.0001", "0.01"),
     
-    NMR_BTC("NMRBTC", "0.000001", "0.01"),
+    NMR_BTC("NMR","BTC", "0.000001", "0.01"),
     
-    NMR_BUSD("NMRBUSD", "0.01", "0.01"),
+    NMR_BUSD("NMR","BUSD", "0.01", "0.01"),
     
-    NMR_USDT("NMRUSDT", "0.01", "0.01"),
+    NMR_USDT("NMR","USDT", "0.01", "0.01"),
     
-    DOT_BNB("DOTBNB", "0.00001", "0.01"),
+    DOT_BNB("DOT","BNB", "0.00001", "0.01"),
     
-    DOT_BTC("DOTBTC", "0.0000001", "0.01"),
+    DOT_BTC("DOT","BTC", "0.0000001", "0.01"),
     
-    DOT_BUSD("DOTBUSD", "0.01", "0.01"),
+    DOT_BUSD("DOT","BUSD", "0.01", "0.01"),
     
-    DOT_USDT("DOTUSDT", "0.01", "0.01"),
+    DOT_USDT("DOT","USDT", "0.01", "0.01"),
     
-    LUNA_BNB("LUNABNB", "0.00001", "0.01"),
+    LUNA_BNB("LUNA","BNB", "0.00001", "0.01"),
     
-    LUNA_BTC("LUNABTC", "0.0000001", "0.01"),
+    LUNA_BTC("LUNA","BTC", "0.0000001", "0.01"),
     
-    LUNA_BUSD("LUNABUSD", "0.01", "0.01"),
+    LUNA_BUSD("LUNA","BUSD", "0.01", "0.01"),
     
-    LUNA_USDT("LUNAUSDT", "0.01", "0.01"),
+    LUNA_USDT("LUNA","USDT", "0.01", "0.01"),
     
-    IDEX_BTC("IDEXBTC", "0.00000001", "1"),
+    IDEX_BTC("IDEX","BTC", "0.00000001", "1"),
     
-    IDEX_BUSD("IDEXBUSD", "0.00001", "0.1"),
+    IDEX_BUSD("IDEX","BUSD", "0.00001", "0.1"),
     
-    RSR_BNB("RSRBNB", "0.0000001", "1"),
+    RSR_BNB("RSR","BNB", "0.0000001", "1"),
     
-    RSR_BTC("RSRBTC", "0.00000001", "1"),
+    RSR_BTC("RSR","BTC", "0.00000001", "1"),
     
-    RSR_BUSD("RSRBUSD", "0.00001", "0.1"),
+    RSR_BUSD("RSR","BUSD", "0.00001", "0.1"),
     
-    RSR_USDT("RSRUSDT", "0.00001", "0.1"),
+    RSR_USDT("RSR","USDT", "0.00001", "0.1"),
     
-    PAXG_BNB("PAXGBNB", "0.001", "0.0001"),
+    PAXG_BNB("PAXG","BNB", "0.001", "0.0001"),
     
-    PAXG_BTC("PAXGBTC", "0.00001", "0.0001"),
+    PAXG_BTC("PAXG","BTC", "0.00001", "0.0001"),
     
-    PAXG_USDT("PAXGUSDT", "1", "0.0001"),
+    PAXG_USDT("PAXG","USDT", "1", "0.0001"),
     
-    WNXM_BTC("WNXMBTC", "0.000001", "0.01"),
+    WNXM_BTC("WNXM","BTC", "0.000001", "0.01"),
     
-    WNXM_USDT("WNXMUSDT", "0.01", "0.01"),
+    WNXM_USDT("WNXM","USDT", "0.01", "0.01"),
     
-    TRB_BTC("TRBBTC", "0.000001", "0.01"),
+    TRB_BTC("TRB","BTC", "0.000001", "0.01"),
     
-    TRB_BUSD("TRBBUSD", "0.01", "0.01"),
+    TRB_BUSD("TRB","BUSD", "0.01", "0.01"),
     
-    TRB_USDT("TRBUSDT", "0.01", "0.01"),
+    TRB_USDT("TRB","USDT", "0.01", "0.01"),
     
-    DOT_BIDR("DOTBIDR", "1", "0.01"),
+    DOT_BIDR("DOT","BIDR", "1", "0.01"),
     
-    LINK_AUD("LINKAUD", "0.01", "0.01"),
+    LINK_AUD("LINK","AUD", "0.01", "0.01"),
     
-    SXP_AUD("SXPAUD", "0.001", "0.1"),
+    SXP_AUD("SXP","AUD", "0.001", "0.1"),
     
-    WBTC_BTC("WBTCBTC", "0.0001", "0.00001"),
+    WBTC_BTC("WBTC","BTC", "0.0001", "0.00001"),
     
-    WBTC_ETH("WBTCETH", "0.01", "0.00001"),
+    WBTC_ETH("WBTC","ETH", "0.01", "0.00001"),
     
-    SUSHI_BNB("SUSHIBNB", "0.00001", "0.1"),
+    SUSHI_BNB("SUSHI","BNB", "0.00001", "0.1"),
     
-    SUSHI_BTC("SUSHIBTC", "0.0000001", "0.1"),
+    SUSHI_BTC("SUSHI","BTC", "0.0000001", "0.1"),
     
-    SUSHI_BUSD("SUSHIBUSD", "0.001", "0.1"),
+    SUSHI_BUSD("SUSHI","BUSD", "0.001", "0.1"),
     
-    SUSHI_USDT("SUSHIUSDT", "0.001", "0.1"),
+    SUSHI_USDT("SUSHI","USDT", "0.001", "0.1"),
     
-    YFII_BNB("YFIIBNB", "0.01", "0.0001"),
+    YFII_BNB("YFII","BNB", "0.01", "0.0001"),
     
-    YFII_BTC("YFIIBTC", "0.0001", "0.0001"),
+    YFII_BTC("YFII","BTC", "0.0001", "0.0001"),
     
-    YFII_BUSD("YFIIBUSD", "1", "0.0001"),
+    YFII_BUSD("YFII","BUSD", "1", "0.0001"),
     
-    YFII_USDT("YFIIUSDT", "1", "0.0001"),
+    YFII_USDT("YFII","USDT", "1", "0.0001"),
     
-    KSM_BNB("KSMBNB", "0.0001", "0.001"),
+    KSM_BNB("KSM","BNB", "0.0001", "0.001"),
     
-    KSM_BTC("KSMBTC", "0.000001", "0.001"),
+    KSM_BTC("KSM","BTC", "0.000001", "0.001"),
     
-    KSM_BUSD("KSMBUSD", "0.1", "0.001"),
+    KSM_BUSD("KSM","BUSD", "0.1", "0.001"),
     
-    KSM_USDT("KSMUSDT", "0.1", "0.001"),
+    KSM_USDT("KSM","USDT", "0.1", "0.001"),
     
-    EGLD_BNB("EGLDBNB", "0.0001", "0.01"),
+    EGLD_BNB("EGLD","BNB", "0.0001", "0.01"),
     
-    EGLD_BTC("EGLDBTC", "0.000001", "0.01"),
+    EGLD_BTC("EGLD","BTC", "0.000001", "0.01"),
     
-    EGLD_BUSD("EGLDBUSD", "0.01", "0.01"),
+    EGLD_BUSD("EGLD","BUSD", "0.01", "0.01"),
     
-    EGLD_USDT("EGLDUSDT", "0.01", "0.01"),
+    EGLD_USDT("EGLD","USDT", "0.01", "0.01"),
     
-    DIA_BTC("DIABTC", "0.00000001", "0.1"),
+    DIA_BTC("DIA","BTC", "0.00000001", "0.1"),
     
-    DIA_BUSD("DIABUSD", "0.001", "0.1"),
+    DIA_BUSD("DIA","BUSD", "0.001", "0.1"),
     
-    DIA_USDT("DIAUSDT", "0.001", "0.1"),
+    DIA_USDT("DIA","USDT", "0.001", "0.1"),
     
-    RUNE_USDT("RUNEUSDT", "0.001", "0.1"),
+    RUNE_USDT("RUNE","USDT", "0.001", "0.1"),
     
-    FIO_USDT("FIOUSDT", "0.0001", "1"),
+    FIO_USDT("FIO","USDT", "0.0001", "1"),
     
-    UMA_BTC("UMABTC", "0.0000001", "0.1"),
+    UMA_BTC("UMA","BTC", "0.0000001", "0.1"),
     
-    UMA_USDT("UMAUSDT", "0.001", "0.1"),
+    UMA_USDT("UMA","USDT", "0.001", "0.1"),
     
-    TRXUP_USDT("TRXUPUSDT", "0.00001", "0.01"),
+    TRXUP_USDT("TRXUP","USDT", "0.00001", "0.01"),
     
-    TRXDOWN_USDT("TRXDOWNUSDT", "0.001", "0.01"),
+    TRXDOWN_USDT("TRXDOWN","USDT", "0.001", "0.01"),
     
-    XRPUP_USDT("XRPUPUSDT", "0.0001", "0.01"),
+    XRPUP_USDT("XRPUP","USDT", "0.0001", "0.01"),
     
-    XRPDOWN_USDT("XRPDOWNUSDT", "0.0000001", "0.01"),
+    XRPDOWN_USDT("XRPDOWN","USDT", "0.0000001", "0.01"),
     
-    DOTUP_USDT("DOTUPUSDT", "0.001", "0.01"),
+    DOTUP_USDT("DOTUP","USDT", "0.001", "0.01"),
     
-    DOTDOWN_USDT("DOTDOWNUSDT", "0.001", "0.01"),
+    DOTDOWN_USDT("DOTDOWN","USDT", "0.001", "0.01"),
     
-    LINK_TRY("LINKTRY", "0.1", "0.01"),
+    LINK_TRY("LINK","TRY", "0.1", "0.01"),
     
-    USDT_NGN("USDTNGN", "0.1", "0.1"),
+    USDT_NGN("USDT","NGN", "0.1", "0.1"),
     
-    BEL_BNB("BELBNB", "0.000001", "0.1"),
+    BEL_BNB("BEL","BNB", "0.000001", "0.1"),
     
-    BEL_BTC("BELBTC", "0.00000001", "0.1"),
+    BEL_BTC("BEL","BTC", "0.00000001", "0.1"),
     
-    BEL_BUSD("BELBUSD", "0.001", "0.1"),
+    BEL_BUSD("BEL","BUSD", "0.001", "0.1"),
     
-    BEL_USDT("BELUSDT", "0.001", "0.1"),
+    BEL_USDT("BEL","USDT", "0.001", "0.1"),
     
-    WING_BTC("WINGBTC", "0.0000001", "0.01"),
+    WING_BTC("WING","BTC", "0.0000001", "0.01"),
     
-    WING_BUSD("WINGBUSD", "0.01", "0.01"),
+    WING_BUSD("WING","BUSD", "0.01", "0.01"),
     
-    WING_USDT("WINGUSDT", "0.01", "0.01"),
+    WING_USDT("WING","USDT", "0.01", "0.01"),
     
-    LTCUP_USDT("LTCUPUSDT", "0.001", "0.01"),
+    LTCUP_USDT("LTCUP","USDT", "0.001", "0.01"),
     
-    LTCDOWN_USDT("LTCDOWNUSDT", "0.0001", "0.01"),
+    LTCDOWN_USDT("LTCDOWN","USDT", "0.0001", "0.01"),
     
-    SXP_EUR("SXPEUR", "0.001", "0.1"),
+    SXP_EUR("SXP","EUR", "0.001", "0.1"),
     
-    CREAM_BNB("CREAMBNB", "0.0001", "0.001"),
+    CREAM_BNB("CREAM","BNB", "0.0001", "0.001"),
     
-    CREAM_BUSD("CREAMBUSD", "0.1", "0.001"),
+    CREAM_BUSD("CREAM","BUSD", "0.1", "0.001"),
     
-    UNI_BNB("UNIBNB", "0.00001", "0.01"),
+    UNI_BNB("UNI","BNB", "0.00001", "0.01"),
     
-    UNI_BTC("UNIBTC", "0.0000001", "0.01"),
+    UNI_BTC("UNI","BTC", "0.0000001", "0.01"),
     
-    UNI_BUSD("UNIBUSD", "0.01", "0.01"),
+    UNI_BUSD("UNI","BUSD", "0.01", "0.01"),
     
-    UNI_USDT("UNIUSDT", "0.01", "0.01"),
+    UNI_USDT("UNI","USDT", "0.01", "0.01"),
     
-    NBS_USDT("NBSUSDT", "0.00001", "0.1"),
+    NBS_USDT("NBS","USDT", "0.00001", "0.1"),
     
-    OXT_BTC("OXTBTC", "0.00000001", "1"),
+    OXT_BTC("OXT","BTC", "0.00000001", "1"),
     
-    OXT_USDT("OXTUSDT", "0.0001", "1"),
+    OXT_USDT("OXT","USDT", "0.0001", "1"),
     
-    SUN_USDT("SUNUSDT", "0.00001", "1"),
+    SUN_USDT("SUN","USDT", "0.00001", "1"),
     
-    AVAX_BNB("AVAXBNB", "0.00001", "0.01"),
+    AVAX_BNB("AVAX","BNB", "0.00001", "0.01"),
     
-    AVAX_BTC("AVAXBTC", "0.0000001", "0.01"),
+    AVAX_BTC("AVAX","BTC", "0.0000001", "0.01"),
     
-    AVAX_BUSD("AVAXBUSD", "0.01", "0.01"),
+    AVAX_BUSD("AVAX","BUSD", "0.01", "0.01"),
     
-    AVAX_USDT("AVAXUSDT", "0.01", "0.01"),
+    AVAX_USDT("AVAX","USDT", "0.01", "0.01"),
     
-    HNT_BTC("HNTBTC", "0.0000001", "0.01"),
+    HNT_BTC("HNT","BTC", "0.0000001", "0.01"),
     
-    HNT_USDT("HNTUSDT", "0.01", "0.01"),
+    HNT_USDT("HNT","USDT", "0.01", "0.01"),
     
-    BAKE_BNB("BAKEBNB", "0.000001", "0.1"),
+    BAKE_BNB("BAKE","BNB", "0.000001", "0.1"),
     
-    BURGER_BNB("BURGERBNB", "0.00001", "0.1"),
+    BURGER_BNB("BURGER","BNB", "0.00001", "0.1"),
     
-    SXP_BIDR("SXPBIDR", "1", "0.1"),
+    SXP_BIDR("SXP","BIDR", "1", "0.1"),
     
-    FLM_BTC("FLMBTC", "0.00000001", "1"),
+    FLM_BTC("FLM","BTC", "0.00000001", "1"),
     
-    FLM_BUSD("FLMBUSD", "0.0001", "1"),
+    FLM_BUSD("FLM","BUSD", "0.0001", "1"),
     
-    FLM_USDT("FLMUSDT", "0.0001", "1"),
+    FLM_USDT("FLM","USDT", "0.0001", "1"),
     
-    SCRT_BTC("SCRTBTC", "0.00000001", "0.1"),
+    SCRT_BTC("SCRT","BTC", "0.00000001", "0.1"),
     
-    SCRT_ETH("SCRTETH", "0.0000001", "1"),
+    SCRT_ETH("SCRT","ETH", "0.0000001", "1"),
     
-    CAKE_BNB("CAKEBNB", "0.00001", "0.01"),
+    CAKE_BNB("CAKE","BNB", "0.00001", "0.01"),
     
-    CAKE_BUSD("CAKEBUSD", "0.01", "0.01"),
+    CAKE_BUSD("CAKE","BUSD", "0.01", "0.01"),
     
-    SPARTA_BNB("SPARTABNB", "0.0000001", "1"),
+    SPARTA_BNB("SPARTA","BNB", "0.0000001", "1"),
     
-    ORN_BTC("ORNBTC", "0.0000001", "0.1"),
+    ORN_BTC("ORN","BTC", "0.0000001", "0.1"),
     
-    ORN_USDT("ORNUSDT", "0.001", "0.1"),
+    ORN_USDT("ORN","USDT", "0.001", "0.1"),
     
-    SXP_TRY("SXPTRY", "0.01", "0.1"),
+    SXP_TRY("SXP","TRY", "0.01", "0.1"),
     
-    UTK_BTC("UTKBTC", "0.00000001", "1"),
+    UTK_BTC("UTK","BTC", "0.00000001", "1"),
     
-    UTK_USDT("UTKUSDT", "0.0001", "1"),
+    UTK_USDT("UTK","USDT", "0.0001", "1"),
     
-    XVS_BNB("XVSBNB", "0.00001", "0.01"),
+    XVS_BNB("XVS","BNB", "0.00001", "0.01"),
     
-    XVS_BTC("XVSBTC", "0.0000001", "0.01"),
+    XVS_BTC("XVS","BTC", "0.0000001", "0.01"),
     
-    XVS_BUSD("XVSBUSD", "0.01", "0.01"),
+    XVS_BUSD("XVS","BUSD", "0.01", "0.01"),
     
-    XVS_USDT("XVSUSDT", "0.01", "0.01"),
+    XVS_USDT("XVS","USDT", "0.01", "0.01"),
     
-    ALPHA_BNB("ALPHABNB", "0.000001", "1"),
+    ALPHA_BNB("ALPHA","BNB", "0.000001", "1"),
     
-    ALPHA_BTC("ALPHABTC", "0.00000001", "1"),
+    ALPHA_BTC("ALPHA","BTC", "0.00000001", "1"),
     
-    ALPHA_BUSD("ALPHABUSD", "0.0001", "1"),
+    ALPHA_BUSD("ALPHA","BUSD", "0.0001", "1"),
     
-    ALPHA_USDT("ALPHAUSDT", "0.0001", "1"),
+    ALPHA_USDT("ALPHA","USDT", "0.0001", "1"),
     
-    VIDT_BTC("VIDTBTC", "0.00000001", "1"),
+    VIDT_BTC("VIDT","BTC", "0.00000001", "1"),
     
-    VIDT_BUSD("VIDTBUSD", "0.0001", "1"),
+    VIDT_BUSD("VIDT","BUSD", "0.0001", "1"),
     
-    AAVE_BNB("AAVEBNB", "0.0001", "0.001"),
+    AAVE_BNB("AAVE","BNB", "0.0001", "0.001"),
     
-    BTC_BRL("BTCBRL", "1", "0.00001"),
+    BTC_BRL("BTC","BRL", "1", "0.00001"),
     
-    USDT_BRL("USDTBRL", "0.001", "0.1"),
+    USDT_BRL("USDT","BRL", "0.001", "0.1"),
     
-    AAVE_BTC("AAVEBTC", "0.000001", "0.001"),
+    AAVE_BTC("AAVE","BTC", "0.000001", "0.001"),
     
-    AAVE_ETH("AAVEETH", "0.0001", "0.001"),
+    AAVE_ETH("AAVE","ETH", "0.0001", "0.001"),
     
-    AAVE_BUSD("AAVEBUSD", "0.1", "0.001"),
+    AAVE_BUSD("AAVE","BUSD", "0.1", "0.001"),
     
-    AAVE_USDT("AAVEUSDT", "0.1", "0.001"),
+    AAVE_USDT("AAVE","USDT", "0.1", "0.001"),
     
-    NEAR_BNB("NEARBNB", "0.000001", "0.1"),
+    NEAR_BNB("NEAR","BNB", "0.000001", "0.1"),
     
-    NEAR_BTC("NEARBTC", "0.00000001", "0.1"),
+    NEAR_BTC("NEAR","BTC", "0.00000001", "0.1"),
     
-    NEAR_BUSD("NEARBUSD", "0.001", "0.1"),
+    NEAR_BUSD("NEAR","BUSD", "0.001", "0.1"),
     
-    NEAR_USDT("NEARUSDT", "0.001", "0.1"),
+    NEAR_USDT("NEAR","USDT", "0.001", "0.1"),
     
-    SXP_GBP("SXPGBP", "0.001", "0.1"),
+    SXP_GBP("SXP","GBP", "0.001", "0.1"),
     
-    FIL_BNB("FILBNB", "0.0001", "0.01"),
+    FIL_BNB("FIL","BNB", "0.0001", "0.01"),
     
-    FIL_BTC("FILBTC", "0.000001", "0.01"),
+    FIL_BTC("FIL","BTC", "0.000001", "0.01"),
     
-    FIL_BUSD("FILBUSD", "0.01", "0.01"),
+    FIL_BUSD("FIL","BUSD", "0.01", "0.01"),
     
-    FIL_USDT("FILUSDT", "0.01", "0.01"),
+    FIL_USDT("FIL","USDT", "0.01", "0.01"),
     
-    FILUP_USDT("FILUPUSDT", "0.0001", "0.01"),
+    INJ_BNB("INJ","BNB", "0.00001", "0.1"),
     
-    FILDOWN_USDT("FILDOWNUSDT", "0.0000001", "0.01"),
+    INJ_BTC("INJ","BTC", "0.0000001", "0.1"),
     
-    INJ_BNB("INJBNB", "0.00001", "0.1"),
+    INJ_BUSD("INJ","BUSD", "0.001", "0.1"),
     
-    INJ_BTC("INJBTC", "0.0000001", "0.1"),
+    INJ_USDT("INJ","USDT", "0.001", "0.1"),
     
-    INJ_BUSD("INJBUSD", "0.001", "0.1"),
+    AERGO_BTC("AERGO","BTC", "0.00000001", "1"),
     
-    INJ_USDT("INJUSDT", "0.001", "0.1"),
+    AERGO_BUSD("AERGO","BUSD", "0.0001", "1"),
     
-    AERGO_BTC("AERGOBTC", "0.00000001", "1"),
+    LINK_EUR("LINK","EUR", "0.01", "0.01"),
     
-    AERGO_BUSD("AERGOBUSD", "0.0001", "1"),
+    ONE_BUSD("ONE","BUSD", "0.00001", "0.1"),
     
-    LINK_EUR("LINKEUR", "0.01", "0.01"),
+    AUDIO_BTC("AUDIO","BTC", "0.00000001", "0.1"),
     
-    ONE_BUSD("ONEBUSD", "0.00001", "0.1"),
+    AUDIO_BUSD("AUDIO","BUSD", "0.001", "0.1"),
     
-    AUDIO_BTC("AUDIOBTC", "0.00000001", "0.1"),
+    AUDIO_USDT("AUDIO","USDT", "0.001", "0.1"),
     
-    AUDIO_BUSD("AUDIOBUSD", "0.001", "0.1"),
+    CTK_BNB("CTK","BNB", "0.000001", "0.1"),
     
-    AUDIO_USDT("AUDIOUSDT", "0.001", "0.1"),
+    CTK_BTC("CTK","BTC", "0.00000001", "0.1"),
     
-    CTK_BNB("CTKBNB", "0.000001", "0.1"),
+    CTK_BUSD("CTK","BUSD", "0.001", "0.1"),
     
-    CTK_BTC("CTKBTC", "0.00000001", "0.1"),
+    CTK_USDT("CTK","USDT", "0.001", "0.1"),
     
-    CTK_BUSD("CTKBUSD", "0.001", "0.1"),
+    ETH_BRL("ETH","BRL", "0.01", "0.0001"),
     
-    CTK_USDT("CTKUSDT", "0.001", "0.1"),
+    DOT_EUR("DOT","EUR", "0.01", "0.01"),
     
-    BCHUP_USDT("BCHUPUSDT", "0.00001", "0.01"),
+    AKRO_BTC("AKRO","BTC", "0.00000001", "1"),
     
-    BCHDOWN_USDT("BCHDOWNUSDT", "0.0001", "0.01"),
+    AKRO_USDT("AKRO","USDT", "0.00001", "1"),
     
-    ETH_BRL("ETHBRL", "0.01", "0.0001"),
+    KP3R_BNB("KP3R","BNB", "0.0001", "0.01"),
     
-    DOT_EUR("DOTEUR", "0.01", "0.01"),
+    KP3R_BUSD("KP3R","BUSD", "0.01", "0.01"),
     
-    AKRO_BTC("AKROBTC", "0.00000001", "1"),
+    AXS_BNB("AXS","BNB", "0.0001", "0.01"),
     
-    AKRO_USDT("AKROUSDT", "0.00001", "1"),
+    AXS_BTC("AXS","BTC", "0.000001", "0.01"),
     
-    KP3R_BNB("KP3RBNB", "0.0001", "0.01"),
+    AXS_BUSD("AXS","BUSD", "0.01", "0.01"),
     
-    KP3R_BUSD("KP3RBUSD", "0.01", "0.01"),
+    AXS_USDT("AXS","USDT", "0.01", "0.01"),
     
-    AXS_BNB("AXSBNB", "0.0001", "0.01"),
+    HARD_BNB("HARD","BNB", "0.000001", "1"),
     
-    AXS_BTC("AXSBTC", "0.000001", "0.01"),
+    HARD_BTC("HARD","BTC", "0.00000001", "1"),
     
-    AXS_BUSD("AXSBUSD", "0.01", "0.01"),
+    HARD_BUSD("HARD","BUSD", "0.0001", "1"),
     
-    AXS_USDT("AXSUSDT", "0.01", "0.01"),
+    HARD_USDT("HARD","USDT", "0.0001", "1"),
     
-    HARD_BNB("HARDBNB", "0.000001", "1"),
+    BNB_BRL("BNB","BRL", "1", "0.001"),
     
-    HARD_BTC("HARDBTC", "0.00000001", "1"),
+    LTC_EUR("LTC","EUR", "0.1", "0.001"),
     
-    HARD_BUSD("HARDBUSD", "0.0001", "1"),
+    RENBTC_BTC("RENBTC","BTC", "0.0001", "0.00001"),
     
-    HARD_USDT("HARDUSDT", "0.0001", "1"),
+    DNT_BUSD("DNT","BUSD", "0.0001", "1"),
     
-    BNB_BRL("BNBBRL", "1", "0.001"),
+    DNT_USDT("DNT","USDT", "0.0001", "1"),
     
-    LTC_EUR("LTCEUR", "0.1", "0.001"),
+    SLP_ETH("SLP","ETH", "0.00000001", "1"),
     
-    RENBTC_BTC("RENBTCBTC", "0.0001", "0.00001"),
+    ADA_EUR("ADA","EUR", "0.001", "0.1"),
     
-    DNT_BUSD("DNTBUSD", "0.0001", "1"),
+    CVP_ETH("CVP","ETH", "0.0000001", "1"),
     
-    DNT_USDT("DNTUSDT", "0.0001", "1"),
+    CVP_BUSD("CVP","BUSD", "0.001", "0.1"),
     
-    SLP_ETH("SLPETH", "0.00000001", "1"),
+    STRAX_BTC("STRAX","BTC", "0.00000001", "0.1"),
     
-    ADA_EUR("ADAEUR", "0.001", "0.1"),
+    STRAX_ETH("STRAX","ETH", "0.0000001", "0.1"),
     
-    CVP_ETH("CVPETH", "0.0000001", "1"),
+    STRAX_BUSD("STRAX","BUSD", "0.001", "0.1"),
     
-    CVP_BUSD("CVPBUSD", "0.001", "0.1"),
+    STRAX_USDT("STRAX","USDT", "0.001", "0.1"),
     
-    STRAX_BTC("STRAXBTC", "0.00000001", "0.1"),
+    FOR_BTC("FOR","BTC", "0.00000001", "1"),
     
-    STRAX_ETH("STRAXETH", "0.0000001", "0.1"),
+    FOR_BUSD("FOR","BUSD", "0.00001", "0.1"),
     
-    STRAX_BUSD("STRAXBUSD", "0.001", "0.1"),
+    UNFI_BTC("UNFI","BTC", "0.0000001", "0.1"),
     
-    STRAX_USDT("STRAXUSDT", "0.001", "0.1"),
+    UNFI_BUSD("UNFI","BUSD", "0.001", "0.1"),
     
-    FOR_BTC("FORBTC", "0.00000001", "1"),
+    UNFI_USDT("UNFI","USDT", "0.001", "0.1"),
     
-    FOR_BUSD("FORBUSD", "0.00001", "0.1"),
+    FRONT_BUSD("FRONT","BUSD", "0.0001", "1"),
     
-    UNFI_BTC("UNFIBTC", "0.0000001", "0.1"),
+    ROSE_BTC("ROSE","BTC", "0.00000001", "1"),
     
-    UNFI_BUSD("UNFIBUSD", "0.001", "0.1"),
+    ROSE_BUSD("ROSE","BUSD", "0.00001", "0.1"),
     
-    UNFI_USDT("UNFIUSDT", "0.001", "0.1"),
+    ROSE_USDT("ROSE","USDT", "0.00001", "0.1"),
     
-    FRONT_BUSD("FRONTBUSD", "0.0001", "1"),
+    AVAX_TRY("AVAX","TRY", "0.1", "0.01"),
     
-    ROSE_BTC("ROSEBTC", "0.00000001", "1"),
+    BUSD_BRL("BUSD","BRL", "0.001", "0.1"),
     
-    ROSE_BUSD("ROSEBUSD", "0.00001", "0.1"),
+    AVA_USDT("AVA","USDT", "0.001", "0.1"),
     
-    ROSE_USDT("ROSEUSDT", "0.00001", "0.1"),
+    SYS_BUSD("SYS","BUSD", "0.0001", "1"),
     
-    AVAX_TRY("AVAXTRY", "0.1", "0.01"),
+    XEM_USDT("XEM","USDT", "0.0001", "1"),
     
-    BUSD_BRL("BUSDBRL", "0.001", "0.1"),
+    HEGIC_ETH("HEGIC","ETH", "0.00000001", "1"),
     
-    AVA_USDT("AVAUSDT", "0.001", "0.1"),
+    HEGIC_BUSD("HEGIC","BUSD", "0.0001", "1"),
     
-    SYS_BUSD("SYSBUSD", "0.0001", "1"),
+    PROM_BNB("PROM","BNB", "0.00001", "0.01"),
     
-    XEM_USDT("XEMUSDT", "0.0001", "1"),
+    PROM_BUSD("PROM","BUSD", "0.01", "0.01"),
     
-    HEGIC_ETH("HEGICETH", "0.00000001", "1"),
+    XRP_BRL("XRP","BRL", "0.001", "1"),
     
-    HEGIC_BUSD("HEGICBUSD", "0.0001", "1"),
+    SKL_BTC("SKL","BTC", "0.00000001", "1"),
     
-    PROM_BNB("PROMBNB", "0.00001", "0.01"),
+    SKL_BUSD("SKL","BUSD", "0.0001", "1"),
     
-    PROM_BUSD("PROMBUSD", "0.01", "0.01"),
+    SKL_USDT("SKL","USDT", "0.0001", "1"),
     
-    XRP_BRL("XRPBRL", "0.001", "1"),
+    BCH_EUR("BCH","EUR", "0.1", "0.001"),
     
-    SKL_BTC("SKLBTC", "0.00000001", "1"),
+    YFI_EUR("YFI","EUR", "0.01", "0.00001"),
     
-    SKL_BUSD("SKLBUSD", "0.0001", "1"),
+    ZIL_BIDR("ZIL","BIDR", "1", "1"),
     
-    SKL_USDT("SKLUSDT", "0.0001", "1"),
+    SUSD_USDT("SUSD","USDT", "0.001", "0.1"),
     
-    BCH_EUR("BCHEUR", "0.1", "0.001"),
+    GLM_BTC("GLM","BTC", "0.00000001", "1"),
     
-    YFI_EUR("YFIEUR", "0.01", "0.00001"),
+    GLM_ETH("GLM","ETH", "0.0000001", "1"),
     
-    ZIL_BIDR("ZILBIDR", "1", "1"),
+    GHST_ETH("GHST","ETH", "0.0000001", "0.1"),
     
-    SUSD_USDT("SUSDUSDT", "0.001", "0.1"),
+    GHST_BUSD("GHST","BUSD", "0.001", "0.1"),
     
-    GLM_BTC("GLMBTC", "0.00000001", "1"),
+    LINK_BRL("LINK","BRL", "0.1", "0.01"),
     
-    GLM_ETH("GLMETH", "0.0000001", "1"),
+    LTC_RUB("LTC","RUB", "0.1", "0.001"),
     
-    GHST_ETH("GHSTETH", "0.0000001", "0.1"),
+    TRX_TRY("TRX","TRY", "0.0001", "1"),
     
-    GHST_BUSD("GHSTBUSD", "0.001", "0.1"),
+    XLM_EUR("XLM","EUR", "0.0001", "1"),
     
-    LINK_BRL("LINKBRL", "0.1", "0.01"),
+    DF_BUSD("DF","BUSD", "0.0001", "1"),
     
-    LTC_RUB("LTCRUB", "0.1", "0.001"),
+    GRT_BTC("GRT","BTC", "0.00000001", "1"),
     
-    TRX_TRY("TRXTRY", "0.0001", "1"),
+    GRT_ETH("GRT","ETH", "0.0000001", "1"),
     
-    XLM_EUR("XLMEUR", "0.0001", "1"),
+    GRT_USDT("GRT","USDT", "0.0001", "1"),
     
-    DF_BUSD("DFBUSD", "0.0001", "1"),
+    JUV_BTC("JUV","BTC", "0.0000001", "0.01"),
     
-    GRT_BTC("GRTBTC", "0.00000001", "1"),
+    JUV_BUSD("JUV","BUSD", "0.01", "0.01"),
     
-    GRT_ETH("GRTETH", "0.0000001", "1"),
+    JUV_USDT("JUV","USDT", "0.01", "0.01"),
     
-    GRT_USDT("GRTUSDT", "0.0001", "1"),
+    PSG_BTC("PSG","BTC", "0.0000001", "0.01"),
     
-    JUV_BTC("JUVBTC", "0.0000001", "0.01"),
+    PSG_BUSD("PSG","BUSD", "0.01", "0.01"),
     
-    JUV_BUSD("JUVBUSD", "0.01", "0.01"),
+    PSG_USDT("PSG","USDT", "0.01", "0.01"),
     
-    JUV_USDT("JUVUSDT", "0.01", "0.01"),
+    $1INCH_BTC("1INCH","BTC", "0.00000001", "0.1"),
     
-    PSG_BTC("PSGBTC", "0.0000001", "0.01"),
+    $1INCH_USDT("1INCH","USDT", "0.001", "0.1"),
     
-    PSG_BUSD("PSGBUSD", "0.01", "0.01"),
+    REEF_BTC("REEF","BTC", "0.00000001", "1"),
     
-    PSG_USDT("PSGUSDT", "0.01", "0.01"),
+    REEF_USDT("REEF","USDT", "0.00001", "1"),
     
-    $1INCH_BTC("1INCHBTC", "0.00000001", "0.1"),
+    OG_BTC("OG","BTC", "0.0000001", "0.1"),
     
-    $1INCH_USDT("1INCHUSDT", "0.001", "0.1"),
+    OG_USDT("OG","USDT", "0.001", "0.1"),
     
-    REEF_BTC("REEFBTC", "0.00000001", "1"),
+    ATM_BTC("ATM","BTC", "0.0000001", "0.01"),
     
-    REEF_USDT("REEFUSDT", "0.00001", "1"),
+    ATM_USDT("ATM","USDT", "0.01", "0.01"),
     
-    OG_BTC("OGBTC", "0.0000001", "0.1"),
+    ASR_BTC("ASR","BTC", "0.0000001", "0.1"),
     
-    OG_USDT("OGUSDT", "0.001", "0.1"),
+    ASR_USDT("ASR","USDT", "0.001", "0.1"),
     
-    ATM_BTC("ATMBTC", "0.0000001", "0.01"),
+    CELO_BTC("CELO","BTC", "0.00000001", "0.1"),
     
-    ATM_USDT("ATMUSDT", "0.01", "0.01"),
+    CELO_USDT("CELO","USDT", "0.001", "0.1"),
     
-    ASR_BTC("ASRBTC", "0.0000001", "0.1"),
+    RIF_BTC("RIF","BTC", "0.00000001", "1"),
     
-    ASR_USDT("ASRUSDT", "0.001", "0.1"),
+    RIF_USDT("RIF","USDT", "0.0001", "1"),
     
-    CELO_BTC("CELOBTC", "0.00000001", "0.1"),
+    CHZ_TRY("CHZ","TRY", "0.001", "1"),
     
-    CELO_USDT("CELOUSDT", "0.001", "0.1"),
+    XLM_TRY("XLM","TRY", "0.001", "1"),
     
-    RIF_BTC("RIFBTC", "0.00000001", "1"),
+    LINK_GBP("LINK","GBP", "0.01", "0.01"),
     
-    RIF_USDT("RIFUSDT", "0.0001", "1"),
+    GRT_EUR("GRT","EUR", "0.0001", "1"),
     
-    CHZ_TRY("CHZTRY", "0.001", "1"),
+    BTCST_BTC("BTCST","BTC", "0.0000001", "0.01"),
     
-    XLM_TRY("XLMTRY", "0.001", "1"),
+    BTCST_BUSD("BTCST","BUSD", "0.01", "0.01"),
     
-    LINK_GBP("LINKGBP", "0.01", "0.01"),
+    BTCST_USDT("BTCST","USDT", "0.01", "0.01"),
     
-    GRT_EUR("GRTEUR", "0.0001", "1"),
+    TRU_BTC("TRU","BTC", "0.00000001", "1"),
     
-    BTCST_BTC("BTCSTBTC", "0.0000001", "0.01"),
+    TRU_USDT("TRU","USDT", "0.0001", "1"),
     
-    BTCST_BUSD("BTCSTBUSD", "0.01", "0.01"),
+    DEXE_ETH("DEXE","ETH", "0.000001", "0.01"),
     
-    BTCST_USDT("BTCSTUSDT", "0.01", "0.01"),
+    DEXE_BUSD("DEXE","BUSD", "0.01", "0.01"),
     
-    TRU_BTC("TRUBTC", "0.00000001", "1"),
+    EOS_EUR("EOS","EUR", "0.001", "0.1"),
     
-    TRU_USDT("TRUUSDT", "0.0001", "1"),
+    LTC_BRL("LTC","BRL", "0.1", "0.001"),
     
-    DEXE_ETH("DEXEETH", "0.000001", "0.01"),
+    USDC_BUSD("USDC","BUSD", "0.0001", "0.01"),
     
-    DEXE_BUSD("DEXEBUSD", "0.01", "0.01"),
+    TUSD_BUSD("TUSD","BUSD", "0.0001", "0.1"),
     
-    EOS_EUR("EOSEUR", "0.001", "0.1"),
+    CKB_BTC("CKB","BTC", "0.00000001", "1"),
     
-    LTC_BRL("LTCBRL", "0.1", "0.001"),
+    CKB_BUSD("CKB","BUSD", "0.00001", "1"),
     
-    USDC_BUSD("USDCBUSD", "0.0001", "0.01"),
+    CKB_USDT("CKB","USDT", "0.00001", "1"),
     
-    TUSD_BUSD("TUSDBUSD", "0.0001", "0.1"),
+    TWT_BTC("TWT","BTC", "0.00000001", "1"),
     
-    CKB_BTC("CKBBTC", "0.00000001", "1"),
+    TWT_BUSD("TWT","BUSD", "0.0001", "1"),
     
-    CKB_BUSD("CKBBUSD", "0.00001", "1"),
+    TWT_USDT("TWT","USDT", "0.0001", "1"),
     
-    CKB_USDT("CKBUSDT", "0.00001", "1"),
+    FIRO_BTC("FIRO","BTC", "0.0000001", "0.1"),
     
-    TWT_BTC("TWTBTC", "0.00000001", "1"),
+    FIRO_ETH("FIRO","ETH", "0.000001", "0.1"),
     
-    TWT_BUSD("TWTBUSD", "0.0001", "1"),
+    FIRO_USDT("FIRO","USDT", "0.001", "0.1"),
     
-    TWT_USDT("TWTUSDT", "0.0001", "1"),
+    BETH_ETH("BETH","ETH", "0.0001", "0.0001"),
     
-    FIRO_BTC("FIROBTC", "0.0000001", "0.1"),
+    DOGE_EUR("DOGE","EUR", "0.0001", "1"),
     
-    FIRO_ETH("FIROETH", "0.000001", "0.1"),
+    DOGE_TRY("DOGE","TRY", "0.001", "1"),
     
-    FIRO_USDT("FIROUSDT", "0.001", "0.1"),
+    DOGE_AUD("DOGE","AUD", "0.0001", "1"),
     
-    BETH_ETH("BETHETH", "0.0001", "0.0001"),
+    DOGE_BRL("DOGE","BRL", "0.001", "1"),
     
-    DOGE_EUR("DOGEEUR", "0.0001", "1"),
+    PROS_ETH("PROS","ETH", "0.0000001", "1"),
     
-    DOGE_TRY("DOGETRY", "0.001", "1"),
+    LIT_BTC("LIT","BTC", "0.00000001", "0.1"),
     
-    DOGE_AUD("DOGEAUD", "0.0001", "1"),
+    LIT_BUSD("LIT","BUSD", "0.001", "0.1"),
     
-    DOGE_BRL("DOGEBRL", "0.001", "1"),
+    LIT_USDT("LIT","USDT", "0.001", "0.1"),
     
-    PROS_ETH("PROSETH", "0.0000001", "1"),
+    BUSD_VAI("BUSD","VAI", "0.001", "0.1"),
     
-    LIT_BTC("LITBTC", "0.00000001", "0.1"),
+    SFP_BTC("SFP","BTC", "0.00000001", "1"),
     
-    LIT_BUSD("LITBUSD", "0.001", "0.1"),
+    SFP_BUSD("SFP","BUSD", "0.0001", "1"),
     
-    LIT_USDT("LITUSDT", "0.001", "0.1"),
+    SFP_USDT("SFP","USDT", "0.0001", "1"),
     
-    BUSD_VAI("BUSDVAI", "0.001", "0.1"),
+    DOGE_GBP("DOGE","GBP", "0.0001", "1"),
     
-    SFP_BTC("SFPBTC", "0.00000001", "1"),
+    DOT_TRY("DOT","TRY", "0.1", "0.01"),
     
-    SFP_BUSD("SFPBUSD", "0.0001", "1"),
+    FXS_BTC("FXS","BTC", "0.00000001", "0.1"),
     
-    SFP_USDT("SFPUSDT", "0.0001", "1"),
+    FXS_BUSD("FXS","BUSD", "0.001", "0.1"),
     
-    DOGE_GBP("DOGEGBP", "0.0001", "1"),
+    DODO_BTC("DODO","BTC", "0.00000001", "0.1"),
     
-    DOT_TRY("DOTTRY", "0.1", "0.01"),
+    DODO_BUSD("DODO","BUSD", "0.001", "0.1"),
     
-    FXS_BTC("FXSBTC", "0.00000001", "0.1"),
+    DODO_USDT("DODO","USDT", "0.001", "0.1"),
     
-    FXS_BUSD("FXSBUSD", "0.001", "0.1"),
+    FRONT_BTC("FRONT","BTC", "0.00000001", "1"),
     
-    DODO_BTC("DODOBTC", "0.00000001", "0.1"),
+    CAKE_BTC("CAKE","BTC", "0.0000001", "0.01"),
     
-    DODO_BUSD("DODOBUSD", "0.001", "0.1"),
+    CAKE_USDT("CAKE","USDT", "0.01", "0.01"),
     
-    DODO_USDT("DODOUSDT", "0.001", "0.1"),
+    BAKE_BUSD("BAKE","BUSD", "0.001", "0.1"),
     
-    FRONT_BTC("FRONTBTC", "0.00000001", "1"),
+    UFT_ETH("UFT","ETH", "0.0000001", "1"),
     
-    CAKE_BTC("CAKEBTC", "0.0000001", "0.01"),
+    UFT_BUSD("UFT","BUSD", "0.0001", "1"),
     
-    CAKE_USDT("CAKEUSDT", "0.01", "0.01"),
+    $1INCH_BUSD("1INCH","BUSD", "0.001", "0.1"),
     
-    BAKE_BUSD("BAKEBUSD", "0.001", "0.1"),
+    BAND_BUSD("BAND","BUSD", "0.001", "0.1"),
     
-    UFT_ETH("UFTETH", "0.0000001", "1"),
+    GRT_BUSD("GRT","BUSD", "0.0001", "1"),
     
-    UFT_BUSD("UFTBUSD", "0.0001", "1"),
+    IOST_BUSD("IOST","BUSD", "0.00001", "0.1"),
     
-    $1INCH_BUSD("1INCHBUSD", "0.001", "0.1"),
+    OMG_BUSD("OMG","BUSD", "0.001", "0.1"),
     
-    BAND_BUSD("BANDBUSD", "0.001", "0.1"),
+    REEF_BUSD("REEF","BUSD", "0.00001", "0.1"),
     
-    GRT_BUSD("GRTBUSD", "0.0001", "1"),
+    ACM_BTC("ACM","BTC", "0.0000001", "0.1"),
     
-    IOST_BUSD("IOSTBUSD", "0.00001", "0.1"),
+    ACM_BUSD("ACM","BUSD", "0.001", "0.1"),
     
-    OMG_BUSD("OMGBUSD", "0.001", "0.1"),
+    ACM_USDT("ACM","USDT", "0.001", "0.1"),
     
-    REEF_BUSD("REEFBUSD", "0.00001", "0.1"),
+    AUCTION_BTC("AUCTION","BTC", "0.0000001", "0.01"),
     
-    ACM_BTC("ACMBTC", "0.0000001", "0.1"),
+    AUCTION_BUSD("AUCTION","BUSD", "0.01", "0.01"),
     
-    ACM_BUSD("ACMBUSD", "0.001", "0.1"),
+    PHA_BTC("PHA","BTC", "0.00000001", "1"),
     
-    ACM_USDT("ACMUSDT", "0.001", "0.1"),
+    PHA_BUSD("PHA","BUSD", "0.0001", "1"),
     
-    AUCTION_BTC("AUCTIONBTC", "0.0000001", "0.01"),
+    DOT_GBP("DOT","GBP", "0.01", "0.01"),
     
-    AUCTION_BUSD("AUCTIONBUSD", "0.01", "0.01"),
+    ADA_TRY("ADA","TRY", "0.01", "0.1"),
     
-    PHA_BTC("PHABTC", "0.00000001", "1"),
+    ADA_BRL("ADA","BRL", "0.001", "0.1"),
     
-    PHA_BUSD("PHABUSD", "0.0001", "1"),
+    ADA_GBP("ADA","GBP", "0.0001", "0.1"),
     
-    DOT_GBP("DOTGBP", "0.01", "0.01"),
+    TVK_BTC("TVK","BTC", "0.00000001", "1"),
     
-    ADA_TRY("ADATRY", "0.01", "0.1"),
+    TVK_BUSD("TVK","BUSD", "0.0001", "1"),
     
-    ADA_BRL("ADABRL", "0.001", "0.1"),
+    BADGER_BTC("BADGER","BTC", "0.0000001", "0.01"),
     
-    ADA_GBP("ADAGBP", "0.0001", "0.1"),
+    BADGER_BUSD("BADGER","BUSD", "0.01", "0.01"),
     
-    TVK_BTC("TVKBTC", "0.00000001", "1"),
+    BADGER_USDT("BADGER","USDT", "0.01", "0.01"),
     
-    TVK_BUSD("TVKBUSD", "0.0001", "1"),
+    FIS_BTC("FIS","BTC", "0.00000001", "1"),
     
-    BADGER_BTC("BADGERBTC", "0.0000001", "0.01"),
+    FIS_BUSD("FIS","BUSD", "0.0001", "1"),
     
-    BADGER_BUSD("BADGERBUSD", "0.01", "0.01"),
+    FIS_USDT("FIS","USDT", "0.0001", "1"),
     
-    BADGER_USDT("BADGERUSDT", "0.01", "0.01"),
+    DOT_BRL("DOT","BRL", "0.01", "0.01"),
     
-    FIS_BTC("FISBTC", "0.00000001", "1"),
+    ADA_AUD("ADA","AUD", "0.001", "0.1"),
     
-    FIS_BUSD("FISBUSD", "0.0001", "1"),
+    HOT_TRY("HOT","TRY", "0.00001", "1"),
     
-    FIS_USDT("FISUSDT", "0.0001", "1"),
+    EGLD_EUR("EGLD","EUR", "0.01", "0.01"),
     
-    DOT_BRL("DOTBRL", "0.01", "0.01"),
+    OM_BTC("OM","BTC", "0.00000001", "1"),
     
-    ADA_AUD("ADAAUD", "0.001", "0.1"),
+    OM_BUSD("OM","BUSD", "0.0001", "1"),
     
-    HOT_TRY("HOTTRY", "0.00001", "1"),
+    OM_USDT("OM","USDT", "0.0001", "1"),
     
-    EGLD_EUR("EGLDEUR", "0.01", "0.01"),
+    POND_BTC("POND","BTC", "0.00000001", "1"),
     
-    OM_BTC("OMBTC", "0.00000001", "1"),
+    POND_BUSD("POND","BUSD", "0.00001", "0.01"),
     
-    OM_BUSD("OMBUSD", "0.0001", "1"),
+    POND_USDT("POND","USDT", "0.00001", "0.01"),
     
-    OM_USDT("OMUSDT", "0.0001", "1"),
+    DEGO_BTC("DEGO","BTC", "0.0000001", "0.01"),
     
-    POND_BTC("PONDBTC", "0.00000001", "1"),
+    DEGO_BUSD("DEGO","BUSD", "0.01", "0.01"),
     
-    POND_BUSD("PONDBUSD", "0.00001", "0.01"),
+    DEGO_USDT("DEGO","USDT", "0.01", "0.01"),
     
-    POND_USDT("PONDUSDT", "0.00001", "0.01"),
+    AVAX_EUR("AVAX","EUR", "0.01", "0.01"),
     
-    DEGO_BTC("DEGOBTC", "0.0000001", "0.01"),
+    BTT_TRY("BTT","TRY", "0.00001", "1"),
     
-    DEGO_BUSD("DEGOBUSD", "0.01", "0.01"),
+    CHZ_BRL("CHZ","BRL", "0.001", "1"),
     
-    DEGO_USDT("DEGOUSDT", "0.01", "0.01"),
+    UNI_EUR("UNI","EUR", "0.01", "0.01"),
     
-    AVAX_EUR("AVAXEUR", "0.01", "0.01"),
+    ALICE_BTC("ALICE","BTC", "0.0000001", "0.01"),
     
-    BTT_TRY("BTTTRY", "0.00001", "1"),
+    ALICE_BUSD("ALICE","BUSD", "0.01", "0.01"),
     
-    CHZ_BRL("CHZBRL", "0.001", "1"),
+    ALICE_USDT("ALICE","USDT", "0.01", "0.01"),
     
-    UNI_EUR("UNIEUR", "0.01", "0.01"),
+    CHZ_BUSD("CHZ","BUSD", "0.0001", "1"),
     
-    ALICE_BTC("ALICEBTC", "0.0000001", "0.01"),
+    CHZ_EUR("CHZ","EUR", "0.0001", "1"),
     
-    ALICE_BUSD("ALICEBUSD", "0.01", "0.01"),
+    CHZ_GBP("CHZ","GBP", "0.0001", "1"),
     
-    ALICE_USDT("ALICEUSDT", "0.01", "0.01"),
+    BIFI_BUSD("BIFI","BUSD", "0.1", "0.001"),
     
-    CHZ_BUSD("CHZBUSD", "0.0001", "1"),
+    LINA_BTC("LINA","BTC", "0.00000001", "1"),
     
-    CHZ_EUR("CHZEUR", "0.0001", "1"),
+    LINA_BUSD("LINA","BUSD", "0.00001", "0.01"),
     
-    CHZ_GBP("CHZGBP", "0.0001", "1"),
+    LINA_USDT("LINA","USDT", "0.00001", "0.01"),
     
-    BIFI_BUSD("BIFIBUSD", "0.1", "0.001"),
+    ADA_RUB("ADA","RUB", "0.01", "0.1"),
     
-    LINA_BTC("LINABTC", "0.00000001", "1"),
+    ENJ_BRL("ENJ","BRL", "0.001", "0.1"),
     
-    LINA_BUSD("LINABUSD", "0.00001", "0.01"),
+    ENJ_EUR("ENJ","EUR", "0.001", "0.1"),
     
-    LINA_USDT("LINAUSDT", "0.00001", "0.01"),
+    MATIC_EUR("MATIC","EUR", "0.0001", "0.1"),
     
-    ADA_RUB("ADARUB", "0.01", "0.1"),
+    NEO_TRY("NEO","TRY", "0.1", "0.01"),
     
-    ENJ_BRL("ENJBRL", "0.001", "0.1"),
+    PERP_BTC("PERP","BTC", "0.0000001", "0.01"),
     
-    ENJ_EUR("ENJEUR", "0.001", "0.1"),
+    PERP_BUSD("PERP","BUSD", "0.01", "0.01"),
     
-    MATIC_EUR("MATICEUR", "0.0001", "0.1"),
+    PERP_USDT("PERP","USDT", "0.01", "0.01"),
     
-    NEO_TRY("NEOTRY", "0.1", "0.01"),
+    RAMP_BTC("RAMP","BTC", "0.00000001", "1"),
     
-    PERP_BTC("PERPBTC", "0.0000001", "0.01"),
+    RAMP_BUSD("RAMP","BUSD", "0.0001", "1"),
     
-    PERP_BUSD("PERPBUSD", "0.01", "0.01"),
+    RAMP_USDT("RAMP","USDT", "0.0001", "1"),
     
-    PERP_USDT("PERPUSDT", "0.01", "0.01"),
+    SUPER_BTC("SUPER","BTC", "0.00000001", "1"),
     
-    RAMP_BTC("RAMPBTC", "0.00000001", "1"),
+    SUPER_BUSD("SUPER","BUSD", "0.0001", "1"),
     
-    RAMP_BUSD("RAMPBUSD", "0.0001", "1"),
+    SUPER_USDT("SUPER","USDT", "0.0001", "1"),
     
-    RAMP_USDT("RAMPUSDT", "0.0001", "1"),
+    CFX_BTC("CFX","BTC", "0.00000001", "1"),
     
-    SUPER_BTC("SUPERBTC", "0.00000001", "1"),
+    CFX_BUSD("CFX","BUSD", "0.0001", "1"),
     
-    SUPER_BUSD("SUPERBUSD", "0.0001", "1"),
+    CFX_USDT("CFX","USDT", "0.0001", "1"),
     
-    SUPER_USDT("SUPERUSDT", "0.0001", "1"),
+    ENJ_GBP("ENJ","GBP", "0.0001", "0.1"),
     
-    CFX_BTC("CFXBTC", "0.00000001", "1"),
+    EOS_TRY("EOS","TRY", "0.01", "0.1"),
     
-    CFX_BUSD("CFXBUSD", "0.0001", "1"),
+    LTC_GBP("LTC","GBP", "0.01", "0.001"),
     
-    CFX_USDT("CFXUSDT", "0.0001", "1"),
+    LUNA_EUR("LUNA","EUR", "0.01", "0.01"),
     
-    ENJ_GBP("ENJGBP", "0.0001", "0.1"),
+    RVN_TRY("RVN","TRY", "0.0001", "0.01"),
     
-    EOS_TRY("EOSTRY", "0.01", "0.1"),
+    THETA_EUR("THETA","EUR", "0.001", "0.1"),
     
-    LTC_GBP("LTCGBP", "0.01", "0.001"),
+    XVG_BUSD("XVG","BUSD", "0.00001", "0.1"),
     
-    LUNA_EUR("LUNAEUR", "0.01", "0.01"),
+    EPS_BTC("EPS","BTC", "0.00000001", "1"),
     
-    RVN_TRY("RVNTRY", "0.0001", "0.01"),
+    EPS_BUSD("EPS","BUSD", "0.0001", "1"),
     
-    THETA_EUR("THETAEUR", "0.001", "0.1"),
+    EPS_USDT("EPS","USDT", "0.0001", "1"),
     
-    XVG_BUSD("XVGBUSD", "0.00001", "0.1"),
+    AUTO_BTC("AUTO","BTC", "0.00001", "0.001"),
     
-    EPS_BTC("EPSBTC", "0.00000001", "1"),
+    AUTO_BUSD("AUTO","BUSD", "0.1", "0.001"),
     
-    EPS_BUSD("EPSBUSD", "0.0001", "1"),
+    AUTO_USDT("AUTO","USDT", "0.1", "0.001"),
     
-    EPS_USDT("EPSUSDT", "0.0001", "1"),
+    TKO_BTC("TKO","BTC", "0.00000001", "0.1"),
     
-    AUTO_BTC("AUTOBTC", "0.00001", "0.001"),
+    TKO_BIDR("TKO","BIDR", "0.01", "0.1"),
     
-    AUTO_BUSD("AUTOBUSD", "0.1", "0.001"),
+    TKO_BUSD("TKO","BUSD", "0.001", "0.1"),
     
-    AUTO_USDT("AUTOUSDT", "0.1", "0.001"),
+    TKO_USDT("TKO","USDT", "0.001", "0.1"),
     
-    TKO_BTC("TKOBTC", "0.00000001", "0.1"),
+    PUNDIX_ETH("PUNDIX","ETH", "0.0000001", "0.1"),
     
-    TKO_BIDR("TKOBIDR", "0.01", "0.1"),
+    PUNDIX_USDT("PUNDIX","USDT", "0.001", "0.1"),
     
-    TKO_BUSD("TKOBUSD", "0.001", "0.1"),
+    BTT_BRL("BTT","BRL", "0.00001", "0.1"),
     
-    TKO_USDT("TKOUSDT", "0.001", "0.1"),
+    BTT_EUR("BTT","EUR", "0.000001", "1"),
     
-    PUNDIX_ETH("PUNDIXETH", "0.0000001", "0.1"),
+    HOT_EUR("HOT","EUR", "0.000001", "0.1"),
     
-    PUNDIX_USDT("PUNDIXUSDT", "0.001", "0.1"),
+    WIN_EUR("WIN","EUR", "0.0000001", "1"),
     
-    BTT_BRL("BTTBRL", "0.00001", "0.1"),
+    TLM_BTC("TLM","BTC", "0.00000001", "1"),
     
-    BTT_EUR("BTTEUR", "0.000001", "1"),
+    TLM_BUSD("TLM","BUSD", "0.0001", "1"),
     
-    HOT_EUR("HOTEUR", "0.000001", "0.1"),
+    TLM_USDT("TLM","USDT", "0.0001", "1"),
     
-    WIN_EUR("WINEUR", "0.0000001", "1"),
+    BTG_BUSD("BTG","BUSD", "0.01", "0.01"),
     
-    TLM_BTC("TLMBTC", "0.00000001", "1"),
+    BTG_USDT("BTG","USDT", "0.01", "0.01"),
     
-    TLM_BUSD("TLMBUSD", "0.0001", "1"),
+    HOT_BUSD("HOT","BUSD", "0.000001", "0.1"),
     
-    TLM_USDT("TLMUSDT", "0.0001", "1"),
+    BNB_UAH("BNB","UAH", "1", "0.001"),
     
-    BTG_BUSD("BTGBUSD", "0.01", "0.01"),
+    ONT_TRY("ONT","TRY", "0.001", "1"),
     
-    BTG_USDT("BTGUSDT", "0.01", "0.01"),
+    VET_EUR("VET","EUR", "0.00001", "0.01"),
     
-    HOT_BUSD("HOTBUSD", "0.000001", "0.1"),
+    VET_GBP("VET","GBP", "0.00001", "0.01"),
     
-    BNB_UAH("BNBUAH", "1", "0.001"),
+    WIN_BRL("WIN","BRL", "0.000001", "1"),
     
-    ONT_TRY("ONTTRY", "0.001", "1"),
+    MIR_BTC("MIR","BTC", "0.00000001", "0.1"),
     
-    VET_EUR("VETEUR", "0.00001", "0.01"),
+    MIR_BUSD("MIR","BUSD", "0.001", "0.1"),
     
-    VET_GBP("VETGBP", "0.00001", "0.01"),
+    MIR_USDT("MIR","USDT", "0.001", "0.1"),
     
-    WIN_BRL("WINBRL", "0.000001", "1"),
+    BAR_BTC("BAR","BTC", "0.0000001", "0.01"),
     
-    MIR_BTC("MIRBTC", "0.00000001", "0.1"),
+    BAR_BUSD("BAR","BUSD", "0.01", "0.01"),
     
-    MIR_BUSD("MIRBUSD", "0.001", "0.1"),
+    BAR_USDT("BAR","USDT", "0.01", "0.01"),
     
-    MIR_USDT("MIRUSDT", "0.001", "0.1"),
+    FORTH_BTC("FORTH","BTC", "0.0000001", "0.01"),
     
-    BAR_BTC("BARBTC", "0.0000001", "0.01"),
+    FORTH_BUSD("FORTH","BUSD", "0.01", "0.01"),
     
-    BAR_BUSD("BARBUSD", "0.01", "0.01"),
+    FORTH_USDT("FORTH","USDT", "0.01", "0.01"),
     
-    BAR_USDT("BARUSDT", "0.01", "0.01"),
+    CAKE_GBP("CAKE","GBP", "0.01", "0.01"),
     
-    FORTH_BTC("FORTHBTC", "0.0000001", "0.01"),
+    DOGE_RUB("DOGE","RUB", "0.01", "1"),
     
-    FORTH_BUSD("FORTHBUSD", "0.01", "0.01"),
+    WRX_EUR("WRX","EUR", "0.0001", "0.1"),
     
-    FORTH_USDT("FORTHUSDT", "0.01", "0.01"),
+    EZ_BTC("EZ","BTC", "0.00000001", "0.1"),
     
-    CAKE_GBP("CAKEGBP", "0.01", "0.01"),
+    EZ_ETH("EZ","ETH", "0.000001", "0.1"),
     
-    DOGE_RUB("DOGERUB", "0.01", "1"),
+    BAKE_USDT("BAKE","USDT", "0.001", "0.1"),
     
-    WRX_EUR("WRXEUR", "0.0001", "0.1"),
+    BURGER_BUSD("BURGER","BUSD", "0.001", "0.1"),
     
-    EZ_BTC("EZBTC", "0.00000001", "0.1"),
+    BURGER_USDT("BURGER","USDT", "0.001", "0.1"),
     
-    EZ_ETH("EZETH", "0.000001", "0.1"),
+    SLP_BUSD("SLP","BUSD", "0.0001", "1"),
     
-    BAKE_USDT("BAKEUSDT", "0.001", "0.1"),
+    SLP_USDT("SLP","USDT", "0.0001", "1"),
     
-    BURGER_BUSD("BURGERBUSD", "0.001", "0.1"),
+    TRX_EUR("TRX","EUR", "0.00001", "1"),
     
-    BURGER_USDT("BURGERUSDT", "0.001", "0.1"),
+    VET_TRY("VET","TRY", "0.0001", "0.1"),
     
-    SLP_BUSD("SLPBUSD", "0.0001", "1"),
+    SHIB_USDT("SHIB","USDT", "0.00000001", "1"),
     
-    SLP_USDT("SLPUSDT", "0.0001", "1"),
+    SHIB_BUSD("SHIB","BUSD", "0.00000001", "1"),
     
-    TRX_EUR("TRXEUR", "0.00001", "1"),
+    ICP_BTC("ICP","BTC", "0.000001", "0.01"),
     
-    VET_TRY("VETTRY", "0.0001", "0.1"),
+    ICP_BNB("ICP","BNB", "0.0001", "0.01"),
     
-    SHIB_USDT("SHIBUSDT", "0.00000001", "1"),
+    ICP_BUSD("ICP","BUSD", "0.01", "0.01"),
     
-    SHIB_BUSD("SHIBBUSD", "0.00000001", "1"),
+    ICP_USDT("ICP","USDT", "0.01", "0.01"),
     
-    ICP_BTC("ICPBTC", "0.000001", "0.01"),
+    SHIB_EUR("SHIB","EUR", "0.00000001", "1"),
     
-    ICP_BNB("ICPBNB", "0.0001", "0.01"),
+    ETC_EUR("ETC","EUR", "0.01", "0.01"),
     
-    ICP_BUSD("ICPBUSD", "0.01", "0.01"),
+    DOGE_BIDR("DOGE","BIDR", "1", "1"),
     
-    ICP_USDT("ICPUSDT", "0.01", "0.01"),
+    AR_BTC("AR","BTC", "0.0000001", "0.01"),
     
-    SHIB_EUR("SHIBEUR", "0.00000001", "1"),
+    AR_BNB("AR","BNB", "0.00001", "0.01"),
     
-    ETC_EUR("ETCEUR", "0.01", "0.01"),
+    AR_BUSD("AR","BUSD", "0.01", "0.01"),
     
-    DOGE_BIDR("DOGEBIDR", "1", "1"),
+    AR_USDT("AR","USDT", "0.01", "0.01"),
     
-    AR_BTC("ARBTC", "0.0000001", "0.01"),
+    POLS_BTC("POLS","BTC", "0.00000001", "0.1"),
     
-    AR_BNB("ARBNB", "0.00001", "0.01"),
+    POLS_BNB("POLS","BNB", "0.000001", "0.1"),
     
-    AR_BUSD("ARBUSD", "0.01", "0.01"),
+    POLS_BUSD("POLS","BUSD", "0.001", "0.1"),
     
-    AR_USDT("ARUSDT", "0.01", "0.01"),
+    POLS_USDT("POLS","USDT", "0.001", "0.1"),
     
-    POLS_BTC("POLSBTC", "0.00000001", "0.1"),
+    MDX_BTC("MDX","BTC", "0.00000001", "0.1"),
     
-    POLS_BNB("POLSBNB", "0.000001", "0.1"),
+    MDX_BNB("MDX","BNB", "0.000001", "0.1"),
     
-    POLS_BUSD("POLSBUSD", "0.001", "0.1"),
+    MDX_BUSD("MDX","BUSD", "0.001", "0.1"),
     
-    POLS_USDT("POLSUSDT", "0.001", "0.1"),
+    MDX_USDT("MDX","USDT", "0.001", "0.1"),
     
-    MDX_BTC("MDXBTC", "0.00000001", "0.1"),
+    MASK_BNB("MASK","BNB", "0.00001", "0.1"),
     
-    MDX_BNB("MDXBNB", "0.000001", "0.1"),
+    MASK_BUSD("MASK","BUSD", "0.001", "0.1"),
     
-    MDX_BUSD("MDXBUSD", "0.001", "0.1"),
+    MASK_USDT("MASK","USDT", "0.001", "0.1"),
     
-    MDX_USDT("MDXUSDT", "0.001", "0.1"),
+    LPT_BTC("LPT","BTC", "0.0000001", "0.01"),
     
-    MASK_BNB("MASKBNB", "0.00001", "0.1"),
+    LPT_BNB("LPT","BNB", "0.00001", "0.01"),
     
-    MASK_BUSD("MASKBUSD", "0.001", "0.1"),
+    LPT_BUSD("LPT","BUSD", "0.01", "0.01"),
     
-    MASK_USDT("MASKUSDT", "0.001", "0.1"),
+    LPT_USDT("LPT","USDT", "0.01", "0.01"),
     
-    LPT_BTC("LPTBTC", "0.0000001", "0.01"),
+    ETH_UAH("ETH","UAH", "1", "0.0001"),
     
-    LPT_BNB("LPTBNB", "0.00001", "0.01"),
+    MATIC_BRL("MATIC","BRL", "0.001", "0.1"),
     
-    LPT_BUSD("LPTBUSD", "0.01", "0.01"),
+    SOL_EUR("SOL","EUR", "0.01", "0.01"),
     
-    LPT_USDT("LPTUSDT", "0.01", "0.01"),
+    SHIB_BRL("SHIB","BRL", "0.00000001", "1"),
     
-    ETH_UAH("ETHUAH", "1", "0.0001"),
+    AGIX_BTC("AGIX","BTC", "0.00000001", "1"),
     
-    MATIC_BRL("MATICBRL", "0.001", "0.1"),
+    ICP_EUR("ICP","EUR", "0.01", "0.01"),
     
-    SOL_EUR("SOLEUR", "0.01", "0.01"),
+    MATIC_GBP("MATIC","GBP", "0.0001", "0.1"),
     
-    SHIB_BRL("SHIBBRL", "0.00000001", "1"),
+    SHIB_TRY("SHIB","TRY", "0.00000001", "1"),
     
-    AGIX_BTC("AGIXBTC", "0.00000001", "1"),
+    MATIC_BIDR("MATIC","BIDR", "1", "0.1"),
     
-    ICP_EUR("ICPEUR", "0.01", "0.01"),
+    MATIC_RUB("MATIC","RUB", "0.01", "0.1"),
     
-    MATIC_GBP("MATICGBP", "0.0001", "0.1"),
+    NU_BTC("NU","BTC", "0.00000001", "1"),
     
-    SHIB_TRY("SHIBTRY", "0.00000001", "1"),
+    NU_BNB("NU","BNB", "0.0000001", "1"),
     
-    MATIC_BIDR("MATICBIDR", "1", "0.1"),
+    NU_BUSD("NU","BUSD", "0.0001", "1"),
     
-    MATIC_RUB("MATICRUB", "0.01", "0.1"),
+    NU_USDT("NU","USDT", "0.0001", "1"),
     
-    NU_BTC("NUBTC", "0.00000001", "1"),
+    XVG_USDT("XVG","USDT", "0.00001", "1"),
     
-    NU_BNB("NUBNB", "0.0000001", "1"),
+    RLC_BUSD("RLC","BUSD", "0.001", "0.1"),
     
-    NU_BUSD("NUBUSD", "0.0001", "1"),
+    CELR_BUSD("CELR","BUSD", "0.00001", "1"),
     
-    NU_USDT("NUUSDT", "0.0001", "1"),
+    ATM_BUSD("ATM","BUSD", "0.01", "0.01"),
     
-    XVG_USDT("XVGUSDT", "0.00001", "1"),
+    ZEN_BUSD("ZEN","BUSD", "0.01", "0.01"),
     
-    RLC_BUSD("RLCBUSD", "0.001", "0.1"),
+    FTM_BUSD("FTM","BUSD", "0.0001", "1"),
     
-    CELR_BUSD("CELRBUSD", "0.00001", "1"),
+    THETA_BUSD("THETA","BUSD", "0.001", "0.1"),
     
-    ATM_BUSD("ATMBUSD", "0.01", "0.01"),
+    WIN_BUSD("WIN","BUSD", "0.0000001", "1"),
     
-    ZEN_BUSD("ZENBUSD", "0.01", "0.01"),
+    KAVA_BUSD("KAVA","BUSD", "0.001", "0.1"),
     
-    FTM_BUSD("FTMBUSD", "0.0001", "1"),
+    XEM_BUSD("XEM","BUSD", "0.0001", "1"),
     
-    THETA_BUSD("THETABUSD", "0.001", "0.1"),
+    ATA_BTC("ATA","BTC", "0.00000001", "1"),
     
-    WIN_BUSD("WINBUSD", "0.0000001", "1"),
+    ATA_BNB("ATA","BNB", "0.000001", "1"),
     
-    KAVA_BUSD("KAVABUSD", "0.001", "0.1"),
+    ATA_BUSD("ATA","BUSD", "0.0001", "1"),
     
-    XEM_BUSD("XEMBUSD", "0.0001", "1"),
+    ATA_USDT("ATA","USDT", "0.0001", "1"),
     
-    ATA_BTC("ATABTC", "0.00000001", "1"),
+    GTC_BTC("GTC","BTC", "0.0000001", "0.1"),
     
-    ATA_BNB("ATABNB", "0.000001", "1"),
+    GTC_BUSD("GTC","BUSD", "0.001", "0.1"),
     
-    ATA_BUSD("ATABUSD", "0.0001", "1"),
+    GTC_USDT("GTC","USDT", "0.001", "0.1"),
     
-    ATA_USDT("ATAUSDT", "0.0001", "1"),
+    TORN_BTC("TORN","BTC", "0.0000001", "0.01"),
     
-    GTC_BTC("GTCBTC", "0.0000001", "0.1"),
+    TORN_BNB("TORN","BNB", "0.00001", "0.01"),
     
-    GTC_BUSD("GTCBUSD", "0.001", "0.1"),
+    TORN_BUSD("TORN","BUSD", "0.01", "0.01"),
     
-    GTC_USDT("GTCUSDT", "0.001", "0.1"),
+    TORN_USDT("TORN","USDT", "0.01", "0.01"),
     
-    TORN_BTC("TORNBTC", "0.0000001", "0.01"),
+    MATIC_TRY("MATIC","TRY", "0.001", "0.1"),
     
-    TORN_BNB("TORNBNB", "0.00001", "0.01"),
+    SOL_GBP("SOL","GBP", "0.01", "0.01"),
     
-    TORN_BUSD("TORNBUSD", "0.01", "0.01"),
+    BAKE_BTC("BAKE","BTC", "0.00000001", "0.1"),
     
-    TORN_USDT("TORNUSDT", "0.01", "0.01"),
+    COTI_BUSD("COTI","BUSD", "0.0001", "1"),
     
-    MATIC_TRY("MATICTRY", "0.001", "0.1"),
+    KEEP_BTC("KEEP","BTC", "0.00000001", "1"),
     
-    SOL_GBP("SOLGBP", "0.01", "0.01"),
+    KEEP_BNB("KEEP","BNB", "0.0000001", "1"),
     
-    BAKE_BTC("BAKEBTC", "0.00000001", "0.1"),
+    KEEP_BUSD("KEEP","BUSD", "0.0001", "1"),
     
-    COTI_BUSD("COTIBUSD", "0.0001", "1"),
+    KEEP_USDT("KEEP","USDT", "0.0001", "1"),
     
-    KEEP_BTC("KEEPBTC", "0.00000001", "1"),
+    SOL_TRY("SOL","TRY", "0.1", "0.01"),
     
-    KEEP_BNB("KEEPBNB", "0.0000001", "1"),
+    RUNE_GBP("RUNE","GBP", "0.001", "0.1"),
     
-    KEEP_BUSD("KEEPBUSD", "0.0001", "1"),
+    SOL_BRL("SOL","BRL", "0.1", "0.01"),
     
-    KEEP_USDT("KEEPUSDT", "0.0001", "1"),
+    SC_BUSD("SC","BUSD", "0.00001", "1"),
     
-    SOL_TRY("SOLTRY", "0.1", "0.01"),
+    CHR_BUSD("CHR","BUSD", "0.0001", "1"),
     
-    RUNE_GBP("RUNEGBP", "0.001", "0.1"),
+    STMX_BUSD("STMX","BUSD", "0.00001", "1"),
     
-    SOL_BRL("SOLBRL", "0.1", "0.01"),
+    HNT_BUSD("HNT","BUSD", "0.01", "0.01"),
     
-    SC_BUSD("SCBUSD", "0.00001", "1"),
+    FTT_BUSD("FTT","BUSD", "0.01", "0.01"),
     
-    CHR_BUSD("CHRBUSD", "0.0001", "1"),
+    DOCK_BUSD("DOCK","BUSD", "0.00001", "1"),
     
-    STMX_BUSD("STMXBUSD", "0.00001", "1"),
+    ADA_BIDR("ADA","BIDR", "1", "0.1"),
     
-    HNT_BUSD("HNTBUSD", "0.01", "0.01"),
+    ERN_BNB("ERN","BNB", "0.00001", "0.1"),
     
-    FTT_BUSD("FTTBUSD", "0.01", "0.01"),
+    ERN_BUSD("ERN","BUSD", "0.001", "0.1"),
     
-    DOCK_BUSD("DOCKBUSD", "0.00001", "1"),
+    ERN_USDT("ERN","USDT", "0.001", "0.1"),
     
-    ADA_BIDR("ADABIDR", "1", "0.1"),
+    KLAY_BTC("KLAY","BTC", "0.00000001", "0.1"),
     
-    ERN_BNB("ERNBNB", "0.00001", "0.1"),
+    KLAY_BNB("KLAY","BNB", "0.000001", "1"),
     
-    ERN_BUSD("ERNBUSD", "0.001", "0.1"),
+    KLAY_BUSD("KLAY","BUSD", "0.001", "0.1"),
     
-    ERN_USDT("ERNUSDT", "0.001", "0.1"),
+    KLAY_USDT("KLAY","USDT", "0.001", "0.1"),
     
-    KLAY_BTC("KLAYBTC", "0.00000001", "0.1"),
+    RUNE_EUR("RUNE","EUR", "0.001", "0.1"),
     
-    KLAY_BNB("KLAYBNB", "0.000001", "1"),
+    MATIC_AUD("MATIC","AUD", "0.001", "0.1"),
     
-    KLAY_BUSD("KLAYBUSD", "0.001", "0.1"),
+    DOT_RUB("DOT","RUB", "1", "0.01"),
     
-    KLAY_USDT("KLAYUSDT", "0.001", "0.1"),
+    UTK_BUSD("UTK","BUSD", "0.0001", "1"),
     
-    RUNE_EUR("RUNEEUR", "0.001", "0.1"),
+    IOTX_BUSD("IOTX","BUSD", "0.00001", "1"),
     
-    MATIC_AUD("MATICAUD", "0.001", "0.1"),
+    PHA_USDT("PHA","USDT", "0.0001", "1"),
     
-    DOT_RUB("DOTRUB", "1", "0.01"),
+    SOL_RUB("SOL","RUB", "1", "0.01"),
     
-    UTK_BUSD("UTKBUSD", "0.0001", "1"),
+    BUSD_UAH("BUSD","UAH", "0.01", "1"),
     
-    IOTX_BUSD("IOTXBUSD", "0.00001", "1"),
+    BOND_BTC("BOND","BTC", "0.0000001", "0.01"),
     
-    PHA_USDT("PHAUSDT", "0.0001", "1"),
+    BOND_BUSD("BOND","BUSD", "0.01", "0.01"),
     
-    SOL_RUB("SOLRUB", "1", "0.01"),
+    BOND_USDT("BOND","USDT", "0.01", "0.01"),
     
-    BUSD_UAH("BUSDUAH", "0.01", "1"),
+    MLN_BTC("MLN","BTC", "0.000001", "0.001"),
     
-    BOND_BTC("BONDBTC", "0.0000001", "0.01"),
+    MLN_BNB("MLN","BNB", "0.0001", "0.001"),
     
-    BOND_BUSD("BONDBUSD", "0.01", "0.01"),
+    MLN_BUSD("MLN","BUSD", "0.1", "0.001"),
     
-    BOND_USDT("BONDUSDT", "0.01", "0.01"),
+    MLN_USDT("MLN","USDT", "0.1", "0.001"),
     
-    MLN_BTC("MLNBTC", "0.000001", "0.001"),
+    GRT_TRY("GRT","TRY", "0.001", "1"),
     
-    MLN_BNB("MLNBNB", "0.0001", "0.001"),
+    DOT_AUD("DOT","AUD", "0.01", "0.01"),
     
-    MLN_BUSD("MLNBUSD", "0.1", "0.001"),
+    DEXE_USDT("DEXE","USDT", "0.01", "0.01"),
     
-    MLN_USDT("MLNUSDT", "0.1", "0.001"),
+    LTO_BUSD("LTO","BUSD", "0.0001", "1"),
     
-    GRT_TRY("GRTTRY", "0.001", "1"),
+    ADX_BUSD("ADX","BUSD", "0.0001", "1"),
     
-    DOT_AUD("DOTAUD", "0.01", "0.01"),
+    QUICK_BTC("QUICK","BTC", "0.000001", "0.001"),
     
-    DEXE_USDT("DEXEUSDT", "0.01", "0.01"),
+    QUICK_BNB("QUICK","BNB", "0.001", "0.001"),
     
-    LTO_BUSD("LTOBUSD", "0.0001", "1"),
+    QUICK_BUSD("QUICK","BUSD", "0.1", "0.001"),
     
-    ADX_BUSD("ADXBUSD", "0.0001", "1"),
+    C98_USDT("C98","USDT", "0.001", "0.1"),
     
-    QUICK_BTC("QUICKBTC", "0.000001", "0.001"),
+    C98_BUSD("C98","BUSD", "0.001", "0.1"),
     
-    QUICK_BNB("QUICKBNB", "0.001", "0.001"),
+    C98_BNB("C98","BNB", "0.000001", "0.1"),
     
-    QUICK_BUSD("QUICKBUSD", "0.1", "0.001"),
+    C98_BTC("C98","BTC", "0.00000001", "0.1"),
     
-    C98_USDT("C98USDT", "0.001", "0.1"),
+    CLV_BTC("CLV","BTC", "0.00000001", "0.1"),
     
-    C98_BUSD("C98BUSD", "0.001", "0.1"),
+    CLV_BNB("CLV","BNB", "0.000001", "0.1"),
     
-    C98_BNB("C98BNB", "0.000001", "0.1"),
+    CLV_BUSD("CLV","BUSD", "0.001", "0.1"),
     
-    C98_BTC("C98BTC", "0.00000001", "0.1"),
+    CLV_USDT("CLV","USDT", "0.001", "0.1"),
     
-    CLV_BTC("CLVBTC", "0.00000001", "0.1"),
+    QNT_BTC("QNT","BTC", "0.000001", "0.001"),
     
-    CLV_BNB("CLVBNB", "0.000001", "0.1"),
+    QNT_BNB("QNT","BNB", "0.0001", "0.001"),
     
-    CLV_BUSD("CLVBUSD", "0.001", "0.1"),
+    QNT_BUSD("QNT","BUSD", "0.1", "0.001"),
     
-    CLV_USDT("CLVUSDT", "0.001", "0.1"),
+    QNT_USDT("QNT","USDT", "0.1", "0.001"),
     
-    QNT_BTC("QNTBTC", "0.000001", "0.001"),
+    FLOW_BTC("FLOW","BTC", "0.0000001", "0.01"),
     
-    QNT_BNB("QNTBNB", "0.0001", "0.001"),
+    FLOW_BNB("FLOW","BNB", "0.00001", "0.01"),
     
-    QNT_BUSD("QNTBUSD", "0.1", "0.001"),
+    FLOW_BUSD("FLOW","BUSD", "0.01", "0.01"),
     
-    QNT_USDT("QNTUSDT", "0.1", "0.001"),
+    FLOW_USDT("FLOW","USDT", "0.01", "0.01"),
     
-    FLOW_BTC("FLOWBTC", "0.0000001", "0.01"),
+    XEC_BUSD("XEC","BUSD", "0.00000001", "1"),
     
-    FLOW_BNB("FLOWBNB", "0.00001", "0.01"),
+    AXS_BRL("AXS","BRL", "0.1", "0.01"),
     
-    FLOW_BUSD("FLOWBUSD", "0.01", "0.01"),
+    AXS_AUD("AXS","AUD", "0.01", "0.01"),
     
-    FLOW_USDT("FLOWUSDT", "0.01", "0.01"),
+    TVK_USDT("TVK","USDT", "0.0001", "1"),
     
-    XEC_BUSD("XECBUSD", "0.00000001", "1"),
+    MINA_BTC("MINA","BTC", "0.00000001", "0.1"),
     
-    AXS_BRL("AXSBRL", "0.1", "0.01"),
+    MINA_BNB("MINA","BNB", "0.000001", "0.1"),
     
-    AXS_AUD("AXSAUD", "0.01", "0.01"),
+    MINA_BUSD("MINA","BUSD", "0.001", "0.1"),
     
-    TVK_USDT("TVKUSDT", "0.0001", "1"),
+    MINA_USDT("MINA","USDT", "0.001", "0.1"),
     
-    MINA_BTC("MINABTC", "0.00000001", "0.1"),
+    RAY_BNB("RAY","BNB", "0.00001", "0.1"),
     
-    MINA_BNB("MINABNB", "0.000001", "0.1"),
+    RAY_BUSD("RAY","BUSD", "0.001", "0.1"),
     
-    MINA_BUSD("MINABUSD", "0.001", "0.1"),
+    RAY_USDT("RAY","USDT", "0.001", "0.1"),
     
-    MINA_USDT("MINAUSDT", "0.001", "0.1"),
+    FARM_BTC("FARM","BTC", "0.000001", "0.001"),
     
-    RAY_BNB("RAYBNB", "0.00001", "0.1"),
+    FARM_BNB("FARM","BNB", "0.0001", "0.001"),
     
-    RAY_BUSD("RAYBUSD", "0.001", "0.1"),
+    FARM_BUSD("FARM","BUSD", "0.1", "0.001"),
     
-    RAY_USDT("RAYUSDT", "0.001", "0.1"),
+    FARM_USDT("FARM","USDT", "0.1", "0.001"),
     
-    FARM_BTC("FARMBTC", "0.000001", "0.001"),
+    ALPACA_BTC("ALPACA","BTC", "0.00000001", "0.1"),
     
-    FARM_BNB("FARMBNB", "0.0001", "0.001"),
+    ALPACA_BNB("ALPACA","BNB", "0.000001", "0.1"),
     
-    FARM_BUSD("FARMBUSD", "0.1", "0.001"),
+    ALPACA_BUSD("ALPACA","BUSD", "0.0001", "0.1"),
     
-    FARM_USDT("FARMUSDT", "0.1", "0.001"),
+    ALPACA_USDT("ALPACA","USDT", "0.0001", "0.1"),
     
-    ALPACA_BTC("ALPACABTC", "0.00000001", "0.1"),
+    TLM_TRY("TLM","TRY", "0.001", "1"),
     
-    ALPACA_BNB("ALPACABNB", "0.000001", "0.1"),
+    QUICK_USDT("QUICK","USDT", "0.1", "0.001"),
     
-    ALPACA_BUSD("ALPACABUSD", "0.0001", "0.1"),
+    ORN_BUSD("ORN","BUSD", "0.001", "0.1"),
     
-    ALPACA_USDT("ALPACAUSDT", "0.0001", "0.1"),
+    MBOX_BTC("MBOX","BTC", "0.00000001", "0.1"),
     
-    TLM_TRY("TLMTRY", "0.001", "1"),
+    MBOX_BNB("MBOX","BNB", "0.000001", "0.1"),
     
-    QUICK_USDT("QUICKUSDT", "0.1", "0.001"),
+    MBOX_BUSD("MBOX","BUSD", "0.001", "0.1"),
     
-    ORN_BUSD("ORNBUSD", "0.001", "0.1"),
+    MBOX_USDT("MBOX","USDT", "0.001", "0.1"),
     
-    MBOX_BTC("MBOXBTC", "0.00000001", "0.1"),
+    VGX_BTC("VGX","BTC", "0.00000001", "0.1"),
     
-    MBOX_BNB("MBOXBNB", "0.000001", "0.1"),
+    VGX_ETH("VGX","ETH", "0.000001", "0.1"),
     
-    MBOX_BUSD("MBOXBUSD", "0.001", "0.1"),
+    FOR_USDT("FOR","USDT", "0.00001", "1"),
     
-    MBOX_USDT("MBOXUSDT", "0.001", "0.1"),
+    REQ_USDT("REQ","USDT", "0.0001", "1"),
     
-    VGX_BTC("VGXBTC", "0.00000001", "0.1"),
+    GHST_USDT("GHST","USDT", "0.001", "0.1"),
     
-    VGX_ETH("VGXETH", "0.000001", "0.1"),
+    TRU_RUB("TRU","RUB", "0.01", "1"),
     
-    FOR_USDT("FORUSDT", "0.00001", "1"),
+    FIS_BRL("FIS","BRL", "0.01", "0.1"),
     
-    REQ_USDT("REQUSDT", "0.0001", "1"),
+    WAXP_USDT("WAXP","USDT", "0.0001", "1"),
     
-    GHST_USDT("GHSTUSDT", "0.001", "0.1"),
+    WAXP_BUSD("WAXP","BUSD", "0.0001", "1"),
     
-    TRU_RUB("TRURUB", "0.01", "1"),
+    WAXP_BNB("WAXP","BNB", "0.0000001", "1"),
     
-    FIS_BRL("FISBRL", "0.01", "0.1"),
+    WAXP_BTC("WAXP","BTC", "0.00000001", "1"),
     
-    WAXP_USDT("WAXPUSDT", "0.0001", "1"),
+    TRIBE_BTC("TRIBE","BTC", "0.00000001", "1"),
     
-    WAXP_BUSD("WAXPBUSD", "0.0001", "1"),
+    TRIBE_BNB("TRIBE","BNB", "0.000001", "1"),
     
-    WAXP_BNB("WAXPBNB", "0.0000001", "1"),
+    TRIBE_BUSD("TRIBE","BUSD", "0.0001", "1"),
     
-    WAXP_BTC("WAXPBTC", "0.00000001", "1"),
+    TRIBE_USDT("TRIBE","USDT", "0.0001", "1"),
     
-    TRIBE_BTC("TRIBEBTC", "0.00000001", "1"),
+    GNO_USDT("GNO","USDT", "0.1", "0.001"),
     
-    TRIBE_BNB("TRIBEBNB", "0.000001", "1"),
+    GNO_BUSD("GNO","BUSD", "0.1", "0.001"),
     
-    TRIBE_BUSD("TRIBEBUSD", "0.0001", "1"),
+    GNO_BNB("GNO","BNB", "0.0001", "0.001"),
     
-    TRIBE_USDT("TRIBEUSDT", "0.0001", "1"),
+    GNO_BTC("GNO","BTC", "0.000001", "0.001"),
     
-    GNO_USDT("GNOUSDT", "0.1", "0.001"),
+    ARPA_TRY("ARPA","TRY", "0.0001", "1"),
     
-    GNO_BUSD("GNOBUSD", "0.1", "0.001"),
+    PROM_BTC("PROM","BTC", "0.0000001", "0.01"),
     
-    GNO_BNB("GNOBNB", "0.0001", "0.001"),
+    MTL_BUSD("MTL","BUSD", "0.001", "0.1"),
     
-    GNO_BTC("GNOBTC", "0.000001", "0.001"),
+    OGN_BUSD("OGN","BUSD", "0.0001", "0.1"),
     
-    ARPA_TRY("ARPATRY", "0.0001", "1"),
+    XEC_USDT("XEC","USDT", "0.00000001", "1"),
     
-    PROM_BTC("PROMBTC", "0.0000001", "0.01"),
+    C98_BRL("C98","BRL", "0.01", "0.1"),
     
-    MTL_BUSD("MTLBUSD", "0.001", "0.1"),
+    SOL_AUD("SOL","AUD", "0.01", "0.001"),
     
-    OGN_BUSD("OGNBUSD", "0.0001", "0.1"),
+    SUSHI_BIDR("SUSHI","BIDR", "1", "0.01"),
     
-    XEC_USDT("XECUSDT", "0.00000001", "1"),
+    XRP_BIDR("XRP","BIDR", "1", "0.1"),
     
-    C98_BRL("C98BRL", "0.01", "0.1"),
+    POLY_BUSD("POLY","BUSD", "0.0001", "0.1"),
     
-    SOL_AUD("SOLAUD", "0.01", "0.001"),
+    ELF_USDT("ELF","USDT", "0.0001", "0.1"),
     
-    SUSHI_BIDR("SUSHIBIDR", "1", "0.01"),
+    DYDX_USDT("DYDX","USDT", "0.001", "0.01"),
     
-    XRP_BIDR("XRPBIDR", "1", "0.1"),
+    DYDX_BUSD("DYDX","BUSD", "0.001", "0.01"),
     
-    POLY_BUSD("POLYBUSD", "0.0001", "0.1"),
+    DYDX_BNB("DYDX","BNB", "0.000001", "0.01"),
     
-    ELF_USDT("ELFUSDT", "0.0001", "0.1"),
+    DYDX_BTC("DYDX","BTC", "0.00000001", "0.01"),
     
-    DYDX_USDT("DYDXUSDT", "0.001", "0.01"),
+    ELF_BUSD("ELF","BUSD", "0.0001", "0.1"),
     
-    DYDX_BUSD("DYDXBUSD", "0.001", "0.01"),
+    POLY_USDT("POLY","USDT", "0.0001", "0.1"),
     
-    DYDX_BNB("DYDXBNB", "0.000001", "0.01"),
+    IDEX_USDT("IDEX","USDT", "0.00001", "0.1"),
     
-    DYDX_BTC("DYDXBTC", "0.00000001", "0.01"),
+    VIDT_USDT("VIDT","USDT", "0.0001", "0.1"),
     
-    ELF_BUSD("ELFBUSD", "0.0001", "0.1"),
+    SOL_BIDR("SOL","BIDR", "1", "0.0001"),
     
-    POLY_USDT("POLYUSDT", "0.0001", "0.1"),
+    AXS_BIDR("AXS","BIDR", "1", "0.001"),
     
-    IDEX_USDT("IDEXUSDT", "0.00001", "0.1"),
+    BTC_USDP("BTC","USDP", "0.01", "0.00001"),
     
-    VIDT_USDT("VIDTUSDT", "0.0001", "0.1"),
+    ETH_USDP("ETH","USDP", "0.01", "0.0001"),
     
-    SOL_BIDR("SOLBIDR", "1", "0.0001"),
+    BNB_USDP("BNB","USDP", "0.01", "0.001"),
     
-    AXS_BIDR("AXSBIDR", "1", "0.001"),
+    USDP_BUSD("USDP","BUSD", "0.0001", "0.01"),
     
-    BTC_USDP("BTCUSDP", "0.01", "0.00001"),
+    USDP_USDT("USDP","USDT", "0.0001", "0.01"),
     
-    ETH_USDP("ETHUSDP", "0.01", "0.0001"),
+    GALA_USDT("GALA","USDT", "0.00001", "1"),
     
-    BNB_USDP("BNBUSDP", "0.01", "0.001"),
+    GALA_BUSD("GALA","BUSD", "0.00001", "1"),
     
-    USDP_BUSD("USDPBUSD", "0.0001", "0.01"),
+    GALA_BNB("GALA","BNB", "0.00000001", "1"),
     
-    USDP_USDT("USDPUSDT", "0.0001", "0.01"),
+    GALA_BTC("GALA","BTC", "0.00000001", "1"),
     
-    GALA_USDT("GALAUSDT", "0.00001", "1"),
+    FTM_BIDR("FTM","BIDR", "1", "0.1"),
     
-    GALA_BUSD("GALABUSD", "0.00001", "1"),
+    KSM_AUD("KSM","AUD", "0.1", "0.001"),
     
-    GALA_BNB("GALABNB", "0.00000001", "1"),
+    SUN_BUSD("SUN","BUSD", "0.00001", "1"),
     
-    GALA_BTC("GALABTC", "0.00000001", "1"),
+    ILV_USDT("ILV","USDT", "0.1", "0.001"),
     
-    FTM_BIDR("FTMBIDR", "1", "0.1"),
+    ILV_BUSD("ILV","BUSD", "0.1", "0.001"),
     
-    KSM_AUD("KSMAUD", "0.1", "0.001"),
+    ILV_BNB("ILV","BNB", "0.001", "0.001"),
     
-    SUN_BUSD("SUNBUSD", "0.00001", "1"),
+    ILV_BTC("ILV","BTC", "0.00001", "0.001"),
     
-    ILV_USDT("ILVUSDT", "0.1", "0.001"),
+    REN_BUSD("REN","BUSD", "0.0001", "1"),
     
-    ILV_BUSD("ILVBUSD", "0.1", "0.001"),
+    YGG_USDT("YGG","USDT", "0.001", "0.1"),
     
-    ILV_BNB("ILVBNB", "0.001", "0.001"),
+    YGG_BUSD("YGG","BUSD", "0.001", "0.1"),
     
-    ILV_BTC("ILVBTC", "0.00001", "0.001"),
+    YGG_BNB("YGG","BNB", "0.00001", "0.1"),
     
-    REN_BUSD("RENBUSD", "0.0001", "1"),
+    YGG_BTC("YGG","BTC", "0.0000001", "0.1"),
     
-    YGG_USDT("YGGUSDT", "0.001", "0.1"),
+    STX_BUSD("STX","BUSD", "0.001", "0.1"),
     
-    YGG_BUSD("YGGBUSD", "0.001", "0.1"),
+    SYS_USDT("SYS","USDT", "0.0001", "1"),
     
-    YGG_BNB("YGGBNB", "0.00001", "0.1"),
+    DF_USDT("DF","USDT", "0.0001", "1"),
     
-    YGG_BTC("YGGBTC", "0.0000001", "0.1"),
+    SOL_USDC("SOL","USDC", "0.01", "0.01"),
     
-    STX_BUSD("STXBUSD", "0.001", "0.1"),
+    ARPA_RUB("ARPA","RUB", "0.001", "1"),
     
-    SYS_USDT("SYSUSDT", "0.0001", "1"),
+    LTC_UAH("LTC","UAH", "1", "0.001"),
     
-    DF_USDT("DFUSDT", "0.0001", "1"),
+    FET_BUSD("FET","BUSD", "0.0001", "1"),
     
-    SOL_USDC("SOLUSDC", "0.01", "0.01"),
+    ARPA_BUSD("ARPA","BUSD", "0.00001", "0.1"),
     
-    ARPA_RUB("ARPARUB", "0.001", "1"),
+    LSK_BUSD("LSK","BUSD", "0.001", "0.1"),
     
-    LTC_UAH("LTCUAH", "1", "0.001"),
+    AVAX_BIDR("AVAX","BIDR", "1", "0.01"),
     
-    FET_BUSD("FETBUSD", "0.0001", "1"),
+    ALICE_BIDR("ALICE","BIDR", "1", "0.01"),
     
-    ARPA_BUSD("ARPABUSD", "0.00001", "0.1"),
+    FIDA_USDT("FIDA","USDT", "0.001", "0.1"),
     
-    LSK_BUSD("LSKBUSD", "0.001", "0.1"),
+    FIDA_BUSD("FIDA","BUSD", "0.001", "0.1"),
     
-    AVAX_BIDR("AVAXBIDR", "1", "0.01"),
+    FIDA_BNB("FIDA","BNB", "0.00001", "0.1"),
     
-    ALICE_BIDR("ALICEBIDR", "1", "0.01"),
+    FIDA_BTC("FIDA","BTC", "0.0000001", "0.1"),
     
-    FIDA_USDT("FIDAUSDT", "0.001", "0.1"),
+    DENT_BUSD("DENT","BUSD", "0.000001", "1"),
     
-    FIDA_BUSD("FIDABUSD", "0.001", "0.1"),
+    FRONT_USDT("FRONT","USDT", "0.0001", "1"),
     
-    FIDA_BNB("FIDABNB", "0.00001", "0.1"),
+    CVP_USDT("CVP","USDT", "0.001", "0.1"),
     
-    FIDA_BTC("FIDABTC", "0.0000001", "0.1"),
+    AGLD_BTC("AGLD","BTC", "0.00000001", "0.1"),
     
-    DENT_BUSD("DENTBUSD", "0.000001", "1"),
+    AGLD_BNB("AGLD","BNB", "0.000001", "0.1"),
     
-    FRONT_USDT("FRONTUSDT", "0.0001", "1"),
+    AGLD_BUSD("AGLD","BUSD", "0.001", "0.1"),
     
-    CVP_USDT("CVPUSDT", "0.001", "0.1"),
+    AGLD_USDT("AGLD","USDT", "0.001", "0.1"),
     
-    AGLD_BTC("AGLDBTC", "0.00000001", "0.1"),
+    RAD_BTC("RAD","BTC", "0.0000001", "0.1"),
     
-    AGLD_BNB("AGLDBNB", "0.000001", "0.1"),
+    RAD_BNB("RAD","BNB", "0.00001", "0.1"),
     
-    AGLD_BUSD("AGLDBUSD", "0.001", "0.1"),
+    RAD_BUSD("RAD","BUSD", "0.001", "0.1"),
     
-    AGLD_USDT("AGLDUSDT", "0.001", "0.1"),
+    RAD_USDT("RAD","USDT", "0.001", "0.1"),
     
-    RAD_BTC("RADBTC", "0.0000001", "0.1"),
+    HIVE_BUSD("HIVE","BUSD", "0.0001", "1"),
     
-    RAD_BNB("RADBNB", "0.00001", "0.1"),
+    STPT_BUSD("STPT","BUSD", "0.00001", "0.1"),
     
-    RAD_BUSD("RADBUSD", "0.001", "0.1"),
+    BETA_BTC("BETA","BTC", "0.00000001", "1"),
     
-    RAD_USDT("RADUSDT", "0.001", "0.1"),
+    BETA_BNB("BETA","BNB", "0.0000001", "1"),
     
-    HIVE_BUSD("HIVEBUSD", "0.0001", "1"),
+    BETA_BUSD("BETA","BUSD", "0.00001", "1"),
     
-    STPT_BUSD("STPTBUSD", "0.00001", "0.1"),
+    BETA_USDT("BETA","USDT", "0.00001", "1"),
     
-    BETA_BTC("BETABTC", "0.00000001", "1"),
+    SHIB_AUD("SHIB","AUD", "0.00000001", "1"),
     
-    BETA_BNB("BETABNB", "0.0000001", "1"),
+    RARE_BTC("RARE","BTC", "0.00000001", "0.1"),
     
-    BETA_BUSD("BETABUSD", "0.00001", "1"),
+    RARE_BNB("RARE","BNB", "0.000001", "0.1"),
     
-    BETA_USDT("BETAUSDT", "0.00001", "1"),
+    RARE_BUSD("RARE","BUSD", "0.001", "0.1"),
     
-    SHIB_AUD("SHIBAUD", "0.00000001", "1"),
+    RARE_USDT("RARE","USDT", "0.001", "0.1"),
     
-    RARE_BTC("RAREBTC", "0.00000001", "0.1"),
+    AVAX_BRL("AVAX","BRL", "0.1", "0.01"),
     
-    RARE_BNB("RAREBNB", "0.000001", "0.1"),
+    AVAX_AUD("AVAX","AUD", "0.01", "0.01"),
     
-    RARE_BUSD("RAREBUSD", "0.001", "0.1"),
+    LUNA_AUD("LUNA","AUD", "0.01", "0.01"),
     
-    RARE_USDT("RAREUSDT", "0.001", "0.1"),
+    TROY_BUSD("TROY","BUSD", "0.000001", "1"),
     
-    AVAX_BRL("AVAXBRL", "0.1", "0.01"),
+    AXS_ETH("AXS","ETH", "0.00001", "0.001"),
     
-    AVAX_AUD("AVAXAUD", "0.01", "0.01"),
+    FTM_ETH("FTM","ETH", "0.0000001", "0.1"),
     
-    LUNA_AUD("LUNAAUD", "0.01", "0.01"),
+    SOL_ETH("SOL","ETH", "0.00001", "0.001"),
     
-    TROY_BUSD("TROYBUSD", "0.000001", "1"),
+    SSV_BTC("SSV","BTC", "0.0000001", "0.01"),
     
-    AXS_ETH("AXSETH", "0.00001", "0.001"),
+    SSV_ETH("SSV","ETH", "0.000001", "0.01"),
     
-    FTM_ETH("FTMETH", "0.0000001", "0.1"),
+    LAZIO_TRY("LAZIO","TRY", "0.001", "0.01"),
     
-    SOL_ETH("SOLETH", "0.00001", "0.001"),
+    LAZIO_EUR("LAZIO","EUR", "0.0001", "0.01"),
     
-    SSV_BTC("SSVBTC", "0.0000001", "0.01"),
+    LAZIO_BTC("LAZIO","BTC", "0.00000001", "0.01"),
     
-    SSV_ETH("SSVETH", "0.000001", "0.01"),
+    LAZIO_USDT("LAZIO","USDT", "0.0001", "0.01"),
     
-    LAZIO_TRY("LAZIOTRY", "0.001", "0.01"),
+    CHESS_BTC("CHESS","BTC", "0.00000001", "0.1"),
     
-    LAZIO_EUR("LAZIOEUR", "0.0001", "0.01"),
+    CHESS_BNB("CHESS","BNB", "0.000001", "0.1"),
     
-    LAZIO_BTC("LAZIOBTC", "0.00000001", "0.01"),
+    CHESS_BUSD("CHESS","BUSD", "0.001", "0.1"),
     
-    LAZIO_USDT("LAZIOUSDT", "0.0001", "0.01"),
+    CHESS_USDT("CHESS","USDT", "0.001", "0.1"),
     
-    CHESS_BTC("CHESSBTC", "0.00000001", "0.1"),
+    FTM_AUD("FTM","AUD", "0.0001", "1"),
     
-    CHESS_BNB("CHESSBNB", "0.000001", "0.1"),
+    FTM_BRL("FTM","BRL", "0.01", "0.1"),
     
-    CHESS_BUSD("CHESSBUSD", "0.001", "0.1"),
+    SCRT_BUSD("SCRT","BUSD", "0.001", "0.1"),
     
-    CHESS_USDT("CHESSUSDT", "0.001", "0.1"),
+    ADX_USDT("ADX","USDT", "0.0001", "1"),
     
-    FTM_AUD("FTMAUD", "0.0001", "1"),
+    AUCTION_USDT("AUCTION","USDT", "0.01", "0.01"),
     
-    FTM_BRL("FTMBRL", "0.01", "0.1"),
+    CELO_BUSD("CELO","BUSD", "0.001", "0.1"),
     
-    SCRT_BUSD("SCRTBUSD", "0.001", "0.1"),
+    FTM_RUB("FTM","RUB", "0.1", "0.1"),
     
-    ADX_USDT("ADXUSDT", "0.0001", "1"),
+    NU_AUD("NU","AUD", "0.0001", "1"),
     
-    AUCTION_USDT("AUCTIONUSDT", "0.01", "0.01"),
+    NU_RUB("NU","RUB", "0.01", "0.1"),
     
-    CELO_BUSD("CELOBUSD", "0.001", "0.1"),
+    REEF_TRY("REEF","TRY", "0.0001", "1"),
     
-    FTM_RUB("FTMRUB", "0.1", "0.1"),
+    REEF_BIDR("REEF","BIDR", "0.1", "1"),
     
-    NU_AUD("NUAUD", "0.0001", "1"),
+    SHIB_DOGE("SHIB","DOGE", "0.0000001", "1"),
     
-    NU_RUB("NURUB", "0.01", "0.1"),
+    DAR_USDT("DAR","USDT", "0.00001", "1"),
     
-    REEF_TRY("REEFTRY", "0.0001", "1"),
+    DAR_BUSD("DAR","BUSD", "0.00001", "1"),
     
-    REEF_BIDR("REEFBIDR", "0.1", "1"),
+    DAR_BNB("DAR","BNB", "0.00000001", "1"),
     
-    SHIB_DOGE("SHIBDOGE", "0.0000001", "1"),
+    DAR_BTC("DAR","BTC", "0.00000001", "1"),
     
-    DAR_USDT("DARUSDT", "0.00001", "1"),
+    BNX_BTC("BNX","BTC", "0.000001", "0.001"),
     
-    DAR_BUSD("DARBUSD", "0.00001", "1"),
+    BNX_BNB("BNX","BNB", "0.0001", "0.001"),
     
-    DAR_BNB("DARBNB", "0.00000001", "1"),
+    BNX_BUSD("BNX","BUSD", "0.1", "0.001"),
     
-    DAR_BTC("DARBTC", "0.00000001", "1"),
+    BNX_USDT("BNX","USDT", "0.1", "0.001"),
     
-    BNX_BTC("BNXBTC", "0.000001", "0.001"),
+    RGT_USDT("RGT","USDT", "0.01", "0.01"),
     
-    BNX_BNB("BNXBNB", "0.0001", "0.001"),
+    RGT_BTC("RGT","BTC", "0.0000001", "0.01"),
     
-    BNX_BUSD("BNXBUSD", "0.1", "0.001"),
+    RGT_BUSD("RGT","BUSD", "0.01", "0.01"),
     
-    BNX_USDT("BNXUSDT", "0.1", "0.001"),
+    RGT_BNB("RGT","BNB", "0.00001", "0.01"),
     
-    RGT_USDT("RGTUSDT", "0.01", "0.01"),
+    LAZIO_BUSD("LAZIO","BUSD", "0.0001", "0.01"),
     
-    RGT_BTC("RGTBTC", "0.0000001", "0.01"),
+    OXT_BUSD("OXT","BUSD", "0.0001", "1"),
     
-    RGT_BUSD("RGTBUSD", "0.01", "0.01"),
+    MANA_TRY("MANA","TRY", "0.01", "0.1"),
     
-    RGT_BNB("RGTBNB", "0.00001", "0.01"),
+    ALGO_RUB("ALGO","RUB", "0.1", "0.1"),
     
-    LAZIO_BUSD("LAZIOBUSD", "0.0001", "0.01"),
+    SHIB_UAH("SHIB","UAH", "0.000001", "1"),
     
-    OXT_BUSD("OXTBUSD", "0.0001", "1"),
+    LUNA_BIDR("LUNA","BIDR", "1", "0.01"),
     
-    MANA_TRY("MANATRY", "0.01", "0.1"),
+    AUD_USDC("AUD","USDC", "0.0001", "1"),
     
-    ALGO_RUB("ALGORUB", "0.1", "0.1"),
+    MOVR_BTC("MOVR","BTC", "0.000001", "0.001"),
     
-    SHIB_UAH("SHIBUAH", "0.000001", "1"),
+    MOVR_BNB("MOVR","BNB", "0.0001", "0.001"),
     
-    LUNA_BIDR("LUNABIDR", "1", "0.01"),
+    MOVR_BUSD("MOVR","BUSD", "0.1", "0.001"),
     
-    AUD_USDC("AUDUSDC", "0.0001", "1"),
+    MOVR_USDT("MOVR","USDT", "0.1", "0.001"),
     
-    MOVR_BTC("MOVRBTC", "0.000001", "0.001"),
+    CITY_BTC("CITY","BTC", "0.0000001", "0.01"),
     
-    MOVR_BNB("MOVRBNB", "0.0001", "0.001"),
+    CITY_BNB("CITY","BNB", "0.00001", "0.01"),
     
-    MOVR_BUSD("MOVRBUSD", "0.1", "0.001"),
+    CITY_BUSD("CITY","BUSD", "0.01", "0.01"),
     
-    MOVR_USDT("MOVRUSDT", "0.1", "0.001"),
+    CITY_USDT("CITY","USDT", "0.01", "0.01"),
     
-    CITY_BTC("CITYBTC", "0.0000001", "0.01"),
+    ENS_BTC("ENS","BTC", "0.0000001", "0.01"),
     
-    CITY_BNB("CITYBNB", "0.00001", "0.01"),
+    ENS_BNB("ENS","BNB", "0.00001", "0.01"),
     
-    CITY_BUSD("CITYBUSD", "0.01", "0.01"),
+    ENS_BUSD("ENS","BUSD", "0.01", "0.01"),
     
-    CITY_USDT("CITYUSDT", "0.01", "0.01"),
+    ENS_USDT("ENS","USDT", "0.01", "0.01"),
     
-    ENS_BTC("ENSBTC", "0.0000001", "0.01"),
+    SAND_ETH("SAND","ETH", "0.0000001", "0.1"),
     
-    ENS_BNB("ENSBNB", "0.00001", "0.01"),
+    DOT_ETH("DOT","ETH", "0.000001", "0.01"),
     
-    ENS_BUSD("ENSBUSD", "0.01", "0.01"),
+    MATIC_ETH("MATIC","ETH", "0.0000001", "0.1"),
     
-    ENS_USDT("ENSUSDT", "0.01", "0.01"),
+    ANKR_BUSD("ANKR","BUSD", "0.00001", "0.1"),
     
-    SAND_ETH("SANDETH", "0.0000001", "0.1"),
+    SAND_TRY("SAND","TRY", "0.01", "0.1"),
     
-    DOT_ETH("DOTETH", "0.000001", "0.01"),
+    MANA_BRL("MANA","BRL", "0.01", "0.1"),
     
-    MATIC_ETH("MATICETH", "0.0000001", "0.1"),
+    KP3R_USDT("KP3R","USDT", "0.01", "0.01"),
     
-    ANKR_BUSD("ANKRBUSD", "0.00001", "0.1"),
+    QI_USDT("QI","USDT", "0.0001", "1"),
     
-    SAND_TRY("SANDTRY", "0.01", "0.1"),
+    QI_BUSD("QI","BUSD", "0.0001", "1"),
     
-    MANA_BRL("MANABRL", "0.01", "0.1"),
+    QI_BNB("QI","BNB", "0.0000001", "1"),
     
-    KP3R_USDT("KP3RUSDT", "0.01", "0.01"),
+    QI_BTC("QI","BTC", "0.00000001", "1"),
     
-    QI_USDT("QIUSDT", "0.0001", "1"),
+    PORTO_BTC("PORTO","BTC", "0.00000001", "0.01"),
     
-    QI_BUSD("QIBUSD", "0.0001", "1"),
+    PORTO_USDT("PORTO","USDT", "0.0001", "0.01"),
     
-    QI_BNB("QIBNB", "0.0000001", "1"),
+    PORTO_TRY("PORTO","TRY", "0.01", "0.01"),
     
-    QI_BTC("QIBTC", "0.00000001", "1"),
+    PORTO_EUR("PORTO","EUR", "0.0001", "0.01"),
     
-    PORTO_BTC("PORTOBTC", "0.00000001", "0.01"),
+    POWR_USDT("POWR","USDT", "0.0001", "1"),
     
-    PORTO_USDT("PORTOUSDT", "0.0001", "0.01"),
+    POWR_BUSD("POWR","BUSD", "0.0001", "1"),
     
-    PORTO_TRY("PORTOTRY", "0.01", "0.01"),
+    AVAX_ETH("AVAX","ETH", "0.00001", "0.01"),
     
-    PORTO_EUR("PORTOEUR", "0.0001", "0.01"),
+    SLP_TRY("SLP","TRY", "0.0001", "1"),
     
-    POWR_USDT("POWRUSDT", "0.0001", "1"),
+    FIS_TRY("FIS","TRY", "0.01", "0.1"),
     
-    POWR_BUSD("POWRBUSD", "0.0001", "1"),
+    LRC_TRY("LRC","TRY", "0.01", "0.1"),
     
-    AVAX_ETH("AVAXETH", "0.00001", "0.01"),
+    CHR_ETH("CHR","ETH", "0.0000001", "0.1"),
     
-    SLP_TRY("SLPTRY", "0.0001", "1"),
+    FIS_BIDR("FIS","BIDR", "1", "0.1"),
     
-    FIS_TRY("FISTRY", "0.01", "0.1"),
+    VGX_USDT("VGX","USDT", "0.001", "0.1"),
     
-    LRC_TRY("LRCTRY", "0.01", "0.1"),
+    GALA_ETH("GALA","ETH", "0.00000001", "1"),
     
-    CHR_ETH("CHRETH", "0.0000001", "0.1"),
+    JASMY_USDT("JASMY","USDT", "0.0001", "0.1"),
     
-    FIS_BIDR("FISBIDR", "1", "0.1"),
+    JASMY_BUSD("JASMY","BUSD", "0.0001", "0.1"),
     
-    VGX_USDT("VGXUSDT", "0.001", "0.1"),
+    JASMY_BNB("JASMY","BNB", "0.0000001", "0.1"),
     
-    GALA_ETH("GALAETH", "0.00000001", "1"),
+    JASMY_BTC("JASMY","BTC", "0.00000001", "0.1"),
     
-    JASMY_USDT("JASMYUSDT", "0.0001", "0.1"),
+    AMP_BTC("AMP","BTC", "0.00000001", "1"),
     
-    JASMY_BUSD("JASMYBUSD", "0.0001", "0.1"),
+    AMP_BNB("AMP","BNB", "0.00000001", "1"),
     
-    JASMY_BNB("JASMYBNB", "0.0000001", "0.1"),
+    AMP_BUSD("AMP","BUSD", "0.00001", "1"),
     
-    JASMY_BTC("JASMYBTC", "0.00000001", "0.1"),
+    AMP_USDT("AMP","USDT", "0.00001", "1"),
     
-    AMP_BTC("AMPBTC", "0.00000001", "1"),
+    PLA_BTC("PLA","BTC", "0.00000001", "0.01"),
     
-    AMP_BNB("AMPBNB", "0.00000001", "1"),
+    PLA_BNB("PLA","BNB", "0.000001", "0.01"),
     
-    AMP_BUSD("AMPBUSD", "0.00001", "1"),
+    PLA_BUSD("PLA","BUSD", "0.001", "0.01"),
     
-    AMP_USDT("AMPUSDT", "0.00001", "1"),
+    PLA_USDT("PLA","USDT", "0.001", "0.01"),
     
-    PLA_BTC("PLABTC", "0.00000001", "0.01"),
+    PYR_BTC("PYR","BTC", "0.0000001", "0.001"),
     
-    PLA_BNB("PLABNB", "0.000001", "0.01"),
+    PYR_BUSD("PYR","BUSD", "0.01", "0.001"),
     
-    PLA_BUSD("PLABUSD", "0.001", "0.01"),
+    PYR_USDT("PYR","USDT", "0.01", "0.001"),
     
-    PLA_USDT("PLAUSDT", "0.001", "0.01"),
+    RNDR_BTC("RNDR","BTC", "0.0000001", "0.01"),
     
-    PYR_BTC("PYRBTC", "0.0000001", "0.001"),
+    RNDR_USDT("RNDR","USDT", "0.001", "0.01"),
     
-    PYR_BUSD("PYRBUSD", "0.01", "0.001"),
+    RNDR_BUSD("RNDR","BUSD", "0.001", "0.01"),
     
-    PYR_USDT("PYRUSDT", "0.01", "0.001"),
+    ALCX_BTC("ALCX","BTC", "0.000001", "0.0001"),
     
-    RNDR_BTC("RNDRBTC", "0.0000001", "0.01"),
+    ALCX_BUSD("ALCX","BUSD", "0.1", "0.0001"),
     
-    RNDR_USDT("RNDRUSDT", "0.001", "0.01"),
+    ALCX_USDT("ALCX","USDT", "0.1", "0.0001"),
     
-    RNDR_BUSD("RNDRBUSD", "0.001", "0.01"),
+    SANTOS_BTC("SANTOS","BTC", "0.00000001", "0.01"),
     
-    ALCX_BTC("ALCXBTC", "0.000001", "0.0001"),
+    SANTOS_USDT("SANTOS","USDT", "0.001", "0.01"),
     
-    ALCX_BUSD("ALCXBUSD", "0.1", "0.0001"),
+    SANTOS_BRL("SANTOS","BRL", "0.01", "0.01"),
     
-    ALCX_USDT("ALCXUSDT", "0.1", "0.0001"),
+    SANTOS_TRY("SANTOS","TRY", "0.01", "0.01"),
     
-    SANTOS_BTC("SANTOSBTC", "0.00000001", "0.01"),
+    MC_BTC("MC","BTC", "0.0000001", "0.01"),
     
-    SANTOS_USDT("SANTOSUSDT", "0.001", "0.01"),
+    MC_BUSD("MC","BUSD", "0.01", "0.01"),
     
-    SANTOS_BRL("SANTOSBRL", "0.01", "0.01"),
+    MC_USDT("MC","USDT", "0.01", "0.01"),
     
-    SANTOS_TRY("SANTOSTRY", "0.01", "0.01"),
+    BEL_TRY("BEL","TRY", "0.01", "0.01"),
     
-    MC_BTC("MCBTC", "0.0000001", "0.01"),
+    COCOS_BUSD("COCOS","BUSD", "0.0001", "1"),
     
-    MC_BUSD("MCBUSD", "0.01", "0.01"),
+    DENT_TRY("DENT","TRY", "0.00001", "1"),
     
-    MC_USDT("MCUSDT", "0.01", "0.01"),
+    ENJ_TRY("ENJ","TRY", "0.01", "0.01"),
     
-    BEL_TRY("BELTRY", "0.01", "0.01"),
+    NEO_RUB("NEO","RUB", "1", "0.001"),
     
-    COCOS_BUSD("COCOSBUSD", "0.0001", "1"),
+    SAND_AUD("SAND","AUD", "0.0001", "1"),
     
-    DENT_TRY("DENTTRY", "0.00001", "1"),
+    SLP_BIDR("SLP","BIDR", "0.1", "1"),
     
-    ENJ_TRY("ENJTRY", "0.01", "0.01"),
+    ANY_BTC("ANY","BTC", "0.0000001", "0.01"),
     
-    NEO_RUB("NEORUB", "1", "0.001"),
+    ANY_BUSD("ANY","BUSD", "0.01", "0.01"),
     
-    SAND_AUD("SANDAUD", "0.0001", "1"),
+    ANY_USDT("ANY","USDT", "0.01", "0.01"),
     
-    SLP_BIDR("SLPBIDR", "0.1", "1"),
+    BICO_BTC("BICO","BTC", "0.0000001", "0.01"),
     
-    ANY_BTC("ANYBTC", "0.0000001", "0.01"),
+    BICO_BUSD("BICO","BUSD", "0.001", "0.01"),
     
-    ANY_BUSD("ANYBUSD", "0.01", "0.01"),
+    BICO_USDT("BICO","USDT", "0.001", "0.01"),
     
-    ANY_USDT("ANYUSDT", "0.01", "0.01"),
+    FLUX_BTC("FLUX","BTC", "0.00000001", "0.01"),
     
-    BICO_BTC("BICOBTC", "0.0000001", "0.01"),
+    FLUX_BUSD("FLUX","BUSD", "0.001", "0.01"),
     
-    BICO_BUSD("BICOBUSD", "0.001", "0.01"),
+    FLUX_USDT("FLUX","USDT", "0.001", "0.01"),
     
-    BICO_USDT("BICOUSDT", "0.001", "0.01"),
+    ALICE_TRY("ALICE","TRY", "0.1", "0.001"),
     
-    FLUX_BTC("FLUXBTC", "0.00000001", "0.01"),
+    FXS_USDT("FXS","USDT", "0.001", "0.1"),
     
-    FLUX_BUSD("FLUXBUSD", "0.001", "0.01"),
+    GALA_BRL("GALA","BRL", "0.001", "0.1"),
     
-    FLUX_USDT("FLUXUSDT", "0.001", "0.01"),
+    GALA_TRY("GALA","TRY", "0.001", "0.1"),
     
-    ALICE_TRY("ALICETRY", "0.1", "0.001"),
+    LUNA_TRY("LUNA","TRY", "0.1", "0.001"),
     
-    FXS_USDT("FXSUSDT", "0.001", "0.1"),
+    REQ_BUSD("REQ","BUSD", "0.0001", "1"),
     
-    GALA_BRL("GALABRL", "0.001", "0.1"),
+    SAND_BRL("SAND","BRL", "0.01", "0.01"),
     
-    GALA_TRY("GALATRY", "0.001", "0.1"),
+    MANA_BIDR("MANA","BIDR", "1", "0.01"),
     
-    LUNA_TRY("LUNATRY", "0.1", "0.001"),
+    SAND_BIDR("SAND","BIDR", "1", "0.01"),
     
-    REQ_BUSD("REQBUSD", "0.0001", "1"),
+    VOXEL_BTC("VOXEL","BTC", "0.00000001", "0.1"),
     
-    SAND_BRL("SANDBRL", "0.01", "0.01"),
+    VOXEL_BNB("VOXEL","BNB", "0.0000001", "0.1"),
     
-    MANA_BIDR("MANABIDR", "1", "0.01"),
+    VOXEL_BUSD("VOXEL","BUSD", "0.0001", "0.1"),
     
-    SAND_BIDR("SANDBIDR", "1", "0.01"),
+    VOXEL_USDT("VOXEL","USDT", "0.0001", "0.1"),
     
-    VOXEL_BTC("VOXELBTC", "0.00000001", "0.1"),
+    COS_BUSD("COS","BUSD", "0.00001", "0.1"),
     
-    VOXEL_BNB("VOXELBNB", "0.0000001", "0.1"),
+    CTXC_BUSD("CTXC","BUSD", "0.0001", "1"),
     
-    VOXEL_BUSD("VOXELBUSD", "0.0001", "0.1"),
+    FTM_TRY("FTM","TRY", "0.01", "0.01"),
     
-    VOXEL_USDT("VOXELUSDT", "0.0001", "0.1"),
+    MANA_BNB("MANA","BNB", "0.000001", "0.01"),
     
-    COS_BUSD("COSBUSD", "0.00001", "0.1"),
+    MINA_TRY("MINA","TRY", "0.01", "0.01"),
     
-    CTXC_BUSD("CTXCBUSD", "0.0001", "1"),
+    XTZ_TRY("XTZ","TRY", "0.01", "0.01"),
     
-    FTM_TRY("FTMTRY", "0.01", "0.01"),
+    HIGH_BTC("HIGH","BTC", "0.0000001", "0.001"),
     
-    MANA_BNB("MANABNB", "0.000001", "0.01"),
+    HIGH_BUSD("HIGH","BUSD", "0.01", "0.001"),
     
-    MINA_TRY("MINATRY", "0.01", "0.01"),
+    HIGH_USDT("HIGH","USDT", "0.01", "0.001"),
     
-    XTZ_TRY("XTZTRY", "0.01", "0.01"),
+    CVX_BTC("CVX","BTC", "0.0000001", "0.001"),
     
-    HIGH_BTC("HIGHBTC", "0.0000001", "0.001"),
+    CVX_BUSD("CVX","BUSD", "0.01", "0.001"),
     
-    HIGH_BUSD("HIGHBUSD", "0.01", "0.001"),
+    CVX_USDT("CVX","USDT", "0.01", "0.001"),
     
-    HIGH_USDT("HIGHUSDT", "0.01", "0.001"),
+    PEOPLE_BTC("PEOPLE","BTC", "0.00000001", "0.1"),
     
-    CVX_BTC("CVXBTC", "0.0000001", "0.001"),
+    PEOPLE_BUSD("PEOPLE","BUSD", "0.0001", "0.1"),
     
-    CVX_BUSD("CVXBUSD", "0.01", "0.001"),
+    PEOPLE_USDT("PEOPLE","USDT", "0.0001", "0.1"),
     
-    CVX_USDT("CVXUSDT", "0.01", "0.001"),
+    OOKI_BUSD("OOKI","BUSD", "0.00001", "1"),
     
-    PEOPLE_BTC("PEOPLEBTC", "0.00000001", "0.1"),
+    OOKI_USDT("OOKI","USDT", "0.00001", "1"),
     
-    PEOPLE_BUSD("PEOPLEBUSD", "0.0001", "0.1"),
+    COCOS_TRY("COCOS","TRY", "0.01", "0.01"),
     
-    PEOPLE_USDT("PEOPLEUSDT", "0.0001", "0.1"),
+    GXS_BNB("GXS","BNB", "0.000001", "0.01"),
     
-    OOKI_BUSD("OOKIBUSD", "0.00001", "1"),
+    LINK_BNB("LINK","BNB", "0.00001", "0.001"),
     
-    OOKI_USDT("OOKIUSDT", "0.00001", "1"),
+    LUNA_ETH("LUNA","ETH", "0.00001", "0.001"),
     
-    COCOS_TRY("COCOSTRY", "0.01", "0.01"),
+    MDT_BUSD("MDT","BUSD", "0.00001", "0.1"),
     
-    GXS_BNB("GXSBNB", "0.000001", "0.01"),
+    NULS_BUSD("NULS","BUSD", "0.0001", "1"),
     
-    LINK_BNB("LINKBNB", "0.00001", "0.001"),
+    SPELL_BTC("SPELL","BTC", "0.00000001", "1"),
     
-    LUNA_ETH("LUNAETH", "0.00001", "0.001"),
+    SPELL_USDT("SPELL","USDT", "0.00001", "1"),
     
-    MDT_BUSD("MDTBUSD", "0.00001", "0.1"),
+    SPELL_BUSD("SPELL","BUSD", "0.00001", "1"),
     
-    NULS_BUSD("NULSBUSD", "0.0001", "1"),
+    UST_BTC("UST","BTC", "0.00000001", "0.01"),
     
-    SPELL_BTC("SPELLBTC", "0.00000001", "1"),
+    UST_BUSD("UST","BUSD", "0.0001", "1"),
     
-    SPELL_USDT("SPELLUSDT", "0.00001", "1"),
+    UST_USDT("UST","USDT", "0.0001", "1"),
     
-    SPELL_BUSD("SPELLBUSD", "0.00001", "1"),
+    JOE_BTC("JOE","BTC", "0.00000001", "0.01"),
     
-    UST_BTC("USTBTC", "0.00000001", "0.01"),
+    JOE_BUSD("JOE","BUSD", "0.001", "0.01"),
     
-    UST_BUSD("USTBUSD", "0.0001", "1"),
+    JOE_USDT("JOE","USDT", "0.001", "0.01"),
     
-    UST_USDT("USTUSDT", "0.0001", "1"),
+    ATOM_ETH("ATOM","ETH", "0.00001", "0.001"),
     
-    JOE_BTC("JOEBTC", "0.00000001", "0.01"),
+    DUSK_BUSD("DUSK","BUSD", "0.0001", "1"),
     
-    JOE_BUSD("JOEBUSD", "0.001", "0.01"),
+    EGLD_ETH("EGLD","ETH", "0.00001", "0.0001"),
     
-    JOE_USDT("JOEUSDT", "0.001", "0.01"),
+    ICP_ETH("ICP","ETH", "0.000001", "0.001"),
+    
+    LUNA_BRL("LUNA","BRL", "0.1", "0.001"),
+    
+    LUNA_UST("LUNA","UST", "0.01", "0.01"),
+    
+    NEAR_ETH("NEAR","ETH", "0.000001", "0.001"),
+    
+    ROSE_BNB("ROSE","BNB", "0.0000001", "0.1"),
+    
+    VOXEL_ETH("VOXEL","ETH", "0.0000001", "0.01"),
+    
+    ALICE_BNB("ALICE","BNB", "0.00001", "0.001"),
+    
+    ATOM_TRY("ATOM","TRY", "0.1", "0.001"),
+    
+    ETH_UST("ETH","UST", "0.01", "0.0001"),
+    
+    GALA_AUD("GALA","AUD", "0.00001", "1"),
+    
+    LRC_BNB("LRC","BNB", "0.000001", "0.01"),
+    
+    ONE_ETH("ONE","ETH", "0.00000001", "0.1"),
+    
+    OOKI_BNB("OOKI","BNB", "0.00000001", "1"),
     
     ;
     // generate code from binance api
     // generate code from binance api
     // generate code from binance api
 
+    public final String name;
+    public final String baseAsset;
+    public final String quoteAsset;
     public final BigDecimal pricePrecision;
     public final BigDecimal quantityPrecision;
-    public final String STR;
 
-    Symbol(String str, String precision, String quantity) {
-        this.STR = str;
+    Symbol(String baseAsset, String quoteAsset, String precision, String quantity) {
+        this.baseAsset = baseAsset;
+        this.quoteAsset = quoteAsset;
+        this.name = baseAsset + quoteAsset;
         this.pricePrecision = new BigDecimal(precision);
         this.quantityPrecision = new BigDecimal(quantity);
     }
 
-    public String toUpperCaseStr() {
-        return this.STR;
+    public String lowerCaseName() {
+        return name.toLowerCase();
     }
 
-    public String toLowerCase() {
-        return STR.toLowerCase();
+    public String upperCaseName() {
+        return name.toUpperCase();
     }
 
     @Override
     public String getStr() {
-        return STR;
+        return name;
     }
 
     @Override
