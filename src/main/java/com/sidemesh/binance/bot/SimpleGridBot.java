@@ -204,6 +204,8 @@ public class SimpleGridBot extends BaseBot implements RealtimeStreamListener {
             } else {
                 log.error("binance api error" , e);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

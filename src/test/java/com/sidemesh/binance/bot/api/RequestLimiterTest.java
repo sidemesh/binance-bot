@@ -12,7 +12,7 @@ public class RequestLimiterTest {
             Assertions.assertTrue(limiter.acquire());
         }
         Assertions.assertFalse(limiter.acquire());
-        Thread.sleep(1000L);
+        Thread.sleep(1010L);
         for (var i = 0; i < 5; i ++) {
             Assertions.assertTrue(limiter.acquire());
         }

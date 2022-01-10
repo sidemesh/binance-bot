@@ -10,6 +10,7 @@ import java.util.function.Consumer;
 /**
  * 当网格数较大时应使用二分法
  */
+@Slf4j
 public class LinkedGrids {
     // 网格基础信息
     public final GridsInfo info;
@@ -116,7 +117,8 @@ public class LinkedGrids {
      * @param node 新的索引
      */
     private void updateIndex(Node node) {
-        if (node != null && node != this.index) this.index = node;
+        log.info("update index node order = {} price = {}", node.order, node.price);
+        if (node != this.index) this.index = node;
     }
 
     /**
@@ -137,6 +139,7 @@ public class LinkedGrids {
      */
     public void init(BigDecimal price) {
         if (isInit()) throw new RuntimeException("already init!");
+        log.info("init index by price {}", price);
         this.findIndex(price).updateIndex();
         this.isInit = true;
     }
