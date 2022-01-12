@@ -9,6 +9,7 @@ import com.sidemesh.binance.bot.store.StoreServiceJsonFileImpl;
 import com.sidemesh.binance.bot.util.TradeUtil;
 import com.sidemesh.binance.bot.websocket.event.BookTickerMessage;
 import com.sidemesh.binance.bot.worker.BotWorker;
+import io.sentry.Sentry;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
@@ -202,9 +203,11 @@ public class SimpleGridBot extends BaseBot implements RealtimeStreamListener {
             } else if (e.isInsufficientBalance()) {
                 log.info("api call balance insufficient!");
             } else {
+                Sentry.captureException(e);
                 log.error("binance api error" , e);
             }
         } catch (Exception e) {
+            Sentry.captureException(e);
             e.printStackTrace();
         }
     }

@@ -10,9 +10,11 @@ public class ApplicationOptions {
     // -enable-local-proxy
     // 是否开启本地代理
     public final boolean isEnableLocalProxy;
+    public final String sentryDsn;
 
-    public ApplicationOptions(boolean isEnableLocalProxy) {
+    public ApplicationOptions(boolean isEnableLocalProxy, String sentryDsn) {
         this.isEnableLocalProxy = isEnableLocalProxy;
+        this.sentryDsn = sentryDsn;
     }
 
     public ProxyInfo getProxyInfo() {
@@ -31,7 +33,8 @@ public class ApplicationOptions {
 
     static {
         var value = System.getenv("IS_ENABLE_LOCAL_PROXY");
-        INSTANCE =
-                new ApplicationOptions(value != null && !value.isEmpty() && Boolean.parseBoolean(value));
+        var isEnableLocalProxy = value != null && !value.isEmpty() && Boolean.parseBoolean(value);
+        var sentryDsn = System.getenv("SENTRY_DSN");
+        INSTANCE = new ApplicationOptions(isEnableLocalProxy, sentryDsn);
     }
 }

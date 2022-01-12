@@ -6,6 +6,7 @@ import com.sidemesh.binance.bot.store.StoreService;
 import com.sidemesh.binance.bot.store.StoreServiceJsonFileImpl;
 import com.sidemesh.binance.bot.websocket.RealtimeStreamWebSocketImpl;
 import io.javalin.Javalin;
+import io.sentry.Sentry;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
@@ -14,8 +15,18 @@ import java.util.stream.Collectors;
 @Slf4j
 public class Application {
 
+    private static void sentryInit() {
+        Sentry.init(options -> {
+            options.setDsn(ApplicationOptions.INSTANCE.sentryDsn);
+            options.setTracesSampleRate(1.0);
+            options.setDebug(true);
+        });
+    }
+
     public static void main(String[] args) {
         log.info("binance-bot v0.0.1");
+        // sentry
+        sentryInit();
         // rts
         final var rts = new RealtimeStreamWebSocketImpl();
         // binance api
