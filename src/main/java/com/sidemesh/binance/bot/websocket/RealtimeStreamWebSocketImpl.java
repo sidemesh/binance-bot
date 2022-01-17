@@ -11,6 +11,7 @@ import com.sidemesh.binance.bot.websocket.event.TradeMessage;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.Proxy;
+import java.net.SocketTimeoutException;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -60,6 +61,13 @@ public class RealtimeStreamWebSocketImpl implements RealtimeStream {
                 (reason) -> this.reconnect(),
                 // on error
                 (e) -> {
+                    if (e instanceof SocketTimeoutException) {
+                        if (e.getMessage().startsWith("sent ping but didn't receive pong within")) {
+                            log.warn("catch socket timeout exception! {} may binance normal close.", e.getMessage());
+                            this.reconnect();
+                            return;
+                        }
+                    }
                     // 不应该无限重连，需要设置最大重连次数，超过最大次数发送报警信息
                     log.error("ws error", e);
                     this.reconnect();
