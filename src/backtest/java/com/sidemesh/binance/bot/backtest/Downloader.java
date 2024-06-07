@@ -25,13 +25,15 @@ class Downloader {
     public static void monthly(Symbol symbol, String month, String path) throws IOException {
         log.info("download back-test data month = {} path = {}", month, path);
 
+        final var symbolUpperCase = symbol.upperCaseName();
+
         // create file dir
         Files.createDirectories(Paths.get(path));
-        File file = new File(path, String.format("%s-%s.zip", symbol.toUpperCaseStr(), month));
+        File file = new File(path, String.format("%s-%s.zip", symbolUpperCase, month));
 
         final var cli = new OkHttpClient.Builder().build();
         final var url = String.format("https://data.binance.vision/data/spot/monthly/trades/%s/%s-trades-%s.zip",
-                symbol.toUpperCaseStr(), symbol.toUpperCaseStr(), month);
+                symbolUpperCase, symbolUpperCase, month);
 
         log.info("Download url {}", url);
 

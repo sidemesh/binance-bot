@@ -16,8 +16,9 @@ public class BaseSubscribeMessage extends BaseMethodMessage {
         // 订阅实时交易
         // 订阅最优下单价格
         symbols.forEach(it -> {
-            set.add(it.toLowerCase() + "@trade");
-            set.add(it.toLowerCase() + "@bookTicker");
+            final var name = it.lowerCaseName();
+            set.add(name+ "@trade");
+            set.add(name+ "@bookTicker");
         });
         this.params = set;
     }

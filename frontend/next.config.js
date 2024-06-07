@@ -2,7 +2,7 @@
 const withAntdLess = require('next-plugin-antd-less');
 
 module.exports = withAntdLess({
-  reactStrictMode: true,
+  // reactStrictMode: true,
   modifyVars: { '@primary-color': '#04f' }, // optional
   lessVarsFilePath: './src/styles/variables.less', // optional 
   lessVarsFilePathAppendToEndOfContent: false, // optional
